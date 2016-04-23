@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Owin.Security.Authorization", "Microsoft.Owin.Security.Authorization\Microsoft.Owin.Security.Authorization.csproj", "{A74DC534-BD34-419B-9FD4-DABCBAE53A46}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Owin.Security.Authorization", "src\Microsoft.Owin.Security.Authorization\Microsoft.Owin.Security.Authorization.csproj", "{A74DC534-BD34-419B-9FD4-DABCBAE53A46}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{BDE5AC4A-6F0C-4D9B-8294-BA2B3F62B4DF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,5 +20,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A74DC534-BD34-419B-9FD4-DABCBAE53A46} = {BDE5AC4A-6F0C-4D9B-8294-BA2B3F62B4DF}
 	EndGlobalSection
 EndGlobal
