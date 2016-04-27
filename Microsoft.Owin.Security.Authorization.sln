@@ -7,6 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Owin.Security.Aut
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{BDE5AC4A-6F0C-4D9B-8294-BA2B3F62B4DF}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build Management", "Build Management", "{F01BF8E8-137B-4203-BEF7-98BB3944C950}"
+	ProjectSection(SolutionItems) = preProject
+		Build Management\ApplyVersionToAssemblies.ps1 = Build Management\ApplyVersionToAssemblies.ps1
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
