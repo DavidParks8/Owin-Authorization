@@ -1,0 +1,10 @@
+﻿@{
+    ViewBag.Title = "title";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Select a link to test ResourceAuthorize</h2>
+<ul>
+    <li>@Html.ActionLink("Authorized", "Index", "Authorized")</li>
+    <li>@Html.ActionLink("Not Authorized", "Index", "Denied")</li>
+</ul>

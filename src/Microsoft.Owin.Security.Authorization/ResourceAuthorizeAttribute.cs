@@ -36,9 +36,6 @@ namespace Microsoft.Owin.Security.Authorization
 
         protected override bool AuthorizeCore(HttpContextBase httpContext)
         {
-        //    var controller = httpContext.Request.RequestContext.RouteData.Values["controller"] as string;
-        //    var action = httpContext.Request.RequestContext.RouteData.Values["action"] as string;
-
             var owinContext = httpContext.GetOwinContext();
             object environmentService;
             object environmentPolicy;
