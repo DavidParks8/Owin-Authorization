@@ -8,7 +8,6 @@ namespace Microsoft.Owin.Security.Authorization
     {
         public const string ServiceKey = "idm:resourceAuthorizationService";
         public const string PolicyKey = "idm:resourceAuthorizationPolicy";
-        public const string HandlerKey = "idm:resourceAuthorizationHandler";
 
         private readonly Func<IDictionary<string, object>, Task> _next;
         private AuthorizationOptions _options;
@@ -23,7 +22,6 @@ namespace Microsoft.Owin.Security.Authorization
         {
             env[ServiceKey] = _options.Dependencies.Service();
             env[PolicyKey] = _options.Dependencies.PolicyProvider();
-            env[HandlerKey] = _options.Dependencies.Handler();
             await _next(env);
         }
     }
