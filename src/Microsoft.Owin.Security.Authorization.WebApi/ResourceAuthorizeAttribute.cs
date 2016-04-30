@@ -1,15 +1,15 @@
 ﻿using System;
+using System.Net.Http;
 using System.Security.Claims;
-using System.Web;
-using System.Web.Mvc;
+using System.Web.Http.Controllers;
 
-namespace Microsoft.Owin.Security.Authorization.Mvc
+namespace Microsoft.Owin.Security.Authorization.WebApi
 {
     /// <summary>
     /// Specifies that the class or method that this attribute is applied to requires the specified authorization.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
-    public class ResourceAuthorizeAttribute : AuthorizeAttribute, IResourceAuthorize
+    public class ResourceAuthorizeAttribute : System.Web.Http.AuthorizeAttribute, IResourceAuthorize
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceAuthorizeAttribute"/> class. 
@@ -31,17 +31,17 @@ namespace Microsoft.Owin.Security.Authorization.Mvc
         /// <inheritdoc />
         public string ActiveAuthenticationSchemes { get; set; }
 
-        protected override bool AuthorizeCore(HttpContextBase httpContext)
+        protected override bool IsAuthorized(HttpActionContext actionContext)
         {
-            if (httpContext == null)
+            if (actionContext == null)
             {
-                throw new ArgumentNullException(nameof(httpContext));
+                throw new ArgumentNullException(nameof(actionContext));
             }
 
-            var owinContext = httpContext.GetOwinContext();
+            var owinContext = actionContext.Request.GetOwinContext();
             var helper = new AuthorizationOwinHelper(owinContext);
             var checker = new AuthorizationChecker(helper.AuthorizationService, helper.PolicyProvider, this);
-            return checker.IsAuthorizedAsync((ClaimsPrincipal) httpContext.User).Result && base.AuthorizeCore(httpContext);
+            return checker.IsAuthorizedAsync(owinContext.Authentication.User).Result && base.IsAuthorized(actionContext);
         }
     }
 }
