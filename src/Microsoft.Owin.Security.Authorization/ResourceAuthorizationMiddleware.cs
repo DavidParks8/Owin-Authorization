@@ -18,11 +18,11 @@ namespace Microsoft.Owin.Security.Authorization
             _next = next;
         }
 
-        public async Task Invoke(IDictionary<string, object> env)
+        public async Task Invoke(IDictionary<string, object> environment)
         {
-            env[ServiceKey] = _options.Dependencies.Service();
-            env[PolicyKey] = _options.Dependencies.PolicyProvider();
-            await _next(env);
+            environment[ServiceKey] = _options.Dependencies.Service();
+            environment[PolicyKey] = _options.Dependencies.PolicyProvider();
+            await _next(environment);
         }
     }
 }

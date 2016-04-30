@@ -21,8 +21,8 @@ namespace Microsoft.Owin.Security.Authorization
             Combine(policy);
         }
 
-        public IList<IAuthorizationRequirement> Requirements { get; set; } = new List<IAuthorizationRequirement>();
-        public IList<string> AuthenticationSchemes { get; set; } = new List<string>();
+        public IList<IAuthorizationRequirement> Requirements { get; } = new List<IAuthorizationRequirement>();
+        public IList<string> AuthenticationSchemes { get; } = new List<string>();
 
         public AuthorizationPolicyBuilder AddAuthenticationSchemes(params string[] schemes)
         {

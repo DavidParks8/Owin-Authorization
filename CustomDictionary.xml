@@ -5,6 +5,8 @@
     </Unrecognized>
     <Recognized>
       <Word>Owin</Word>
+      <Word>Mvc</Word>
+      <Word>Api</Word>
     </Recognized>
     <Deprecated>
       <Term PreferredAlternate=""></Term>

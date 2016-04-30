@@ -62,7 +62,7 @@ namespace Microsoft.Owin.Security.Authorization
             }
         }
 
-        private string GetUserNameForLogging(ClaimsPrincipal user)
+        private static string GetUserNameForLogging(ClaimsPrincipal user)
         {
             var identity = user?.Identity;
             if (identity != null)
