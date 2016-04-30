@@ -73,7 +73,7 @@ namespace Microsoft.Owin.Security.Authorization
 
             var policyBuilder = new AuthorizationPolicyBuilder();
             var any = false;
-            foreach (var authorizeAttribute in attributes.OfType<ResourceAuthorizeAttribute>())
+            foreach (var authorizeAttribute in attributes.Where(x => x is IResourceAuthorize))
             {
                 any = true;
                 var useDefaultPolicy = true;

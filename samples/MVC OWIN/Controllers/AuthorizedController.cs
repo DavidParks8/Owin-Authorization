@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 using System.Web.Mvc;
-using Microsoft.Owin.Security.Authorization;
+using Microsoft.Owin.Security.Authorization.Mvc;
 using AuthorizationContext = System.Web.Mvc.AuthorizationContext;
 
 namespace MVC_OWIN.Controllers

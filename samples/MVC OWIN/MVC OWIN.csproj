@@ -136,6 +136,10 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Microsoft.Owin.Security.Authorization.Mvc\Microsoft.Owin.Security.Authorization.Mvc.csproj">
+      <Project>{ad310d5e-fc2f-42b8-90a0-4fa46ff08b45}</Project>
+      <Name>Microsoft.Owin.Security.Authorization.Mvc</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Microsoft.Owin.Security.Authorization\Microsoft.Owin.Security.Authorization.csproj">
       <Project>{a74dc534-bd34-419b-9fd4-dabcbae53a46}</Project>
       <Name>Microsoft.Owin.Security.Authorization</Name>

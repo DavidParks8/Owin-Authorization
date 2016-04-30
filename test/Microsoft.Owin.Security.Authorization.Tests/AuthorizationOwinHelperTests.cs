@@ -1,19 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Security.Claims;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Microsoft.Owin.Security.Authorization
 {
     [TestClass, ExcludeFromCodeCoverage]
-    public class ResourceAuthorizationAttributeTest
+    public class AuthorizationOwinHelperTests
     {
         [TestMethod, ExpectedException(typeof(ArgumentNullException))]
-        public void ResourceAuthorizeShouldThrowWhenPassedNull()
+        public void AuthorizationOwinHelperShouldThrowWhenPassedNullOwinContext()
         {
-            var attribute = new ResourceAuthorizeAttribute();
-            attribute.OnAuthorization(null);
+            // ReSharper disable once ObjectCreationAsStatement
+            new AuthorizationOwinHelper(null);
         }
     }
 }

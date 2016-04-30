@@ -11,6 +11,9 @@
 using System.Globalization;
 
 namespace Microsoft.Owin.Security.Authorization.Properties {
+    using System;
+    
+    
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -60,20 +63,20 @@ namespace Microsoft.Owin.Security.Authorization.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The owin environment dictionary was null.
+        /// </summary>
+        internal static string ErrorTheOwinEnvironmentDictionaryWasNull {
+            get {
+                return ResourceManager.GetString("ErrorTheOwinEnvironmentDictionaryWasNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to AuthorizationPolicy must have at least one requirement..
         /// </summary>
         internal static string Exception_AuthorizationPolicyEmpty {
             get {
                 return ResourceManager.GetString("Exception_AuthorizationPolicyEmpty", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The AuthorizationPolicy named: &apos;{0}&apos; was not found..
-        /// </summary>
-        internal static string Exception_AuthorizationPolicyNotFound {
-            get {
-                return ResourceManager.GetString("Exception_AuthorizationPolicyNotFound", resourceCulture);
             }
         }
 
@@ -85,6 +88,15 @@ namespace Microsoft.Owin.Security.Authorization.Properties {
             return string.Format(CultureInfo.CurrentCulture, ResourceManager.GetString("Exception_AuthorizationPolicyNotFound"), p0);
         }
 
+        /// <summary>
+        ///   Looks up a localized string similar to Please setup owin resource authorization in your startup file.
+        /// </summary>
+        internal static string Exception_PleaseSetupOwinResourceAuthorizationInYourStartupFile {
+            get {
+                return ResourceManager.GetString("Exception_PleaseSetupOwinResourceAuthorizationInYourStartupFile", resourceCulture);
+            }
+        }
+        
         /// <summary>
         ///   Looks up a localized string similar to At least one role must be specified..
         /// </summary>

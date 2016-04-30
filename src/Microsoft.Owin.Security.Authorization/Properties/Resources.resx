@@ -126,4 +126,10 @@
   <data name="Exception_RoleRequirementEmpty" xml:space="preserve">
     <value>At least one role must be specified.</value>
   </data>
+  <data name="ErrorTheOwinEnvironmentDictionaryWasNull" xml:space="preserve">
+    <value>The owin environment dictionary was null</value>
+  </data>
+  <data name="Exception_PleaseSetupOwinResourceAuthorizationInYourStartupFile" xml:space="preserve">
+    <value>Please setup owin resource authorization in your startup file</value>
+  </data>
 </root>
