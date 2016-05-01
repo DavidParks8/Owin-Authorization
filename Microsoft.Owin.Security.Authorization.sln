@@ -24,6 +24,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Owin.Security.Aut
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Owin.Security.Authorization.WebApi", "src\Microsoft.Owin.Security.Authorization.WebApi\Microsoft.Owin.Security.Authorization.WebApi.csproj", "{B21E8782-D3D8-4329-BD92-2DBA581F1C9B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi OWIN", "samples\WebApi OWIN\WebApi OWIN.csproj", "{4EDAF3A2-8389-4D22-8267-02CAA8D65596}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,6 +52,10 @@ Global
 		{B21E8782-D3D8-4329-BD92-2DBA581F1C9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B21E8782-D3D8-4329-BD92-2DBA581F1C9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B21E8782-D3D8-4329-BD92-2DBA581F1C9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4EDAF3A2-8389-4D22-8267-02CAA8D65596}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EDAF3A2-8389-4D22-8267-02CAA8D65596}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EDAF3A2-8389-4D22-8267-02CAA8D65596}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EDAF3A2-8389-4D22-8267-02CAA8D65596}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -60,5 +66,6 @@ Global
 		{75D2262B-7033-4216-8583-0DF28A195D80} = {9D82C3FC-EC41-4F7A-8846-D69C4CA1FA5B}
 		{AD310D5E-FC2F-42B8-90A0-4FA46FF08B45} = {BDE5AC4A-6F0C-4D9B-8294-BA2B3F62B4DF}
 		{B21E8782-D3D8-4329-BD92-2DBA581F1C9B} = {BDE5AC4A-6F0C-4D9B-8294-BA2B3F62B4DF}
+		{4EDAF3A2-8389-4D22-8267-02CAA8D65596} = {9D82C3FC-EC41-4F7A-8846-D69C4CA1FA5B}
 	EndGlobalSection
 EndGlobal
