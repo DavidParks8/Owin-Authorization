@@ -87,7 +87,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="ResourceAuthorizationMiddleware.cs" />
-    <Compile Include="AuthorizationChecker.cs" />
     <Compile Include="IResourceAuthorize.cs" />
   </ItemGroup>
   <ItemGroup>
