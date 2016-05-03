@@ -15,8 +15,7 @@ namespace Microsoft.Owin.Security.Authorization
             }
             if (context.Environment == null)
             {
-                throw new ArgumentNullException(nameof(context),
-                    Properties.Resources.ErrorTheOwinEnvironmentDictionaryWasNull);
+                throw new ArgumentNullException(nameof(context), Resources.ErrorTheOwinEnvironmentDictionaryWasNull);
             }
 
             object environmentService;

@@ -74,7 +74,13 @@ namespace Microsoft.Owin.Security.Authorization
                 throw new ArgumentNullException(nameof(name));
             }
 
-            return PolicyMap.ContainsKey(name) ? PolicyMap[name] : null;
+            AuthorizationPolicy policy;
+            if (PolicyMap.TryGetValue(name, out policy))
+            {
+                return policy;
+            }
+
+            return null;
         }
     }
 }
