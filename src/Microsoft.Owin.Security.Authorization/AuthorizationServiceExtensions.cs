@@ -5,11 +5,67 @@ using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.Owin.Security.Authorization.Infrastructure;
 
 namespace Microsoft.Owin.Security.Authorization
 {
     public static class AuthorizationServiceExtensions
     {
+        public static async Task<bool> AuthorizeAsync(this IAuthorizationService service, ClaimsPrincipal user, IAuthorizeData authorizeData)
+        {
+            if (service == null)
+            {
+                throw new ArgumentNullException(nameof(service));
+            }
+            if (authorizeData == null)
+            {
+                throw new ArgumentNullException(nameof(authorizeData));
+            }
+
+            if (!string.IsNullOrEmpty(authorizeData.Policy))
+            {
+                if (!await service.AuthorizeAsync(user, authorizeData.Policy))
+                {
+                    return false;
+                }
+            }
+
+            var builder = new AuthorizationPolicyBuilder();
+            if (!string.IsNullOrEmpty(authorizeData.ActiveAuthenticationSchemes))
+            {
+                builder.AddAuthenticationSchemes(SplitAndTrim(authorizeData.ActiveAuthenticationSchemes));
+            }
+
+            if (!string.IsNullOrWhiteSpace(authorizeData.Roles))
+            {
+                builder.RequireRole(SplitAndTrim(authorizeData.Roles));
+            }
+            // todo: decide if authenticated user is required for resource authorization
+            //else
+            //{
+            //    builder.RequireAuthenticatedUser();
+            //}
+
+            if (builder.Requirements.Count > 0)
+            {
+                var policy = builder.Build();
+                return await service.AuthorizeAsync(user, policy);
+            }
+
+            return true;
+        }
+
+        private static string[] SplitAndTrim(string commaSeparated)
+        {
+            var split = commaSeparated.Split(',');
+            for (int i = 0; i < split.Length; i++)
+            {
+                split[i] = split[i].Trim();
+            }
+
+            return split;
+        }
+
         /// <summary>
         /// Checks if a user meets a specific requirement for the specified resource
         /// </summary>
