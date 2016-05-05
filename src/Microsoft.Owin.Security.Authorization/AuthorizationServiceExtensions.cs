@@ -5,7 +5,6 @@ using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.Owin.Security.Authorization.Infrastructure;
 
 namespace Microsoft.Owin.Security.Authorization
 {

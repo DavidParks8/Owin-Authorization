@@ -17,16 +17,6 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
                 options.Dependencies = new AuthorizeDependencies();
             }
 
-            if (options.Dependencies.Handler == null)
-            {
-                options.Dependencies.Handler = () => new PassThroughAuthorizationHandler();
-            }
-
-            if (options.Dependencies.PolicyProvider == null)
-            {
-                options.Dependencies.PolicyProvider = () => new DefaultAuthorizationPolicyProvider(options);
-            }
-
             if (options.Dependencies.LoggerFactory == null)
             {
                 options.Dependencies.LoggerFactory = new DiagnosticsLoggerFactory();
@@ -34,10 +24,10 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
 
             if (options.Dependencies.Service == null)
             {
-                options.Dependencies.Service = () => new DefaultAuthorizationService(
-                options.Dependencies.PolicyProvider(),
-                new List<IAuthorizationHandler>() { options.Dependencies.Handler() },
-                options.Dependencies.LoggerFactory.Create(options.GetType().Name));
+                var policyProvider = new DefaultAuthorizationPolicyProvider(options);
+                var handlers = new List<IAuthorizationHandler>() { new PassThroughAuthorizationHandler() };
+                var logger = options.Dependencies.LoggerFactory.Create(options.GetType().Name);
+                options.Dependencies.Service = new DefaultAuthorizationService(policyProvider, handlers, logger);
             }
 
             return options;

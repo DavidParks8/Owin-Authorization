@@ -34,7 +34,8 @@ namespace Microsoft.Owin.Security.Authorization.WebApi
 
             var owinContext = actionContext.Request.GetOwinContext();
             var helper = new AuthorizationOwinHelper(owinContext);
-            return helper.AuthorizationService.AuthorizeAsync(owinContext.Authentication.User, this).Result;
+            var service = helper.AuthorizationOptions.Dependencies.Service;
+            return service.AuthorizeAsync(owinContext.Authentication.User, this).Result;
         }
     }
 }

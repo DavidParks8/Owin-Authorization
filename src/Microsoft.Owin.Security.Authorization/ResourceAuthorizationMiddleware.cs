@@ -9,7 +9,7 @@ namespace Microsoft.Owin.Security.Authorization
         public const string ServiceKey = "idm:resourceAuthorizationService";
 
         private readonly Func<IDictionary<string, object>, Task> _next;
-        private AuthorizationOptions _options;
+        private readonly AuthorizationOptions _options;
 
         public ResourceAuthorizationMiddleware(Func<IDictionary<string, object>, Task> next, AuthorizationOptions options)
         {
@@ -19,7 +19,7 @@ namespace Microsoft.Owin.Security.Authorization
 
         public async Task Invoke(IDictionary<string, object> environment)
         {
-            environment[ServiceKey] = _options.Dependencies.Service();
+            environment[ServiceKey] = _options;
             await _next(environment);
         }
     }

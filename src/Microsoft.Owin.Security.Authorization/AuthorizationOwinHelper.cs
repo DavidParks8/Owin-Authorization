@@ -5,7 +5,7 @@ namespace Microsoft.Owin.Security.Authorization
 {
     public class AuthorizationOwinHelper
     {
-        public IAuthorizationService AuthorizationService { get; }
+        public AuthorizationOptions AuthorizationOptions { get; }
 
         public AuthorizationOwinHelper(IOwinContext context)
         {
@@ -21,7 +21,7 @@ namespace Microsoft.Owin.Security.Authorization
             object environmentService;
             if (context.Environment.TryGetValue(ResourceAuthorizationMiddleware.ServiceKey, out environmentService))
             {
-                AuthorizationService = (IAuthorizationService) environmentService;
+                AuthorizationOptions = (AuthorizationOptions) environmentService;
             }
             else
             {
