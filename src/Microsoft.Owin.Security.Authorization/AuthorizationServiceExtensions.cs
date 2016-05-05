@@ -10,7 +10,7 @@ namespace Microsoft.Owin.Security.Authorization
 {
     public static class AuthorizationServiceExtensions
     {
-        public static async Task<bool> AuthorizeAsync(this IAuthorizationService service, ClaimsPrincipal user, IAuthorizeData authorizeData)
+        public static async Task<bool> AuthorizeAsync(this IAuthorizationService service, ClaimsPrincipal user, IAuthorizeData authorizeData, AuthorizationOptions options)
         {
             if (service == null)
             {
@@ -20,16 +20,21 @@ namespace Microsoft.Owin.Security.Authorization
             {
                 throw new ArgumentNullException(nameof(authorizeData));
             }
-
-            if (!string.IsNullOrEmpty(authorizeData.Policy))
+            if (options == null)
             {
-                if (!await service.AuthorizeAsync(user, authorizeData.Policy))
-                {
-                    return false;
-                }
+                throw new ArgumentNullException(nameof(options));
             }
 
             var builder = new AuthorizationPolicyBuilder();
+            if (!string.IsNullOrEmpty(authorizeData.Policy))
+            {
+                var policy = options.GetPolicy(authorizeData.Policy);
+                if (policy != null)
+                {
+                    builder.Combine(policy);
+                }
+            }
+
             if (!string.IsNullOrEmpty(authorizeData.ActiveAuthenticationSchemes))
             {
                 builder.AddAuthenticationSchemes(SplitAndTrim(authorizeData.ActiveAuthenticationSchemes));
@@ -39,11 +44,15 @@ namespace Microsoft.Owin.Security.Authorization
             {
                 builder.RequireRole(SplitAndTrim(authorizeData.Roles));
             }
-            // todo: decide if authenticated user is required for resource authorization
-            //else
-            //{
-            //    builder.RequireAuthenticatedUser();
-            //}
+            
+            if (builder.Requirements.Count == 0)
+            {
+                if (options.DefaultPolicy != null)
+                {
+                    builder.Combine(options.DefaultPolicy);
+
+                }
+            }
 
             if (builder.Requirements.Count > 0)
             {
@@ -57,7 +66,7 @@ namespace Microsoft.Owin.Security.Authorization
         private static string[] SplitAndTrim(string commaSeparated)
         {
             var split = commaSeparated.Split(',');
-            for (int i = 0; i < split.Length; i++)
+            for (var i = 0; i < split.Length; i++)
             {
                 split[i] = split[i].Trim();
             }

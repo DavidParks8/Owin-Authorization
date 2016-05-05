@@ -59,7 +59,7 @@
     <Compile Include="AuthorizationContext.cs" />
     <Compile Include="AuthorizationHandler.cs" />
     <Compile Include="AuthorizationOptions.cs" />
-    <Compile Include="AuthorizationOwinHelper.cs" />
+    <Compile Include="AuthorizationHelper.cs" />
     <Compile Include="AuthorizationPolicy.cs" />
     <Compile Include="AuthorizationPolicyBuilder.cs" />
     <Compile Include="AuthorizationServiceExtensions.cs" />

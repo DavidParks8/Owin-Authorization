@@ -3,11 +3,11 @@ using Microsoft.Owin.Security.Authorization.Properties;
 
 namespace Microsoft.Owin.Security.Authorization
 {
-    public class AuthorizationOwinHelper
+    public class AuthorizationHelper
     {
         public AuthorizationOptions AuthorizationOptions { get; }
 
-        public AuthorizationOwinHelper(IOwinContext context)
+        public AuthorizationHelper(IOwinContext context)
         {
             if (context == null)
             {
@@ -27,6 +27,17 @@ namespace Microsoft.Owin.Security.Authorization
             {
                 throw new InvalidOperationException(Resources.Exception_PleaseSetupOwinResourceAuthorizationInYourStartupFile);
             }
+        }
+
+        public bool ShouldUseDefaultPolicy(IAuthorizeData authorizeData)
+        {
+            if (authorizeData == null)
+            {
+                return true;
+            }
+
+            return string.IsNullOrWhiteSpace(authorizeData.Policy)
+                   || string.IsNullOrWhiteSpace(authorizeData.Roles);
         }
     }
 }

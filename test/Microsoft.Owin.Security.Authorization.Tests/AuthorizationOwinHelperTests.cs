@@ -12,7 +12,7 @@ namespace Microsoft.Owin.Security.Authorization
         public void AuthorizationOwinHelperShouldThrowWhenPassedNullOwinContext()
         {
             // ReSharper disable once ObjectCreationAsStatement
-            new AuthorizationOwinHelper(null);
+            new AuthorizationHelper(null);
         }
     }
 }

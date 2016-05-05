@@ -33,9 +33,9 @@ namespace Microsoft.Owin.Security.Authorization.Mvc
             }
 
             var owinContext = httpContext.GetOwinContext();
-            var helper = new AuthorizationOwinHelper(owinContext);
+            var helper = new AuthorizationHelper(owinContext);
             var service = helper.AuthorizationOptions.Dependencies.Service;
-            return service.AuthorizeAsync((ClaimsPrincipal) httpContext.User, this).Result;
+            return service.AuthorizeAsync((ClaimsPrincipal) httpContext.User, this, helper.AuthorizationOptions).Result;
         }
     }
 }

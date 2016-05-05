@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
 using System.Web.Http.Controllers;
@@ -33,9 +32,9 @@ namespace Microsoft.Owin.Security.Authorization.WebApi
             }
 
             var owinContext = actionContext.Request.GetOwinContext();
-            var helper = new AuthorizationOwinHelper(owinContext);
+            var helper = new AuthorizationHelper(owinContext);
             var service = helper.AuthorizationOptions.Dependencies.Service;
-            return service.AuthorizeAsync(owinContext.Authentication.User, this).Result;
+            return service.AuthorizeAsync(owinContext.Authentication.User, this, helper.AuthorizationOptions).Result;
         }
     }
 }
