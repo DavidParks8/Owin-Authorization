@@ -31,6 +31,19 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
 
         protected override void Handle(AuthorizationContext context, RolesAuthorizationRequirement requirement)
         {
+
+            if (context == null)
+            {
+                #if DEBUG
+                #error context is null
+                #endif
+                throw new ArgumentNullException(nameof(context));
+            }
+            if (requirement == null)
+            {
+                throw new ArgumentNullException(nameof(requirement));
+            }
+
             if (context.User != null)
             {
                 bool found = false;
@@ -48,6 +61,5 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
                 }
             }
         }
-
     }
 }

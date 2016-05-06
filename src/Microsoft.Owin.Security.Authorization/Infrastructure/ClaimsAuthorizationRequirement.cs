@@ -3,6 +3,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Microsoft.Owin.Security.Authorization.Infrastructure
@@ -27,6 +29,11 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
 
         protected override void Handle(AuthorizationContext context, ClaimsAuthorizationRequirement requirement)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
             if (context.User != null)
             {
                 var found = false;

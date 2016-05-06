@@ -2,6 +2,8 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Microsoft.Owin.Security.Authorization.Infrastructure
@@ -25,6 +27,11 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
 
         protected override void Handle(AuthorizationContext context, NameAuthorizationRequirement requirement)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
             if (context.User != null)
             {
                 // REVIEW: Do we need to do normalization?  casing/loc?

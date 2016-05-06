@@ -35,6 +35,11 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
 
         public async Task HandleAsync(AuthorizationContext context)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
             if (await Handler(context))
             {
                 context.Succeed(this);

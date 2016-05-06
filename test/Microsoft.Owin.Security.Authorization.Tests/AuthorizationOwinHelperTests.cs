@@ -7,7 +7,7 @@ namespace Microsoft.Owin.Security.Authorization
     [TestClass, ExcludeFromCodeCoverage]
     public class AuthorizationOwinHelperTests
     {
-        [SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "Microsoft.Owin.Security.Authorization.AuthorizationOwinHelper", Justification = "Expected exception")]
+        [SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "Microsoft.Owin.Security.Authorization.AuthorizationHelper", Justification = "Expected exception")]
         [TestMethod, ExpectedException(typeof(ArgumentNullException))]
         public void AuthorizationOwinHelperShouldThrowWhenPassedNullOwinContext()
         {

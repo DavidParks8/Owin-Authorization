@@ -26,6 +26,11 @@ namespace Microsoft.Owin.Security.Authorization
 
         public AuthorizationPolicyBuilder AddAuthenticationSchemes(params string[] schemes)
         {
+            if (schemes == null)
+            {
+                throw new ArgumentNullException(nameof(schemes));
+            }
+
             foreach (var authType in schemes)
             {
                 AuthenticationSchemes.Add(authType);
@@ -35,6 +40,11 @@ namespace Microsoft.Owin.Security.Authorization
 
         public AuthorizationPolicyBuilder AddRequirements(params IAuthorizationRequirement[] requirements)
         {
+            if (requirements == null)
+            {
+                throw new ArgumentNullException(nameof(requirements));
+            }
+
             foreach (var req in requirements)
             {
                 Requirements.Add(req);

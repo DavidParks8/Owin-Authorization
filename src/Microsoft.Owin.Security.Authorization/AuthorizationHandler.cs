@@ -1,6 +1,8 @@
 // Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,6 +13,11 @@ namespace Microsoft.Owin.Security.Authorization
     {
         public void Handle(AuthorizationContext context)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
             foreach (var req in context.Requirements.OfType<TRequirement>())
             {
                 Handle(context, req);
@@ -19,6 +26,11 @@ namespace Microsoft.Owin.Security.Authorization
 
         public virtual async Task HandleAsync(AuthorizationContext context)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
             foreach (var req in context.Requirements.OfType<TRequirement>())
             {
                 await HandleAsync(context, req);
@@ -39,6 +51,11 @@ namespace Microsoft.Owin.Security.Authorization
     {
         public virtual async Task HandleAsync(AuthorizationContext context)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
             if (context.Resource is TResource)
             {
                 foreach (var req in context.Requirements.OfType<TRequirement>())
@@ -56,6 +73,11 @@ namespace Microsoft.Owin.Security.Authorization
 
         public virtual void Handle(AuthorizationContext context)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
             if (context.Resource is TResource)
             {
                 foreach (var req in context.Requirements.OfType<TRequirement>())

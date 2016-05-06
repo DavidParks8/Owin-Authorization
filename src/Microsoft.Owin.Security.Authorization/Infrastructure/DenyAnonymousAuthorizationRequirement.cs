@@ -1,6 +1,9 @@
 // Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Microsoft.Owin.Security.Authorization.Infrastructure
@@ -9,6 +12,11 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
     {
         protected override void Handle(AuthorizationContext context, DenyAnonymousAuthorizationRequirement requirement)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
             var user = context.User;
             var userIsAnonymous =
                 user?.Identity == null ||
