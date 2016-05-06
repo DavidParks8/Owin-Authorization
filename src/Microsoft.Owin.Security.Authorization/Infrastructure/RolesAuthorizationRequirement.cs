@@ -34,9 +34,10 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
 
             if (context == null)
             {
-                #if DEBUG
-                #error context is null
-                #endif
+                // Review: see how error preprocessor directive can be used to enforce best practices
+                //#if DEBUG
+                //#error context is null
+                //#endif
                 throw new ArgumentNullException(nameof(context));
             }
             if (requirement == null)
