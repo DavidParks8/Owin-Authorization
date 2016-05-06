@@ -28,16 +28,5 @@ namespace Microsoft.Owin.Security.Authorization
                 throw new InvalidOperationException(Resources.Exception_PleaseSetupOwinResourceAuthorizationInYourStartupFile);
             }
         }
-
-        public bool ShouldUseDefaultPolicy(IAuthorizeData authorizeData)
-        {
-            if (authorizeData == null)
-            {
-                return true;
-            }
-
-            return string.IsNullOrWhiteSpace(authorizeData.Policy)
-                   || string.IsNullOrWhiteSpace(authorizeData.Roles);
-        }
     }
 }
