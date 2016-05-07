@@ -18,7 +18,7 @@ namespace Microsoft.Owin.Security.Authorization
             _owinContextAccessor = owinContextAccessor;
         }
 
-        public async Task<bool> IsAuthorizedAsync(IAuthorizationHolder controller, ClaimsPrincipal user, IResourceAuthorize authorizeAttribute)
+        public async Task<bool> IsAuthorizedAsync(IAuthorizationController controller, ClaimsPrincipal user, IResourceAuthorize authorizeAttribute)
         {
             if (user == null)
             {

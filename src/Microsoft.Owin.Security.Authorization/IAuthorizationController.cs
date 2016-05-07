@@ -1,6 +1,6 @@
 ﻿namespace Microsoft.Owin.Security.Authorization
 {
-    public interface IAuthorizationHolder
+    public interface IAuthorizationController
     {
         AuthorizationOptions AuthorizationOptions { get; }
     }

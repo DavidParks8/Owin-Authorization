@@ -48,7 +48,7 @@ namespace Microsoft.Owin.Security.Authorization.Mvc
                 throw new ArgumentNullException(nameof(filterContext));
             }
 
-            var controller = filterContext.Controller as IAuthorizationHolder;
+            var controller = filterContext.Controller as IAuthorizationController;
             var user = (ClaimsPrincipal) filterContext.HttpContext.User;
             if (!_authorizationHelper.IsAuthorizedAsync(controller, user, this).Result)
             {

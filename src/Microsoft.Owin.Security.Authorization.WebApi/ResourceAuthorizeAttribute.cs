@@ -44,7 +44,7 @@ namespace Microsoft.Owin.Security.Authorization.WebApi
                 throw new ArgumentNullException(nameof(actionContext));
             }
 
-            var controller = actionContext.ControllerContext.Controller as IAuthorizationHolder;
+            var controller = actionContext.ControllerContext.Controller as IAuthorizationController;
             var user = (ClaimsPrincipal)actionContext.RequestContext.Principal;
             return _authorizationHelper.IsAuthorizedAsync(controller, user, this).Result;
         }

@@ -73,7 +73,7 @@
     <Compile Include="DefaultAuthorizationService.cs" />
     <Compile Include="HttpContextAccessor.cs" />
     <Compile Include="IAuthorizationHandler.cs" />
-    <Compile Include="IAuthorizationHolder.cs" />
+    <Compile Include="IAuthorizationController.cs" />
     <Compile Include="IAuthorizationPolicyProvider.cs" />
     <Compile Include="IAuthorizationRequirement.cs" />
     <Compile Include="IAuthorizationService.cs" />
