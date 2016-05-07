@@ -30,7 +30,7 @@ namespace Microsoft.Owin.Security.Authorization.WebApi
             {
                 throw new ArgumentNullException(nameof(actionContext));
             }
-
+            
             var owinContext = actionContext.Request.GetOwinContext();
             var helper = new AuthorizationHelper(owinContext);
             var service = helper.AuthorizationOptions.Dependencies.Service;
