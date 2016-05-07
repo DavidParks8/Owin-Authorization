@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.Owin.Security.Authorization.Infrastructure;
 
 namespace Microsoft.Owin.Security.Authorization
 {
@@ -54,7 +55,10 @@ namespace Microsoft.Owin.Security.Authorization
             var authorizationService = options.Dependencies.Service;
             if (authorizationService == null)
             {
-                throw new InvalidOperationException("No IAuthorizationService could be found");
+                var policyProvider = new DefaultAuthorizationPolicyProvider(options);
+                var handlers = new IAuthorizationHandler[] {new PassThroughAuthorizationHandler()};
+                var logger = options.Dependencies.LoggerFactory?.Create("default");
+                authorizationService = new DefaultAuthorizationService(policyProvider, handlers, logger);
             }
 
             return await authorizationService.AuthorizeAsync(user, authorizeAttribute, options);
