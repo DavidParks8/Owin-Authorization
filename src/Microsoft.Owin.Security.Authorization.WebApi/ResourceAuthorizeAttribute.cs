@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
+using System.Security.Claims;
 using System.Web.Http.Controllers;
 
 namespace Microsoft.Owin.Security.Authorization.WebApi
@@ -12,10 +13,22 @@ namespace Microsoft.Owin.Security.Authorization.WebApi
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
     public class ResourceAuthorizeAttribute : System.Web.Http.AuthorizeAttribute, IResourceAuthorize
     {
+        private readonly IResourceAuthorizationHelper _authorizationHelper;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceAuthorizeAttribute"/> class. 
         /// </summary>
-        public ResourceAuthorizeAttribute() { }
+        public ResourceAuthorizeAttribute() : this(new AuthorizationHelper(new OwinContextAccessor(new HttpContextAccessor()))) { }
+
+        public ResourceAuthorizeAttribute(IResourceAuthorizationHelper authorizationHelper)
+        {
+            if (authorizationHelper == null)
+            {
+                throw new ArgumentNullException(nameof(authorizationHelper));
+            }
+
+            _authorizationHelper = authorizationHelper;
+        }
 
         /// <inheritdoc />
         public string Policy { get; set; }
@@ -30,11 +43,10 @@ namespace Microsoft.Owin.Security.Authorization.WebApi
             {
                 throw new ArgumentNullException(nameof(actionContext));
             }
-            
-            var owinContext = actionContext.Request.GetOwinContext();
-            var helper = new AuthorizationHelper(owinContext);
-            var service = helper.AuthorizationOptions.Dependencies.Service;
-            return service.AuthorizeAsync(owinContext.Authentication.User, this, helper.AuthorizationOptions).Result;
+
+            var controller = actionContext.ControllerContext.Controller as IAuthorizationHolder;
+            var user = (ClaimsPrincipal)actionContext.RequestContext.Principal;
+            return _authorizationHelper.IsAuthorizedAsync(controller, user, this).Result;
         }
     }
 }

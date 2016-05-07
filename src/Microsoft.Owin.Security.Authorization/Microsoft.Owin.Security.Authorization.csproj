@@ -62,20 +62,23 @@
   <ItemGroup>
     <Compile Include="AuthorizationContext.cs" />
     <Compile Include="AuthorizationHandler.cs" />
-    <Compile Include="AuthorizationOptions.cs" />
     <Compile Include="AuthorizationHelper.cs" />
+    <Compile Include="AuthorizationOptions.cs" />
+    <Compile Include="AuthorizationDependencyHelper.cs" />
     <Compile Include="AuthorizationPolicy.cs" />
     <Compile Include="AuthorizationPolicyBuilder.cs" />
     <Compile Include="AuthorizationServiceExtensions.cs" />
     <Compile Include="AuthorizeDependencies.cs" />
     <Compile Include="DefaultAuthorizationPolicyProvider.cs" />
     <Compile Include="DefaultAuthorizationService.cs" />
+    <Compile Include="HttpContextAccessor.cs" />
     <Compile Include="IAuthorizationHandler.cs" />
     <Compile Include="IAuthorizationHolder.cs" />
     <Compile Include="IAuthorizationPolicyProvider.cs" />
     <Compile Include="IAuthorizationRequirement.cs" />
     <Compile Include="IAuthorizationService.cs" />
     <Compile Include="IAuthorizeData.cs" />
+    <Compile Include="IHttpContextAccessor.cs" />
     <Compile Include="Infrastructure\AppBuilderExtensions.cs" />
     <Compile Include="Infrastructure\AssertionRequirement.cs" />
     <Compile Include="Infrastructure\ClaimsAuthorizationRequirement.cs" />
@@ -85,6 +88,7 @@
     <Compile Include="Infrastructure\PassThroughAuthorizationHandler.cs" />
     <Compile Include="Infrastructure\RolesAuthorizationRequirement.cs" />
     <Compile Include="IOwinContextAccessor.cs" />
+    <Compile Include="IResourceAuthorizationHelper.cs" />
     <Compile Include="LoggingExtensions.cs" />
     <Compile Include="OwinContextAccessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

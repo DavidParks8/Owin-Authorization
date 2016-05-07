@@ -12,25 +12,24 @@ namespace Microsoft.Owin.Security.Authorization.Mvc
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
     public class ResourceAuthorizeAttribute : FilterAttribute, IResourceAuthorize , IAuthorizationFilter
     {
-        private readonly IOwinContextAccessor m_contextAccessor;
+        private readonly  IResourceAuthorizationHelper _authorizationHelper;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceAuthorizeAttribute"/> class. 
         /// </summary>
-        public ResourceAuthorizeAttribute() : this(new OwinContextAccessor()) { }
+        public ResourceAuthorizeAttribute() : this(new AuthorizationHelper(new OwinContextAccessor(new HttpContextAccessor()))) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceAuthorizeAttribute"/> class. 
         /// </summary>
-        /// <param name="contextAccessor">Allows easily testable retrieval of an <see cref="IOwinContext"/></param>
-        public ResourceAuthorizeAttribute(IOwinContextAccessor contextAccessor)
+        public ResourceAuthorizeAttribute(IResourceAuthorizationHelper authorizationHelper)
         {
-            if (contextAccessor == null)
+            if (authorizationHelper == null)
             {
-                throw new ArgumentNullException(nameof(contextAccessor));
+                throw new ArgumentNullException(nameof(authorizationHelper));
             }
 
-            m_contextAccessor = contextAccessor;
+            _authorizationHelper = authorizationHelper;
         }
 
         /// <inheritdoc />
@@ -49,38 +48,9 @@ namespace Microsoft.Owin.Security.Authorization.Mvc
                 throw new ArgumentNullException(nameof(filterContext));
             }
 
-            AuthorizationOptions options;
-            var httpContext = filterContext.HttpContext;
             var controller = filterContext.Controller as IAuthorizationHolder;
-            if (controller != null)
-            {
-                options = controller.AuthorizationOptions;
-            }
-            else
-            {
-                var owinContext = m_contextAccessor.GetOwinContext(httpContext);
-                var helper = new AuthorizationHelper(owinContext);
-                options = helper.AuthorizationOptions;
-            }
-
-            if (options == null)
-            {
-                throw new InvalidOperationException("AuthorizationOptions must not be null.  Your resource authorization may be set up incorrectly.");
-            }
-
-            if (options.Dependencies == null)
-            {
-                throw new InvalidOperationException("AuthorizationOptions.Dependencies must not be null");
-            }
-
-            var authorizationService = options.Dependencies.Service;
-            if (authorizationService == null)
-            {
-                throw new InvalidOperationException("No IAuthorizationService could be found");
-            }
-
-            var user = (ClaimsPrincipal) httpContext.User;
-            if (!authorizationService.AuthorizeAsync(user, this, options).Result)
+            var user = (ClaimsPrincipal) filterContext.HttpContext.User;
+            if (!_authorizationHelper.IsAuthorizedAsync(controller, user, this).Result)
             {
                 filterContext.Result = new HttpUnauthorizedResult();
             }
