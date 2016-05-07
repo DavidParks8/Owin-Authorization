@@ -3,6 +3,9 @@ using Microsoft.Owin.Security.Authorization.Properties;
 
 namespace Microsoft.Owin.Security.Authorization
 {
+    /// <summary>
+    /// Extracts authorization objects from the <see cref="IOwinContext"/> environment.
+    /// </summary>
     public class AuthorizationDependencyHelper
     {
         public AuthorizationOptions AuthorizationOptions { get; }

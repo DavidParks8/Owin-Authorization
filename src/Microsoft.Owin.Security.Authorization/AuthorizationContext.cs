@@ -13,9 +13,18 @@ namespace Microsoft.Owin.Security.Authorization
     /// </summary>
     public class AuthorizationContext
     {
-        private HashSet<IAuthorizationRequirement> _pendingRequirements;
-        private bool _failCalled;
+        private readonly HashSet<IAuthorizationRequirement> _pendingRequirements;
         private bool _succeedCalled;
+
+        public IEnumerable<IAuthorizationRequirement> Requirements { get; }
+        public ClaimsPrincipal User { get; }
+        public object Resource { get; }
+
+        public IEnumerable<IAuthorizationRequirement> PendingRequirements => _pendingRequirements;
+
+        public bool HasFailed { get; private set; }
+
+        public bool HasSucceeded => !HasFailed && _succeedCalled && !PendingRequirements.Any();
 
         public AuthorizationContext(
             IEnumerable<IAuthorizationRequirement> requirements,
@@ -33,25 +42,9 @@ namespace Microsoft.Owin.Security.Authorization
             _pendingRequirements = new HashSet<IAuthorizationRequirement>(requirements);
         }
 
-        public IEnumerable<IAuthorizationRequirement> Requirements { get; }
-        public ClaimsPrincipal User { get; }
-        public object Resource { get; }
-
-        public IEnumerable<IAuthorizationRequirement> PendingRequirements { get { return _pendingRequirements; } }
-
-        public bool HasFailed { get { return _failCalled; } }
-
-        public bool HasSucceeded
-        {
-            get
-            {
-                return !_failCalled && _succeedCalled && !PendingRequirements.Any();
-            }
-        }
-
         public void Fail()
         {
-            _failCalled = true;
+            HasFailed = true;
         }
 
         public void Succeed(IAuthorizationRequirement requirement)
