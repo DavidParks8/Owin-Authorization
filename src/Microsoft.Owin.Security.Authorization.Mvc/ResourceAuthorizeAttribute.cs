@@ -12,7 +12,7 @@ namespace Microsoft.Owin.Security.Authorization.Mvc
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
     public class ResourceAuthorizeAttribute : FilterAttribute, IResourceAuthorize , IAuthorizationFilter
     {
-        private readonly  IResourceAuthorizationHelper _authorizationHelper;
+        public IResourceAuthorizationHelper AuthorizationHelper { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceAuthorizeAttribute"/> class. 
@@ -29,7 +29,7 @@ namespace Microsoft.Owin.Security.Authorization.Mvc
                 throw new ArgumentNullException(nameof(authorizationHelper));
             }
 
-            _authorizationHelper = authorizationHelper;
+            AuthorizationHelper = authorizationHelper;
         }
 
         /// <inheritdoc />
@@ -50,7 +50,7 @@ namespace Microsoft.Owin.Security.Authorization.Mvc
 
             var controller = filterContext.Controller as IAuthorizationController;
             var user = (ClaimsPrincipal) filterContext.HttpContext.User;
-            if (!_authorizationHelper.IsAuthorizedAsync(controller, user, this).Result)
+            if (!AuthorizationHelper.IsAuthorizedAsync(controller, user, this).Result)
             {
                 filterContext.Result = new HttpUnauthorizedResult();
             }

@@ -13,7 +13,7 @@ namespace Microsoft.Owin.Security.Authorization.WebApi
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
     public class ResourceAuthorizeAttribute : System.Web.Http.AuthorizeAttribute, IResourceAuthorize
     {
-        private readonly IResourceAuthorizationHelper _authorizationHelper;
+        public IResourceAuthorizationHelper AuthorizationHelper { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceAuthorizeAttribute"/> class. 
@@ -27,7 +27,7 @@ namespace Microsoft.Owin.Security.Authorization.WebApi
                 throw new ArgumentNullException(nameof(authorizationHelper));
             }
 
-            _authorizationHelper = authorizationHelper;
+            AuthorizationHelper = authorizationHelper;
         }
 
         /// <inheritdoc />
@@ -46,7 +46,7 @@ namespace Microsoft.Owin.Security.Authorization.WebApi
 
             var controller = actionContext.ControllerContext.Controller as IAuthorizationController;
             var user = (ClaimsPrincipal)actionContext.RequestContext.Principal;
-            return _authorizationHelper.IsAuthorizedAsync(controller, user, this).Result;
+            return AuthorizationHelper.IsAuthorizedAsync(controller, user, this).Result;
         }
     }
 }
