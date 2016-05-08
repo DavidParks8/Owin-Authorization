@@ -99,10 +99,11 @@
     </Compile>
     <Compile Include="ResourceAuthorizationMiddleware.cs" />
     <Compile Include="IResourceAuthorize.cs" />
+    <Compile Include="Properties\ResourceHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>

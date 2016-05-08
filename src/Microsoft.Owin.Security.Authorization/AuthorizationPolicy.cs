@@ -82,7 +82,7 @@ namespace Microsoft.Owin.Security.Authorization
                     var policy = options.GetPolicy(authorizeAttribute.Policy);
                     if (policy == null)
                     {
-                        throw new InvalidOperationException(Resources.FormatException_AuthorizationPolicyNotFound(authorizeAttribute.Policy));
+                        throw new InvalidOperationException(ResourceHelper.FormatException_AuthorizationPolicyNotFound(authorizeAttribute.Policy));
                     }
                     policyBuilder.Combine(policy);
                     useDefaultPolicy = false;

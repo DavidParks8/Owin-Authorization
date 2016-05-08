@@ -8,8 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System.Globalization;
-
 namespace Microsoft.Owin.Security.Authorization.Properties {
     using System;
     
@@ -24,7 +22,7 @@ namespace Microsoft.Owin.Security.Authorization.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -38,7 +36,7 @@ namespace Microsoft.Owin.Security.Authorization.Properties {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Microsoft.Owin.Security.Authorization.Properties.Resources", typeof(Resources).Assembly);
@@ -53,7 +51,7 @@ namespace Microsoft.Owin.Security.Authorization.Properties {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -65,7 +63,7 @@ namespace Microsoft.Owin.Security.Authorization.Properties {
         /// <summary>
         ///   Looks up a localized string similar to The owin environment dictionary was null.
         /// </summary>
-        internal static string ErrorTheOwinEnvironmentDictionaryWasNull {
+        public static string ErrorTheOwinEnvironmentDictionaryWasNull {
             get {
                 return ResourceManager.GetString("ErrorTheOwinEnvironmentDictionaryWasNull", resourceCulture);
             }
@@ -74,24 +72,25 @@ namespace Microsoft.Owin.Security.Authorization.Properties {
         /// <summary>
         ///   Looks up a localized string similar to AuthorizationPolicy must have at least one requirement..
         /// </summary>
-        internal static string Exception_AuthorizationPolicyEmpty {
+        public static string Exception_AuthorizationPolicyEmpty {
             get {
                 return ResourceManager.GetString("Exception_AuthorizationPolicyEmpty", resourceCulture);
             }
         }
-
+        
         /// <summary>
-        /// The AuthorizationPolicy named: '{0}' was not found.
+        ///   Looks up a localized string similar to The AuthorizationPolicy named: &apos;{0}&apos; was not found..
         /// </summary>
-        internal static string FormatException_AuthorizationPolicyNotFound(object p0)
-        {
-            return string.Format(CultureInfo.CurrentCulture, ResourceManager.GetString("Exception_AuthorizationPolicyNotFound"), p0);
+        public static string Exception_AuthorizationPolicyNotFound {
+            get {
+                return ResourceManager.GetString("Exception_AuthorizationPolicyNotFound", resourceCulture);
+            }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Please setup owin resource authorization in your startup file.
         /// </summary>
-        internal static string Exception_PleaseSetupOwinResourceAuthorizationInYourStartupFile {
+        public static string Exception_PleaseSetupOwinResourceAuthorizationInYourStartupFile {
             get {
                 return ResourceManager.GetString("Exception_PleaseSetupOwinResourceAuthorizationInYourStartupFile", resourceCulture);
             }
@@ -100,7 +99,7 @@ namespace Microsoft.Owin.Security.Authorization.Properties {
         /// <summary>
         ///   Looks up a localized string similar to At least one role must be specified..
         /// </summary>
-        internal static string Exception_RoleRequirementEmpty {
+        public static string Exception_RoleRequirementEmpty {
             get {
                 return ResourceManager.GetString("Exception_RoleRequirementEmpty", resourceCulture);
             }
