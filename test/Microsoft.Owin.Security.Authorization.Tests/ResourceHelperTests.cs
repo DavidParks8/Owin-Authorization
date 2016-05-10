@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Microsoft.Owin.Security.Authorization
 {
     [TestClass, ExcludeFromCodeCoverage]
-    public class ResourceHelperTests
+    public class ResourceHelperTests : TestClassBase
     {
         [TestMethod, UnitTest]
         public void EnsureAuthorizationPolicyNotFoundIsFormatted()

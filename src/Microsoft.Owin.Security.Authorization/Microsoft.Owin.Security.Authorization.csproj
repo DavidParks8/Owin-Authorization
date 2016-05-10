@@ -68,7 +68,7 @@
     <Compile Include="AuthorizationPolicy.cs" />
     <Compile Include="AuthorizationPolicyBuilder.cs" />
     <Compile Include="AuthorizationServiceExtensions.cs" />
-    <Compile Include="AuthorizeDependencies.cs" />
+    <Compile Include="AuthorizationDependencies.cs" />
     <Compile Include="DefaultAuthorizationPolicyProvider.cs" />
     <Compile Include="DefaultAuthorizationService.cs" />
     <Compile Include="HttpContextAccessor.cs" />
