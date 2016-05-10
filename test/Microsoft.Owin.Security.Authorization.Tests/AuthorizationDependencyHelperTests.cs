@@ -55,7 +55,7 @@ namespace Microsoft.Owin.Security.Authorization
             environment.Add(ResourceAuthorizationMiddleware.ServiceKey, options);
             owinContext.Setup(x => x.Environment).Returns(environment);
             var helper = new AuthorizationDependencyHelper(owinContext.Object);
-
+            Assert.AreSame(options, helper.AuthorizationOptions);
         }
     }
 }
