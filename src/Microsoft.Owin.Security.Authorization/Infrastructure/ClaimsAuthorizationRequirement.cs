@@ -3,8 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Microsoft.Owin.Security.Authorization.Infrastructure
@@ -34,22 +32,24 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
                 throw new ArgumentNullException(nameof(context));
             }
 
-            if (context.User != null)
+            if (context.User == null)
             {
-                var found = false;
-                if (requirement.AllowedValues == null || !requirement.AllowedValues.Any())
-                {
-                    found = context.User.Claims.Any(c => string.Equals(c.Type, requirement.ClaimType, StringComparison.OrdinalIgnoreCase));
-                }
-                else
-                {
-                    found = context.User.Claims.Any(c => string.Equals(c.Type, requirement.ClaimType, StringComparison.OrdinalIgnoreCase)
-                                                        && requirement.AllowedValues.Contains(c.Value, StringComparer.Ordinal));
-                }
-                if (found)
-                {
-                    context.Succeed(requirement);
-                }
+                return;
+            }
+
+            bool found;
+            if (requirement.AllowedValues == null || !requirement.AllowedValues.Any())
+            {
+                found = context.User.Claims.Any(c => string.Equals(c.Type, requirement.ClaimType, StringComparison.OrdinalIgnoreCase));
+            }
+            else
+            {
+                found = context.User.Claims.Any(c => string.Equals(c.Type, requirement.ClaimType, StringComparison.OrdinalIgnoreCase)
+                                                     && requirement.AllowedValues.Contains(c.Value, StringComparer.Ordinal));
+            }
+            if (found)
+            {
+                context.Succeed(requirement);
             }
         }
     }
