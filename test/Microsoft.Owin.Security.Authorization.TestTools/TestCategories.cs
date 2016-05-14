@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Microsoft.Owin.Security.Authorization
+namespace Microsoft.Owin.Security.Authorization.TestTools
 {
     /// <summary>Attribute for a test category which allows enums instead of strings.</summary>
     /// <remarks>David, 9/7/2014.</remarks>

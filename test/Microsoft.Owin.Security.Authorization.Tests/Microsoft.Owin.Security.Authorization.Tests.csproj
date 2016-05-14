@@ -106,14 +106,16 @@
     <Compile Include="AuthorizationDependencyHelperTests.cs" />
     <Compile Include="Infrastructure\AppBuilderExtensionsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestCategories.cs" />
-    <Compile Include="TestClassBase.cs" />
     <Compile Include="ResourceHelperTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Microsoft.Owin.Security.Authorization\Microsoft.Owin.Security.Authorization.csproj">
       <Project>{a74dc534-bd34-419b-9fd4-dabcbae53a46}</Project>
       <Name>Microsoft.Owin.Security.Authorization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Microsoft.Owin.Security.Authorization.TestTools\Microsoft.Owin.Security.Authorization.TestTools.csproj">
+      <Project>{43dbb1b1-539b-4740-9cc8-998a742c598a}</Project>
+      <Name>Microsoft.Owin.Security.Authorization.TestTools</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

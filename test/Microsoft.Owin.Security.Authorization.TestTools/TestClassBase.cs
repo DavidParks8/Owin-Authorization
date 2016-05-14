@@ -1,9 +1,8 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
-namespace Microsoft.Owin.Security.Authorization
+namespace Microsoft.Owin.Security.Authorization.TestTools
 {
     [TestClass, ExcludeFromCodeCoverage]
     public abstract class TestClassBase
