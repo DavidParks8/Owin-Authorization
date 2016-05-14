@@ -1,0 +1,11 @@
+﻿namespace Microsoft.Owin.Security.Authorization.TestTools
+{
+    /// <summary>
+    /// Common justification messages for suppressing code analysis warnings
+    /// </summary>
+    public static class Justifications
+    {
+        public const string ExpectedException = "Expected exception";
+        public const string AsyncTestMustBeInstanceMethod = "Must be an instance method in order to be recognized as a test";
+    }
+}

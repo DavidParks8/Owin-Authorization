@@ -9,7 +9,7 @@ namespace Microsoft.Owin.Security.Authorization.TestTools
     {
         protected MockRepository Repository { get; } = new MockRepository(MockBehavior.Strict);
 
-        protected void FailWhenNoExceptionIsThrown()
+        protected static void FailWhenNoExceptionIsThrown()
         {
             Assert.Fail("No exception was thrown");
         }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
 using Microsoft.Owin.Security.Authorization.TestTools;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -10,7 +9,9 @@ namespace Microsoft.Owin.Security.Authorization
     [TestClass, ExcludeFromCodeCoverage]
     public class AuthorizationDependencyHelperTests : TestClassBase
     {
-        [SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "Microsoft.Owin.Security.Authorization." + nameof(AuthorizationDependencyHelper), Justification = "Expected exception")]
+        private const string _messageId = "Microsoft.Owin.Security.Authorization." + nameof(AuthorizationDependencyHelper);
+
+        [SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = _messageId, Justification = Justifications.ExpectedException)]
         [TestMethod, UnitTest, ExpectedException(typeof(ArgumentNullException))]
         public void ThrowWhenPassedNullContext()
         {
@@ -18,7 +19,7 @@ namespace Microsoft.Owin.Security.Authorization
             new AuthorizationDependencyHelper(null);
         }
 
-        [SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "Microsoft.Owin.Security.Authorization." + nameof(AuthorizationDependencyHelper), Justification = "Expected exception")]
+        [SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = _messageId, Justification = Justifications.ExpectedException)]
         [TestMethod, UnitTest, ExpectedException(typeof(ArgumentNullException))]
         public void ThrowWhenPassedNullEnvironment()
         {
@@ -28,7 +29,7 @@ namespace Microsoft.Owin.Security.Authorization
             new AuthorizationDependencyHelper(owinContext.Object);
         }
 
-        [SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "Microsoft.Owin.Security.Authorization." + nameof(AuthorizationDependencyHelper), Justification = "Expected exception")]
+        [SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = _messageId, Justification = Justifications.ExpectedException)]
         [TestMethod, UnitTest]
         public void ThrowWhenOptionsNotFoundInEnvironment()
         {
