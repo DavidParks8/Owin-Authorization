@@ -31,6 +31,10 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
             {
                 throw new ArgumentNullException(nameof(context));
             }
+            if (requirement == null)
+            {
+                throw new ArgumentNullException(nameof(requirement));
+            }
 
             if (context.User == null)
             {
