@@ -19,11 +19,13 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
                 throw new ArgumentNullException(nameof(allowedRoles));
             }
 
+            // ReSharper disable once PossibleMultipleEnumeration because it will not enumerate the entire list
             if (!allowedRoles.Any())
             {
                 throw new InvalidOperationException(Resources.Exception_RoleRequirementEmpty);
             }
 
+            // ReSharper disable once PossibleMultipleEnumeration
             AllowedRoles = allowedRoles;
         }
 
@@ -31,13 +33,8 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
 
         protected override void Handle(AuthorizationContext context, RolesAuthorizationRequirement requirement)
         {
-
             if (context == null)
             {
-                // Review: see how error preprocessor directive can be used to enforce best practices
-                //#if DEBUG
-                //#error context is null
-                //#endif
                 throw new ArgumentNullException(nameof(context));
             }
             if (requirement == null)
