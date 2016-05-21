@@ -9,7 +9,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Microsoft.Owin.Security.Authorization.Infrastructure
 {
     [TestClass, ExcludeFromCodeCoverage]
-    public class NameAuthorizationRequirementTests
+    public class NameAuthorizationRequirementTests : TestClassBase
     {
         private class TestNameRequirement : NameAuthorizationRequirement
         {
