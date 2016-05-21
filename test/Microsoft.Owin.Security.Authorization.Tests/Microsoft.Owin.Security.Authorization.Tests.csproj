@@ -109,6 +109,7 @@
     <Compile Include="Infrastructure\RequirementHandlerTestsBase.cs" />
     <Compile Include="Infrastructure\ClaimsAuthorizationRequirementTests.cs" />
     <Compile Include="Infrastructure\DenyAnonymousAuthorizationRequirementTests.cs" />
+    <Compile Include="Infrastructure\NameAuthorizationRequirementTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResourceHelperTests.cs" />
   </ItemGroup>

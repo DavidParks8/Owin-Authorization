@@ -3,13 +3,12 @@
 
 using System;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
+using System.Security.Claims;
 
 namespace Microsoft.Owin.Security.Authorization.Infrastructure
 {
     /// <summary>
-    /// Requirement that ensures a specific Name
+    /// Requirement that ensures a specific Name using a case insensitive comparison
     /// </summary>
     public class NameAuthorizationRequirement : AuthorizationHandler<NameAuthorizationRequirement>, IAuthorizationRequirement
     {
@@ -31,15 +30,33 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
             {
                 throw new ArgumentNullException(nameof(context));
             }
-
-            if (context.User != null)
+            if (requirement == null)
             {
-                // REVIEW: Do we need to do normalization?  casing/loc?
-                if (context.User.Identities.Any(i => string.Equals(i.Name, requirement.RequiredName)))
+                throw new ArgumentNullException(nameof(requirement));
+            }
+
+            if (context.User == null)
+            {
+                return;
+            }
+
+            var identities = context.User.Identities;
+            foreach (var identity in identities)
+            {
+                if (ContainsRequiredName(identity, requirement))
                 {
                     context.Succeed(requirement);
+                    break;
                 }
             }
+        }
+
+        private static bool ContainsRequiredName(ClaimsIdentity identity, NameAuthorizationRequirement requirement)
+        {
+            Debug.Assert(identity != null, "identity != null");
+            Debug.Assert(requirement != null, "requirement != null");
+
+            return string.Equals(identity.Name, requirement.RequiredName, StringComparison.OrdinalIgnoreCase);
         }
     }
 }
