@@ -9,7 +9,9 @@ using System.Linq;
 
 namespace Microsoft.Owin.Security.Authorization.Infrastructure
 {
-    // Must belong to with one of specified roles
+    /// <summary>
+    /// Requires the user to belong to atleast one of the roles specified in <see cref="AllowedRoles"/>
+    /// </summary>
     public class RolesAuthorizationRequirement : AuthorizationHandler<RolesAuthorizationRequirement>, IAuthorizationRequirement
     {
         public IEnumerable<string> AllowedRoles { get; }
