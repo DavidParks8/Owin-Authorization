@@ -18,9 +18,7 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
             }
 
             var user = context.User;
-            var userIsAnonymous =
-                user?.Identity == null ||
-                !user.Identities.Any(i => i.IsAuthenticated);
+            var userIsAnonymous = user?.Identity == null || !user.Identities.Any(i => i.IsAuthenticated);
             if (!userIsAnonymous)
             {
                 context.Succeed(requirement);
