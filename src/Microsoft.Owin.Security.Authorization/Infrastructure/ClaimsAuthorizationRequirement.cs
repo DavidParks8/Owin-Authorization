@@ -7,10 +7,15 @@ using System.Linq;
 
 namespace Microsoft.Owin.Security.Authorization.Infrastructure
 {
-    // Must contain a claim with the specified name, and at least one of the required values
-    // If AllowedValues is null or empty, that means any claim is valid
+    /// <summary>
+    /// Requires that the user must contain a claim with the specified name, and at least one of the required values.
+    /// If <see cref="AllowedValues"/> is null or empty, that means any claim is valid.
+    /// </summary>
     public class ClaimsAuthorizationRequirement : AuthorizationHandler<ClaimsAuthorizationRequirement>, IAuthorizationRequirement
     {
+        public string ClaimType { get; }
+        public IEnumerable<string> AllowedValues { get; }
+
         public ClaimsAuthorizationRequirement(string claimType, IEnumerable<string> allowedValues)
         {
             if (claimType == null)
@@ -21,9 +26,6 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
             ClaimType = claimType;
             AllowedValues = allowedValues;
         }
-
-        public string ClaimType { get; }
-        public IEnumerable<string> AllowedValues { get; }
 
         protected override void Handle(AuthorizationContext context, ClaimsAuthorizationRequirement requirement)
         {

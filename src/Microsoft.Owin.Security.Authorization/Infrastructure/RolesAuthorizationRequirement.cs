@@ -12,6 +12,8 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
     // Must belong to with one of specified roles
     public class RolesAuthorizationRequirement : AuthorizationHandler<RolesAuthorizationRequirement>, IAuthorizationRequirement
     {
+        public IEnumerable<string> AllowedRoles { get; }
+
         public RolesAuthorizationRequirement(IEnumerable<string> allowedRoles)
         {
             if (allowedRoles == null)
@@ -28,8 +30,6 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
             // ReSharper disable once PossibleMultipleEnumeration
             AllowedRoles = allowedRoles;
         }
-
-        public IEnumerable<string> AllowedRoles { get; }
 
         protected override void Handle(AuthorizationContext context, RolesAuthorizationRequirement requirement)
         {

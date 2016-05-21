@@ -12,6 +12,8 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
     /// </summary>
     public class NameAuthorizationRequirement : AuthorizationHandler<NameAuthorizationRequirement>, IAuthorizationRequirement
     {
+        public string RequiredName { get; }
+
         public NameAuthorizationRequirement(string requiredName)
         {
             if (requiredName == null)
@@ -21,8 +23,6 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
 
             RequiredName = requiredName;
         }
-
-        public string RequiredName { get; }
 
         protected override void Handle(AuthorizationContext context, NameAuthorizationRequirement requirement)
         {
