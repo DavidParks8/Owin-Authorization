@@ -48,9 +48,20 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
             }
             else
             {
-                found = context.User.Claims.Any(c => string.Equals(c.Type, requirement.ClaimType, StringComparison.OrdinalIgnoreCase)
-                                                     && requirement.AllowedValues.Contains(c.Value, StringComparer.Ordinal));
+                found = false;
+                foreach (var claim in context.User.Claims)
+                {
+                    if (string.Equals(claim.Type, requirement.ClaimType, StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (requirement.AllowedValues.Contains(claim.Value, StringComparer.Ordinal))
+                        {
+                            found = true;
+                            break;
+                        }
+                    }
+                }
             }
+
             if (found)
             {
                 context.Succeed(requirement);

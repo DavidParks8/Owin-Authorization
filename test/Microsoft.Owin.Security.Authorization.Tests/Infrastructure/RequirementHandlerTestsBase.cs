@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Microsoft.Owin.Security.Authorization.Infrastructure
 {
     [TestClass, ExcludeFromCodeCoverage]
-    public abstract class RequirementHandlerTestsBase<TRequirement> : TestClassBase, IRequirementHandlerTests
+    public abstract class RequirementHandlerTestsBase<TRequirement> : TestClassBase
         where TRequirement : IAuthorizationHandler, IAuthorizationRequirement
     {
         protected async Task HandleAsyncShouldSucceed(TRequirement requirement)

@@ -106,7 +106,6 @@
     <Compile Include="AuthorizationDependencyHelperTests.cs" />
     <Compile Include="Infrastructure\AppBuilderExtensionsTests.cs" />
     <Compile Include="Infrastructure\AssertionRequirementTests.cs" />
-    <Compile Include="Infrastructure\IRequirementHandlerTests.cs" />
     <Compile Include="Infrastructure\RequirementHandlerTestsBase.cs" />
     <Compile Include="Infrastructure\ClaimsAuthorizationRequirementTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
