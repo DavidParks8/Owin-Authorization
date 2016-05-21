@@ -4,12 +4,12 @@
 using Microsoft.Owin.Security.Authorization.Properties;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Microsoft.Owin.Security.Authorization.Infrastructure
 {
     // Must belong to with one of specified roles
-    // If AllowedRoles is null or empty, that means any role is valid
     public class RolesAuthorizationRequirement : AuthorizationHandler<RolesAuthorizationRequirement>, IAuthorizationRequirement
     {
         public RolesAuthorizationRequirement(IEnumerable<string> allowedRoles)
@@ -45,21 +45,18 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
                 throw new ArgumentNullException(nameof(requirement));
             }
 
-            if (context.User != null)
+            if (context.User == null)
             {
-                bool found = false;
-                if (requirement.AllowedRoles == null || !requirement.AllowedRoles.Any())
-                {
-                    // Review: What do we want to do here?  No roles requested is auto success?
-                }
-                else
-                {
-                    found = requirement.AllowedRoles.Any(r => context.User.IsInRole(r));
-                }
-                if (found)
-                {
-                    context.Succeed(requirement);
-                }
+                return;
+            }
+
+            Debug.Assert(requirement.AllowedRoles != null, "requirement.AllowedRoles != null");
+            Debug.Assert(requirement.AllowedRoles.Any(), "requirement.AllowedRoles.Any()");
+
+            var found = requirement.AllowedRoles.Any(role => context.User.IsInRole(role));
+            if (found)
+            {
+                context.Succeed(requirement);
             }
         }
     }
