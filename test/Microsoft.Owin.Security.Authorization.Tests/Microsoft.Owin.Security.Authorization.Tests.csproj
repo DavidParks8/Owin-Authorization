@@ -117,6 +117,7 @@
     <Compile Include="ResourceHelperTests.cs" />
     <Compile Include="OwinContextAccessorTests.cs" />
     <Compile Include="AuthorizationContextTests.cs" />
+    <Compile Include="AuthorizationOptionsTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Microsoft.Owin.Security.Authorization\Microsoft.Owin.Security.Authorization.csproj">
