@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <licenseUrl>https://github.com/DavidParks8/Owin-Authorization/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/DavidParks8/Owin-Authorization</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>
+    <releaseNotes>Initial package.</releaseNotes>
+    <copyright>Copyright 2016</copyright>
+    <tags>Security Owin Authorization Authentication Policy Claim Backport Mvc AspNet</tags>
+  </metadata>
+</package>

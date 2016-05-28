@@ -81,6 +81,7 @@
       <Link>Owin-Authorization.snk</Link>
     </None>
     <None Include="app.config" />
+    <None Include="Microsoft.Owin.Security.Authorization.WebApi.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
