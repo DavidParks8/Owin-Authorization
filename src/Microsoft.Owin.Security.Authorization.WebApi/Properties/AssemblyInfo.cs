@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Microsoft.Owin.Security.Authorization.WebApi")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Backport of Asp.Net core's policy based authorization to Asp.Net 4 WebApi 2")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("David Parks")]
 [assembly: AssemblyProduct("Microsoft.Owin.Security.Authorization.WebApi")]
