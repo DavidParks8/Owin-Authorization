@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>$id$</id>
+    <id>Microsoft.Owin.Security.Authorization.WebApi</id>
     <version>$version$</version>
     <title>$title$</title>
     <authors>$author$</authors>
     <owners>$author$</owners>
     <licenseUrl>https://github.com/DavidParks8/Owin-Authorization/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/DavidParks8/Owin-Authorization</projectUrl>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>$description$</description>
     <releaseNotes>Initial package.</releaseNotes>
     <copyright>Copyright 2016</copyright>
