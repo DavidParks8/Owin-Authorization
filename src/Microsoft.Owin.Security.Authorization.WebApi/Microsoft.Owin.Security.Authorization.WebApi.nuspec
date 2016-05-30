@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Microsoft.Owin.Security.Authorization.WebApi</id>
-    <version>$version$</version>
+    <version>$version$-beta</version>
     <title>$title$</title>
     <authors>$author$</authors>
     <owners>$author$</owners>
