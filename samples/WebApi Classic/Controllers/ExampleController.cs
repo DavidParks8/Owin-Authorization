@@ -25,7 +25,7 @@ namespace WebApi_Classic.Controllers
             var options = new AuthorizationOptions();
             options.AddPolicy("EmployeeOnly", policy => policy.RequireClaim("EmployeeNumber"));
             options.AddPolicy("EmployeeNumber6", policy => policy.RequireClaim("EmployeeNumber", "6"));
-
+            
             AuthorizationOptions = options;
 
             SetupDemo();
