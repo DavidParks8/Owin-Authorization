@@ -5,6 +5,6 @@ namespace Microsoft.Owin.Security.Authorization
 {
     public interface IResourceAuthorizationHelper
     {
-        Task<bool> IsAuthorizedAsync(IAuthorizationController controller, ClaimsPrincipal user, IResourceAuthorize authorizeAttribute);
+        Task<bool> IsAuthorizedAsync(IAuthorizationController controller, ClaimsPrincipal user, IAuthorizeData authorizeAttribute);
     }
 }

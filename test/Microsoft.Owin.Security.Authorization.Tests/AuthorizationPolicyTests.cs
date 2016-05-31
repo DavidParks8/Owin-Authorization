@@ -37,9 +37,10 @@ namespace Microsoft.Owin.Security.Authorization
         }
 
         [TestMethod, UnitTest, ExpectedException(typeof(ArgumentNullException))]
-        public void CombineShouldThrowWhenPoliciesParamsIsNull()
+        public void CombineShouldThrowWhenPoliciesParametersIsNull()
         {
             AuthorizationPolicy[] policies = null;
+            // ReSharper disable once ExpressionIsAlwaysNull because we want it to be null
             AuthorizationPolicy.Combine(policies);
         }
 

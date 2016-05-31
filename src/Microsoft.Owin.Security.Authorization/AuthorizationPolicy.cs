@@ -70,10 +70,10 @@ namespace Microsoft.Owin.Security.Authorization
             {
                 throw new ArgumentNullException(nameof(attributes));
             }
-
+            
             var policyBuilder = new AuthorizationPolicyBuilder();
             var any = false;
-            foreach (var authorizeAttribute in attributes.Where(x => x is IResourceAuthorize))
+            foreach (var authorizeAttribute in attributes)
             {
                 any = true;
                 var useDefaultPolicy = true;
@@ -84,34 +84,41 @@ namespace Microsoft.Owin.Security.Authorization
                     {
                         throw new InvalidOperationException(ResourceHelper.FormatException_AuthorizationPolicyNotFound(authorizeAttribute.Policy));
                     }
+
                     policyBuilder.Combine(policy);
                     useDefaultPolicy = false;
                 }
-                var rolesSplit = authorizeAttribute.Roles?.Split(',');
-                if (rolesSplit != null && rolesSplit.Any())
-                {
-                    var trimmedRolesSplit = rolesSplit.Where(r => !string.IsNullOrWhiteSpace(r)).Select(r => r.Trim());
 
-                    policyBuilder.RequireRole(trimmedRolesSplit);
+                if (!string.IsNullOrWhiteSpace(authorizeAttribute.Roles))
+                {
+                    policyBuilder.RequireRole(SplitAndTrim(authorizeAttribute.Roles));
                     useDefaultPolicy = false;
                 }
-                var authTypesSplit = authorizeAttribute.ActiveAuthenticationSchemes?.Split(',');
-                if (authTypesSplit != null && authTypesSplit.Any())
+
+                if (!string.IsNullOrWhiteSpace(authorizeAttribute.ActiveAuthenticationSchemes))
                 {
-                    foreach (var authType in authTypesSplit)
-                    {
-                        if (!string.IsNullOrWhiteSpace(authType))
-                        {
-                            policyBuilder.AuthenticationSchemes.Add(authType.Trim());
-                        }
-                    }
+                    policyBuilder.AddAuthenticationSchemes(SplitAndTrim(authorizeAttribute.ActiveAuthenticationSchemes));
+                    useDefaultPolicy = false;
                 }
+                
                 if (useDefaultPolicy)
                 {
                     policyBuilder.Combine(options.DefaultPolicy);
                 }
             }
+
             return any ? policyBuilder.Build() : null;
+        }
+
+        private static string[] SplitAndTrim(string commaSeparated)
+        {
+            var split = commaSeparated.Split(new [] {','}, StringSplitOptions.RemoveEmptyEntries);
+            for (var i = 0; i < split.Length; i++)
+            {
+                split[i] = split[i].Trim();
+            }
+
+            return split;
         }
     }
 }

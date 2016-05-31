@@ -10,7 +10,7 @@ namespace Microsoft.Owin.Security.Authorization.WebApi
     /// </summary>
     [SuppressMessage("Microsoft.Performance", "CA1813:AvoidUnsealedAttributes", Justification = "It must remain extensible")]
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
-    public class ResourceAuthorizeAttribute : System.Web.Http.AuthorizeAttribute, IResourceAuthorize
+    public class ResourceAuthorizeAttribute : System.Web.Http.AuthorizeAttribute, IAuthorizeData
     {
         public IResourceAuthorizationHelper AuthorizationHelper { get; }
 

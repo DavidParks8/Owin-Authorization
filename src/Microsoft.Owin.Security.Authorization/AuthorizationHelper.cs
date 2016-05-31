@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.Owin.Security.Authorization.Infrastructure;
@@ -19,7 +20,7 @@ namespace Microsoft.Owin.Security.Authorization
             _owinContextAccessor = owinContextAccessor;
         }
 
-        public async Task<bool> IsAuthorizedAsync(IAuthorizationController controller, ClaimsPrincipal user, IResourceAuthorize authorizeAttribute)
+        public async Task<bool> IsAuthorizedAsync(IAuthorizationController controller, ClaimsPrincipal user, IAuthorizeData authorizeAttribute)
         {
             if (user == null)
             {
@@ -61,7 +62,8 @@ namespace Microsoft.Owin.Security.Authorization
                 authorizationService = new DefaultAuthorizationService(policyProvider, handlers, logger);
             }
 
-            return await authorizationService.AuthorizeAsync(user, authorizeAttribute, options);
+            var policy = AuthorizationPolicy.Combine(options, new[] {authorizeAttribute});
+            return await authorizationService.AuthorizeAsync(user, policy);
         }
     }
 }

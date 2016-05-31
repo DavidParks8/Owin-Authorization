@@ -10,7 +10,7 @@ namespace Microsoft.Owin.Security.Authorization.Mvc
     /// </summary>
     [SuppressMessage("Microsoft.Performance", "CA1813:AvoidUnsealedAttributes", Justification = "It must remain extensible")]
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
-    public class ResourceAuthorizeAttribute : FilterAttribute, IResourceAuthorize , IAuthorizationFilter
+    public class ResourceAuthorizeAttribute : FilterAttribute, IAuthorizeData, IAuthorizationFilter
     {
         public IResourceAuthorizationHelper AuthorizationHelper { get; }
 
