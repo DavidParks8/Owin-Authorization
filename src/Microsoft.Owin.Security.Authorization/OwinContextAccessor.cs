@@ -3,6 +3,9 @@ using System.Web;
 
 namespace Microsoft.Owin.Security.Authorization
 {
+    /// <summary>
+    /// Allows for easy access of the <see cref="IOwinContext"/>
+    /// </summary>
     public class OwinContextAccessor : IOwinContextAccessor
     {
         private readonly IHttpContextAccessor _httpContextAccessor;

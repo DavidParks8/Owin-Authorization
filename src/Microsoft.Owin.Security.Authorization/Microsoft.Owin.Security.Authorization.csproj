@@ -111,7 +111,9 @@
     <None Include="..\..\Build Management\Owin-Authorization.snk">
       <Link>Owin-Authorization.snk</Link>
     </None>
-    <None Include="Microsoft.Owin.Security.Authorization.nuspec" />
+    <None Include="Microsoft.Owin.Security.Authorization.nuspec">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
