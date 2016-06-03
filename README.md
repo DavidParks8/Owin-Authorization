@@ -1,5 +1,6 @@
 # Owin-Authorization
-![Build Status](https://davidparks8.visualstudio.com/_apis/public/build/definitions/ae37acab-ad85-4e44-8b7c-ff852d94c49d/1/badge)
+Master ![Build Status](https://davidparks8.visualstudio.com/_apis/public/build/definitions/ae37acab-ad85-4e44-8b7c-ff852d94c49d/1/badge)  
+Dev ![Build Status](https://davidparks8.visualstudio.com/_apis/public/build/definitions/ae37acab-ad85-4e44-8b7c-ff852d94c49d/2/badge)
   
 Backport of Asp.Net core's policy based authorization to Asp.Net 4. The original ASP.NET core source code from which this project is based upon is available on GitHub [here]( https://github.com/aspnet/Security).
 
