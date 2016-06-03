@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using Microsoft.Owin.Security.Authorization.Infrastructure;
 using Microsoft.Owin.Security.Authorization.TestTools;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -12,7 +10,7 @@ namespace Microsoft.Owin.Security.Authorization
     public class AuthorizationPolicyBuilderTests
     {
         [TestMethod, UnitTest, ExpectedException(typeof(ArgumentNullException))]
-        public void AddAuthenticationSchemesShouldThrowWhenShemesIsNull()
+        public void AddAuthenticationSchemesShouldThrowWhenSchemesIsNull()
         {
             var builder = new AuthorizationPolicyBuilder();
             string[] nullSchemes = null;
