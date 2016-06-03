@@ -104,5 +104,23 @@ namespace Microsoft.Owin.Security.Authorization.Properties {
                 return ResourceManager.GetString("Exception_RoleRequirementEmpty", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Authorization failed for user: {0}.
+        /// </summary>
+        internal static string LogAuthorizationFailedForUser {
+            get {
+                return ResourceManager.GetString("LogAuthorizationFailedForUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Authorization was successful for user: {0}.
+        /// </summary>
+        internal static string LogAuthorizationSucceededForUser {
+            get {
+                return ResourceManager.GetString("LogAuthorizationSucceededForUser", resourceCulture);
+            }
+        }
     }
 }

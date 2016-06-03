@@ -132,4 +132,10 @@
   <data name="Exception_PleaseSetupOwinResourceAuthorizationInYourStartupFile" xml:space="preserve">
     <value>Please setup owin resource authorization in your startup file</value>
   </data>
+  <data name="LogAuthorizationFailedForUser" xml:space="preserve">
+    <value>Authorization failed for user: {0}</value>
+  </data>
+  <data name="LogAuthorizationSucceededForUser" xml:space="preserve">
+    <value>Authorization was successful for user: {0}</value>
+  </data>
 </root>

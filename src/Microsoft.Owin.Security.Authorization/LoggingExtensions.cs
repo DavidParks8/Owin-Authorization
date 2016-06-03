@@ -3,7 +3,9 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using Microsoft.Owin.Logging;
+using Microsoft.Owin.Security.Authorization.Properties;
 
 namespace Microsoft.Owin.Security.Authorization
 {
@@ -16,7 +18,7 @@ namespace Microsoft.Owin.Security.Authorization
                 throw new ArgumentNullException(nameof(logger));
             }
 
-            logger.WriteInformation($"Authorization was successful for user: {userName}");
+            logger.WriteInformation(string.Format(CultureInfo.CurrentCulture, Resources.LogAuthorizationSucceededForUser, userName));
         }
 
         public static void UserAuthorizationFailed(this ILogger logger, string userName)
@@ -26,7 +28,7 @@ namespace Microsoft.Owin.Security.Authorization
                 throw new ArgumentNullException(nameof(logger));
             }
 
-            logger.WriteInformation($"Authorization failed for user: {userName}");
+            logger.WriteInformation(string.Format(CultureInfo.CurrentCulture, Resources.LogAuthorizationFailedForUser, userName));
         }
     }
 }
