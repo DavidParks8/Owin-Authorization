@@ -106,7 +106,20 @@ namespace Microsoft.Owin.Security.Authorization
                 }
             }
 
-            return any ? policyBuilder.Build() : null;
+            if (any)
+            {
+                if (policyBuilder.AuthenticationSchemes.Count > 0)
+                {
+                    if (policyBuilder.Requirements.Count == 0)
+                    {
+                        policyBuilder.RequireAuthenticatedUser();
+                    }
+                }
+
+                return policyBuilder.Build();
+            }
+
+            return null;
         }
 
         private static string[] SplitAndTrim(string commaSeparated)
