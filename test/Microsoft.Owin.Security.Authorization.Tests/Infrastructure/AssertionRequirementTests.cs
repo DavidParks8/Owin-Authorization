@@ -27,7 +27,7 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
             new AssertionRequirement((Func<AuthorizationContext, Task<bool>>)null);
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.AsyncTestMustBeInstanceMethod)]
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest]
         public async Task HandlerShouldBeSetWhenPassedSynchronousFunc()
         {

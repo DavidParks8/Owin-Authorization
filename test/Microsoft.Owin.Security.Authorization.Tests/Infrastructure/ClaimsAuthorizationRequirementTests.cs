@@ -11,7 +11,7 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
     [TestClass, ExcludeFromCodeCoverage]
     public class ClaimsAuthorizationRequirementTests : TestClassBase
     {
-        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.AsyncTestMustBeInstanceMethod)]
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest]
         public async Task NullAllowedValuesShouldSucceed()
         {
@@ -19,7 +19,7 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
             await AssertMissingAllowedValuesShouldSucceed(requirement);
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.AsyncTestMustBeInstanceMethod)]
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest]
         public async Task EmptyAllowedValuesShouldSucceed()
         {
@@ -51,7 +51,7 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
             new ClaimsAuthorizationRequirement(null, new List<string>());
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.AsyncTestMustBeInstanceMethod)]
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest, ExpectedException(typeof(ArgumentNullException))]
         public async Task HandleAsyncShouldThrowWhenPassedNullContext()
         {
@@ -59,7 +59,7 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
             await requirement.HandleAsync(null);
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.AsyncTestMustBeInstanceMethod)]
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest]
         public async Task HandleAsyncShouldFailWhenUserIsNull()
         {
@@ -69,7 +69,7 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
             Assert.IsFalse(context.HasSucceeded);
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.AsyncTestMustBeInstanceMethod)]
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest]
         public async Task DifferentAllowedValuesShouldSucceed()
         {
@@ -83,7 +83,7 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
             await AssertClaimValueAffectsSuccess("fdsa", requirement, false);
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.AsyncTestMustBeInstanceMethod)]
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest]
         public async Task AllowedValuesShouldBeCaseSensitive()
         {
@@ -103,7 +103,7 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
             Assert.AreEqual(shouldSucceed, context.HasSucceeded);
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.AsyncTestMustBeInstanceMethod)]
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest]
         public async Task ShouldFailWithoutExpectedClaim()
         {

@@ -64,21 +64,21 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
             requirement.HandleProtected(context, null);
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.AsyncTestMustBeInstanceMethod)]
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest]
         public async Task HandleAsyncShouldFailWhenUserIsNull()
         {
             await AssertRolesAffectSuccess(null, new[] {"asdf"}, false);
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.AsyncTestMustBeInstanceMethod)]
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest]
         public async Task HandleAsyncShouldFailWhenNoRoleClaimIsPresent()
         {
             await AssertRolesAffectSuccess(new ClaimsPrincipal(), new[] {"asdf"}, false);
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.AsyncTestMustBeInstanceMethod)]
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest]
         public async Task HandleAsyncShouldSucceedWhenRoleClaimIsPresent()
         {

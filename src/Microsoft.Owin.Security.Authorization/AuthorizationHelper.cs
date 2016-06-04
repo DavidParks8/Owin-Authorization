@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.Owin.Security.Authorization.Infrastructure;
@@ -56,17 +57,25 @@ namespace Microsoft.Owin.Security.Authorization
             var authorizationService = options.Dependencies.Service;
             if (authorizationService == null)
             {
-                var policyProvider = new DefaultAuthorizationPolicyProvider(options);
-                var handlers = new HashSet<IAuthorizationHandler>(options.Dependencies.AdditionalHandlers)
-                {
-                    new PassThroughAuthorizationHandler()
-                };
-                var logger = options.Dependencies.LoggerFactory?.Create("default");
-                authorizationService = new DefaultAuthorizationService(policyProvider, handlers, logger);
+                authorizationService = CreateDefaultAuthorizationService(options);
             }
 
             var policy = AuthorizationPolicy.Combine(options, new[] {authorizeAttribute});
             return await authorizationService.AuthorizeAsync(user, policy);
+        }
+
+        private static IAuthorizationService CreateDefaultAuthorizationService(AuthorizationOptions options)
+        {
+            Debug.Assert(options != null, "options != null");
+            Debug.Assert(options.Dependencies != null, "options.Dependencies != null");
+
+            var policyProvider = new DefaultAuthorizationPolicyProvider(options);
+            var handlers = new HashSet<IAuthorizationHandler>(options.Dependencies.AdditionalHandlers)
+            {
+                new PassThroughAuthorizationHandler()
+            };
+            var logger = options.Dependencies.LoggerFactory?.Create("default");
+            return new DefaultAuthorizationService(policyProvider, handlers, logger);
         }
     }
 }

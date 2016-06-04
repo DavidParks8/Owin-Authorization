@@ -6,6 +6,6 @@
     public static class Justifications
     {
         public const string ExpectedException = "Expected exception";
-        public const string AsyncTestMustBeInstanceMethod = "Must be an instance method in order to be recognized as a test";
+        public const string MustBeInstanceMethod = "Must be an instance method in order to be recognized as a test";
     }
 }

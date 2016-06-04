@@ -10,7 +10,7 @@ namespace Microsoft.Owin.Security.Authorization
     [TestClass, ExcludeFromCodeCoverage]
     public class ResourceAuthorizationMiddlewareTests
     {
-        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.AsyncTestMustBeInstanceMethod)]
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest]
         public async Task NextShouldBeInvokedWithOptionsInEnvironment()
         {

@@ -48,14 +48,14 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
             new NameAuthorizationRequirement(null);
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.AsyncTestMustBeInstanceMethod)]
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest]
         public async Task HandleShouldFailWhenUserIsNull()
         {
             await AssertNameAffectsSuccess(null, "asdf", false);
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.AsyncTestMustBeInstanceMethod)]
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest]
         public async Task HandleShouldFailWhenIdentitiesHaveNoClaims()
         {
@@ -63,7 +63,7 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
             await AssertNameAffectsSuccess(user, "asdf", false);
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.AsyncTestMustBeInstanceMethod)]
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest]
         public async Task HandleShouldSucceedWhenNameClaimIsPresent()
         {
@@ -79,7 +79,7 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
             await AssertNameAffectsSuccess(user, requiredName, true);
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.AsyncTestMustBeInstanceMethod)]
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest]
         public async Task NameComparisonShouldBeCaseInsensitive()
         {

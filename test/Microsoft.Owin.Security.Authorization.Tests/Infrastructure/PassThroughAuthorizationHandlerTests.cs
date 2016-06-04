@@ -17,7 +17,7 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
             Assert.IsNotInstanceOfType(handler, typeof(IAuthorizationRequirement));
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.AsyncTestMustBeInstanceMethod)]
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest, ExpectedException(typeof(ArgumentNullException))]
         public async Task HandleAsyncShouldThrowWhenContextIsNull()
         {
@@ -25,7 +25,7 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
             await handler.HandleAsync(null);
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.AsyncTestMustBeInstanceMethod)]
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest]
         public async Task HandleAsyncShouldPassThrough()
         {
