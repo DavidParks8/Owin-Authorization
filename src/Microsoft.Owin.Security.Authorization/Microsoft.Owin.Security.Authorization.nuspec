@@ -10,7 +10,7 @@
     <projectUrl>https://github.com/DavidParks8/Owin-Authorization</projectUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Initial package.</releaseNotes>
+    <releaseNotes>Bug fixes and performance improvements.</releaseNotes>
     <copyright>Copyright 2016</copyright>
     <tags>Security Owin Authorization Authentication Policy Claim Backport AspNet</tags>
   </metadata>
