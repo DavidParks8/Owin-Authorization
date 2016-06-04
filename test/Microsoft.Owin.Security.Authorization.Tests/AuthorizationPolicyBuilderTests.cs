@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Owin.Security.Authorization.Infrastructure;
 using Microsoft.Owin.Security.Authorization.TestTools;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -169,6 +172,105 @@ namespace Microsoft.Owin.Security.Authorization
             builder.RequireUserName(testName);
             Assert.IsInstanceOfType(builder.Requirements[0], typeof(NameAuthorizationRequirement));
             Assert.AreEqual(testName, ((NameAuthorizationRequirement)builder.Requirements[0]).RequiredName);
+        }
+
+        [TestMethod, UnitTest, ExpectedException(typeof(ArgumentNullException))]
+        public void RequireAssertionAsyncShouldThrowWhenAssertIsNull()
+        {
+            var builder = new AuthorizationPolicyBuilder();
+            builder.RequireAssertion((Func<AuthorizationContext, Task<bool>>) null);
+        }
+
+        [TestMethod, UnitTest, ExpectedException(typeof(ArgumentNullException))]
+        public void RequireAssertionShouldThrowWhenAssertIsNull()
+        {
+            var builder = new AuthorizationPolicyBuilder();
+            builder.RequireAssertion((Func<AuthorizationContext, bool>)null);
+        }
+
+        [TestMethod, UnitTest]
+        public void RequireAssertionAsyncShouldAddAssertionRequirement()
+        {
+            Func<AuthorizationContext, Task<bool>> assert = context => Task.FromResult(true); 
+            var builder = new AuthorizationPolicyBuilder();
+            builder.RequireAssertion(assert);
+            Assert.IsInstanceOfType(builder.Requirements[0], typeof(AssertionRequirement));
+        }
+
+        [TestMethod, UnitTest]
+        public void RequireAssertionShouldAddAssertionRequirement()
+        {
+            Func<AuthorizationContext, bool> assert = context => true;
+            var builder = new AuthorizationPolicyBuilder();
+            builder.RequireAssertion(assert);
+            Assert.IsInstanceOfType(builder.Requirements[0], typeof(AssertionRequirement));
+        }
+
+        [TestMethod, UnitTest, ExpectedException(typeof(ArgumentNullException))]
+        public void RequireClaimParamsValueShouldThrowWhenClaimTypeIsNull()
+        {
+            var builder = new AuthorizationPolicyBuilder();
+            builder.RequireClaim(null, new string[0]);
+        }
+
+        [TestMethod, UnitTest, ExpectedException(typeof(ArgumentNullException))]
+        public void RequireClaimEnumerableValueShouldThrowWhenClaimTypeIsNull()
+        {
+            var builder = new AuthorizationPolicyBuilder();
+            builder.RequireClaim(null, new List<string>());
+        }
+
+        [TestMethod, UnitTest, ExpectedException(typeof(ArgumentNullException))]
+        public void RequireClaimShouldThrowWhenClaimTypeIsNull()
+        {
+            var builder = new AuthorizationPolicyBuilder();
+            builder.RequireClaim(null);
+        }
+
+        [TestMethod, UnitTest]
+        public void RequireClaimShouldAddClaimRequirement()
+        {
+            const string claimType = "test";
+            var builder = new AuthorizationPolicyBuilder();
+            builder.RequireClaim(claimType);
+            var requirement = (ClaimsAuthorizationRequirement) builder.Requirements[0];
+            Assert.AreEqual(claimType, requirement.ClaimType);
+        }
+
+        [TestMethod, UnitTest]
+        public void RequireClaimParamsValueShouldAddClaimRequirement()
+        {
+            const string claimType = "test";
+            var builder = new AuthorizationPolicyBuilder();
+            builder.RequireClaim(claimType, claimType);
+            var requirement = (ClaimsAuthorizationRequirement)builder.Requirements[0];
+            Assert.AreEqual(claimType, requirement.ClaimType);
+            Assert.AreEqual(claimType, requirement.AllowedValues.First());
+        }
+
+        [TestMethod, UnitTest, ExpectedException(typeof(ArgumentNullException))]
+        public void RequireRoleParamsShouldThrowWhenRolesIsNull()
+        {
+            var builder = new AuthorizationPolicyBuilder();
+            // ReSharper disable once RedundantCast because what we are doing is more obvious
+            builder.RequireRole((string[]) null);
+        }
+
+        [TestMethod, UnitTest, ExpectedException(typeof(ArgumentNullException))]
+        public void RequireRoleEnumerableShouldThrowWhenRolesIsNull()
+        {
+            var builder = new AuthorizationPolicyBuilder();
+            builder.RequireRole((IEnumerable<string>)null);
+        }
+
+        [TestMethod, UnitTest]
+        public void RequireRoleShouldAddRoleRequirement()
+        {
+            const string role = "test";
+            var builder = new AuthorizationPolicyBuilder();
+            builder.RequireRole(role);
+            var requirement = (RolesAuthorizationRequirement) builder.Requirements[0];
+            Assert.AreEqual(role, requirement.AllowedRoles.First());
         }
     }
 }
