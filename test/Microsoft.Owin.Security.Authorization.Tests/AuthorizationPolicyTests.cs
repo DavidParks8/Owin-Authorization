@@ -77,5 +77,12 @@ namespace Microsoft.Owin.Security.Authorization
             Assert.IsTrue(requirements.Contains(roleRequirement));
             Assert.IsTrue(requirements.Contains(denyAnonymousRequirement));
         }
+
+        [TestMethod, UnitTest]
+        public void CombineShouldReturnNullWhenThereAreNoAttributes()
+        {
+            var policy = AuthorizationPolicy.Combine(new AuthorizationOptions(), new IAuthorizeData[0]);
+            Assert.IsNull(policy, "policy != null");
+        }
     }
 }
