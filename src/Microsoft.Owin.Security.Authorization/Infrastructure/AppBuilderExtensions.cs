@@ -25,7 +25,10 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
             if (options.Dependencies.Service == null)
             {
                 var policyProvider = new DefaultAuthorizationPolicyProvider(options);
-                var handlers = new List<IAuthorizationHandler>() { new PassThroughAuthorizationHandler() };
+                var handlers = new List<IAuthorizationHandler>(options.Dependencies.AdditionalHandlers)
+                {
+                    new PassThroughAuthorizationHandler()
+                };
                 var logger = options.Dependencies.LoggerFactory.Create(options.GetType().Name);
                 options.Dependencies.Service = new DefaultAuthorizationService(policyProvider, handlers, logger);
             }

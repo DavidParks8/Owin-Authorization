@@ -11,6 +11,12 @@ namespace WebApi_OWIN.Controllers
         {
             return Json("You are authorized!");
         }
+        [HttpGet]
+        [ResourceAuthorize(Policy = "EmployeeNumber2")]
+        public IHttpActionResult Authorized2()
+        {
+            return Json("You (2) are authorized!");
+        }
 
         [HttpGet]
         [ResourceAuthorize(Policy = ExampleConstants.EmployeeNumber6Policy)]

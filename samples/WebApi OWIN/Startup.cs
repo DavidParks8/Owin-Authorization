@@ -28,6 +28,8 @@ namespace WebApi_OWIN
             {
                 options.AddPolicy(ExampleConstants.EmployeeOnlyPolicy, policyBuilder => policyBuilder.RequireClaim(ExampleConstants.EmployeeClaimType));
                 options.AddPolicy(ExampleConstants.EmployeeNumber6Policy, policyBuilder => policyBuilder.RequireClaim(ExampleConstants.EmployeeClaimType, "6"));
+                options.AddPolicy(ExampleConstants.EmployeeNumber2Policy, policyBuilder => policyBuilder.AddRequirements(new EmployeeNumber2Requirement()));
+                options.Dependencies.AdditionalHandlers.Add(new EmployeeNumber2Handler());
             });
 
             app.UseWebApi(config);
