@@ -5,7 +5,6 @@ using Microsoft.Owin;
 using Owin;
 using Microsoft.Owin.Security.Authorization.Infrastructure;
 using System.Web.Http;
-using Microsoft.Owin.Cors;
 
 [assembly: OwinStartup(typeof(WebApi_OWIN.Startup))]
 
@@ -17,13 +16,10 @@ namespace WebApi_OWIN
         {
             app.UseErrorPage();
             app.Use(AddEmployeeClaimBeforeAuthorizationCheck);
-
+            
             var config = new HttpConfiguration();
             WebApiConfig.Register(config);
-            config.EnableCors();
-
-            app.UseCors(CorsOptions.AllowAll);
-
+            
             app.UseAuthorization(options =>
             {
                 options.AddPolicy(ExampleConstants.EmployeeOnlyPolicy, policyBuilder => policyBuilder.RequireClaim(ExampleConstants.EmployeeClaimType));
