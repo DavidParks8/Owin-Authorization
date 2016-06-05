@@ -123,7 +123,6 @@
     <Compile Include="AuthorizationContextTests.cs" />
     <Compile Include="AuthorizationOptionsTests.cs" />
     <Compile Include="AuthorizationPolicyTests.cs" />
-    <Compile Include="AuthorizationDependenciesTests.cs" />
     <Compile Include="AuthorizationPolicyBuilderTests.cs" />
     <Compile Include="ResourceAuthorizationMiddlewareTests.cs" />
     <Compile Include="DefaultAuthorizationPolicyProviderTests.cs" />

@@ -7,7 +7,7 @@ namespace WebApi_Custom_Handler.Controllers
     {
         [HttpGet]
         [ResourceAuthorize(Policy = ExampleConstants.EmployeeNumber2Policy)]
-        public IHttpActionResult Authorized2()
+        public IHttpActionResult Authorized()
         {
             return Json("You are authorized!");
         }
