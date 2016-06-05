@@ -104,10 +104,6 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
             app.Object.UseAuthorization(options);
 
             Assert.IsNotNull(options.Dependencies, "options.Dependencies != null");
-            Assert.IsNotNull(options.Dependencies.LoggerFactory, "options.Dependencies.LoggerFactory != null");
-            Assert.IsNotNull(options.Dependencies.Service, "options.Dependencies.Service != null");
-            Assert.IsInstanceOfType(options.Dependencies.Service, typeof(DefaultAuthorizationService), "Default authorization service was not set");
-
             app.Verify(x => x.Use(typeof(ResourceAuthorizationMiddleware), options), Times.Once);
         }
 

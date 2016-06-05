@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.Owin.Logging;
 using Microsoft.Owin.Security.Authorization.Infrastructure;
 
 namespace Microsoft.Owin.Security.Authorization
@@ -54,28 +54,31 @@ namespace Microsoft.Owin.Security.Authorization
                 throw new InvalidOperationException("AuthorizationOptions.Dependencies must not be null");
             }
 
-            var authorizationService = options.Dependencies.Service;
-            if (authorizationService == null)
-            {
-                authorizationService = CreateDefaultAuthorizationService(options);
-            }
-
+            var authorizationService = GetAuthorizationService(options);
             var policy = AuthorizationPolicy.Combine(options, new[] {authorizeAttribute});
             return await authorizationService.AuthorizeAsync(user, policy);
         }
 
-        private static IAuthorizationService CreateDefaultAuthorizationService(AuthorizationOptions options)
+        private static IAuthorizationService GetAuthorizationService(AuthorizationOptions options)
         {
             Debug.Assert(options != null, "options != null");
             Debug.Assert(options.Dependencies != null, "options.Dependencies != null");
 
-            var policyProvider = new DefaultAuthorizationPolicyProvider(options);
-            var handlers = new HashSet<IAuthorizationHandler>(options.Dependencies.AdditionalHandlers)
+            if (options.Dependencies.Service != null)
             {
-                new PassThroughAuthorizationHandler()
-            };
-            var logger = options.Dependencies.LoggerFactory?.Create("default");
+                return options.Dependencies.Service;
+            }
+
+            var policyProvider = new DefaultAuthorizationPolicyProvider(options);
+            var handlers = new IAuthorizationHandler[] { new PassThroughAuthorizationHandler() };
+            var logger = GetLogger(options);
             return new DefaultAuthorizationService(policyProvider, handlers, logger);
+        }
+
+        private static ILogger GetLogger(AuthorizationOptions options)
+        {
+            var loggerFactory = options.Dependencies.LoggerFactory ?? new DiagnosticsLoggerFactory();
+            return loggerFactory.Create("ResourceAuthorization");
         }
     }
 }

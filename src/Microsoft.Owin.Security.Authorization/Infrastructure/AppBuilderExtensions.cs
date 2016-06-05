@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.Owin.Logging;
 using Owin;
@@ -15,22 +14,6 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
             if (options.Dependencies == null)
             {
                 options.Dependencies = new AuthorizationDependencies();
-            }
-
-            if (options.Dependencies.LoggerFactory == null)
-            {
-                options.Dependencies.LoggerFactory = new DiagnosticsLoggerFactory();
-            }
-
-            if (options.Dependencies.Service == null)
-            {
-                var policyProvider = new DefaultAuthorizationPolicyProvider(options);
-                var handlers = new List<IAuthorizationHandler>(options.Dependencies.AdditionalHandlers)
-                {
-                    new PassThroughAuthorizationHandler()
-                };
-                var logger = options.Dependencies.LoggerFactory.Create(options.GetType().Name);
-                options.Dependencies.Service = new DefaultAuthorizationService(policyProvider, handlers, logger);
             }
 
             return options;
