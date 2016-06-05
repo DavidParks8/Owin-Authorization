@@ -3,11 +3,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
 using Microsoft.Owin.Logging;
+using Microsoft.Owin.Security.Authorization.Infrastructure;
 
 namespace Microsoft.Owin.Security.Authorization
 {
@@ -32,9 +33,33 @@ namespace Microsoft.Owin.Security.Authorization
                 throw new ArgumentNullException(nameof(handlers));
             }
 
-            _handlers = handlers.ToArray();
+            _handlers = InitializeHandlers(handlers);
             _policyProvider = policyProvider;
             _logger = logger ?? new DiagnosticsLoggerFactory().Create("ResourceAuthorization");
+        }
+
+        private static IList<IAuthorizationHandler> InitializeHandlers(IEnumerable<IAuthorizationHandler> handlers)
+        {
+            Debug.Assert(handlers != null, "handlers != null");
+
+            var allHandlers = new List<IAuthorizationHandler>();
+            bool passThroughFound = false;
+            foreach (var handler in handlers)
+            {
+                if (handler is PassThroughAuthorizationHandler)
+                {
+                    passThroughFound = true;
+                }
+
+                allHandlers.Add(handler);
+            }
+
+            if (!passThroughFound)
+            {
+                allHandlers.Add(new PassThroughAuthorizationHandler());
+            }
+
+            return allHandlers;
         }
 
         public async Task<bool> AuthorizeAsync(ClaimsPrincipal user, object resource, IEnumerable<IAuthorizationRequirement> requirements)
