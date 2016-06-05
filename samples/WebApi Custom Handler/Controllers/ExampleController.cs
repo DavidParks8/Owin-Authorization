@@ -1,19 +1,19 @@
 ﻿using System.Web.Http;
 using Microsoft.Owin.Security.Authorization.WebApi;
 
-namespace WebApi_OWIN.Controllers
+namespace WebApi_Custom_Handler.Controllers
 {
     public class ExampleController : ApiController
     {
         [HttpGet]
-        [ResourceAuthorize(Policy = ExampleConstants.EmployeeOnlyPolicy)]
-        public IHttpActionResult Authorized()
+        [ResourceAuthorize(Policy = ExampleConstants.EmployeeNumber2Policy)]
+        public IHttpActionResult Authorized2()
         {
             return Json("You are authorized!");
         }
 
         [HttpGet]
-        [ResourceAuthorize(Policy = ExampleConstants.EmployeeNumber6Policy)]
+        [ResourceAuthorize(Roles = "admin")]
         public IHttpActionResult Denied()
         {
             return Json("You should never be presented this text because you will never be authorized to see it");

@@ -1,9 +1,6 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.Owin.Security.Authorization;
-using Microsoft.Owin.Security.Authorization.Infrastructure;
+﻿using Microsoft.Owin.Security.Authorization;
 
-namespace WebApi_OWIN
+namespace WebApi_Custom_Handler.Models
 {
     public class EmployeeNumber2Handler : AuthorizationHandler<EmployeeNumber2Requirement>
     {

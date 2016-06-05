@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.Owin;
-using Owin;
-using Microsoft.Owin.Security.Authorization.Infrastructure;
 using System.Web.Http;
+using Microsoft.Owin;
+using Microsoft.Owin.Logging;
+using Microsoft.Owin.Security.Authorization;
+using Microsoft.Owin.Security.Authorization.Infrastructure;
+using Owin;
+using WebApi_Custom_Handler;
+using WebApi_Custom_Handler.Models;
 
-[assembly: OwinStartup(typeof(WebApi_OWIN.Startup))]
+[assembly: OwinStartup(typeof(Startup))]
 
-namespace WebApi_OWIN
+namespace WebApi_Custom_Handler
 {
     public class Startup
     {
@@ -22,8 +26,15 @@ namespace WebApi_OWIN
             
             app.UseAuthorization(options =>
             {
-                options.AddPolicy(ExampleConstants.EmployeeOnlyPolicy, policyBuilder => policyBuilder.RequireClaim(ExampleConstants.EmployeeClaimType));
-                options.AddPolicy(ExampleConstants.EmployeeNumber6Policy, policyBuilder => policyBuilder.RequireClaim(ExampleConstants.EmployeeClaimType, "6"));
+                options.AddPolicy(ExampleConstants.EmployeeNumber2Policy, policyBuilder =>
+                {
+                    policyBuilder.AddRequirements(new EmployeeNumber2Requirement());
+                });
+
+                var policyProvider = new DefaultAuthorizationPolicyProvider(options);
+                var handlers = new IAuthorizationHandler[] {new EmployeeNumber2Handler()};
+                var logger = app.CreateLogger("my logger");
+                options.Dependencies.Service = new DefaultAuthorizationService(policyProvider, handlers, logger);
             });
 
             app.UseWebApi(config);

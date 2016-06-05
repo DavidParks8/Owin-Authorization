@@ -17,6 +17,10 @@ namespace Microsoft.Owin.Security.Authorization
         private readonly IList<IAuthorizationHandler> _handlers;
         private readonly ILogger _logger;
 
+        public DefaultAuthorizationService(IAuthorizationPolicyProvider policyProvider, IEnumerable<IAuthorizationHandler> handlers) 
+            : this(policyProvider, handlers, null)
+        { }
+
         public DefaultAuthorizationService(IAuthorizationPolicyProvider policyProvider, IEnumerable<IAuthorizationHandler> handlers, ILogger logger)
         {
             if (policyProvider == null)
@@ -27,14 +31,10 @@ namespace Microsoft.Owin.Security.Authorization
             {
                 throw new ArgumentNullException(nameof(handlers));
             }
-            if (logger == null)
-            {
-                throw new ArgumentNullException(nameof(logger));
-            }
 
             _handlers = handlers.ToArray();
             _policyProvider = policyProvider;
-            _logger = logger;
+            _logger = logger ?? new DiagnosticsLoggerFactory().Create("ResourceAuthorization");
         }
 
         public async Task<bool> AuthorizeAsync(ClaimsPrincipal user, object resource, IEnumerable<IAuthorizationRequirement> requirements)
@@ -55,11 +55,9 @@ namespace Microsoft.Owin.Security.Authorization
                 _logger.UserAuthorizationSucceeded(GetUserNameForLogging(user));
                 return true;
             }
-            else
-            {
-                _logger.UserAuthorizationFailed(GetUserNameForLogging(user));
-                return false;
-            }
+
+            _logger.UserAuthorizationFailed(GetUserNameForLogging(user));
+            return false;
         }
 
         private static string GetUserNameForLogging(ClaimsPrincipal user)
@@ -96,6 +94,7 @@ namespace Microsoft.Owin.Security.Authorization
             {
                 throw new InvalidOperationException($"No policy found: {policyName}.");
             }
+
             return await this.AuthorizeAsync(user, resource, policy);
         }
     }
