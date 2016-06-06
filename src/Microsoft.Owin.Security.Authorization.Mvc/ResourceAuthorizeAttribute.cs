@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Security.Claims;
+using System.Web;
 using System.Web.Mvc;
 
 namespace Microsoft.Owin.Security.Authorization.Mvc
@@ -12,26 +13,6 @@ namespace Microsoft.Owin.Security.Authorization.Mvc
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
     public class ResourceAuthorizeAttribute : FilterAttribute, IAuthorizeData, IAuthorizationFilter
     {
-        public IResourceAuthorizationHelper AuthorizationHelper { get; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ResourceAuthorizeAttribute"/> class. 
-        /// </summary>
-        public ResourceAuthorizeAttribute() : this(new AuthorizationHelper(new OwinContextAccessor(new HttpContextAccessor()))) { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ResourceAuthorizeAttribute"/> class. 
-        /// </summary>
-        public ResourceAuthorizeAttribute(IResourceAuthorizationHelper authorizationHelper)
-        {
-            if (authorizationHelper == null)
-            {
-                throw new ArgumentNullException(nameof(authorizationHelper));
-            }
-
-            AuthorizationHelper = authorizationHelper;
-        }
-
         /// <inheritdoc />
         public string Policy { get; set; }
 
@@ -50,7 +31,7 @@ namespace Microsoft.Owin.Security.Authorization.Mvc
 
             var controller = filterContext.Controller as IAuthorizationController;
             var user = (ClaimsPrincipal) filterContext.HttpContext.User;
-            if (!AuthorizationHelper.IsAuthorizedAsync(controller, user, this).Result)
+            if (!new AuthorizationHelper(() => filterContext.HttpContext.GetOwinContext()).IsAuthorizedAsync(controller, user, this).Result)
             {
                 filterContext.Result = new HttpUnauthorizedResult();
             }

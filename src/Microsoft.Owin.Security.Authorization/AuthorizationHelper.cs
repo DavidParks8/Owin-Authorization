@@ -4,21 +4,22 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.Owin.Logging;
 using Microsoft.Owin.Security.Authorization.Infrastructure;
+using Microsoft.Owin.Security.Authorization.Properties;
 
 namespace Microsoft.Owin.Security.Authorization
 {
     public class AuthorizationHelper : IResourceAuthorizationHelper
     {
-        private readonly IOwinContextAccessor _owinContextAccessor;
+        private readonly Func<IOwinContext> _contextProvisioning;
 
-        public AuthorizationHelper(IOwinContextAccessor owinContextAccessor)
+        public AuthorizationHelper(Func<IOwinContext> contextProvisioning)
         {
-            if (owinContextAccessor == null)
+            if (contextProvisioning == null)
             {
-                throw new ArgumentNullException(nameof(owinContextAccessor));
+                throw new ArgumentNullException(nameof(contextProvisioning));
             }
 
-            _owinContextAccessor = owinContextAccessor;
+            _contextProvisioning = contextProvisioning;
         }
 
         public async Task<bool> IsAuthorizedAsync(IAuthorizationController controller, ClaimsPrincipal user, IAuthorizeData authorizeAttribute)
@@ -39,9 +40,26 @@ namespace Microsoft.Owin.Security.Authorization
             }
             else
             {
-                var owinContext = _owinContextAccessor.Context;
-                var helper = new AuthorizationDependencyHelper(owinContext);
-                options = helper.AuthorizationOptions;
+                var context = _contextProvisioning();
+                if (context == null)
+                {
+                    throw new ArgumentNullException(nameof(context));
+                }
+
+                if (context.Environment == null)
+                {
+                    throw new ArgumentNullException(nameof(context), Resources.ErrorTheOwinEnvironmentDictionaryWasNull);
+                }
+
+                object environmentService;
+                if (context.Environment.TryGetValue(ResourceAuthorizationMiddleware.ServiceKey, out environmentService))
+                {
+                    options = (AuthorizationOptions)environmentService;
+                }
+                else
+                {
+                    throw new InvalidOperationException(Resources.Exception_PleaseSetupOwinResourceAuthorizationInYourStartupFile);
+                }
             }
             
             if (options == null)
