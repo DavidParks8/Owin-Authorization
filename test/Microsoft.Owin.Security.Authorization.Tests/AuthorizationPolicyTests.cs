@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Owin.Security.Authorization.Infrastructure;
 using Microsoft.Owin.Security.Authorization.TestTools;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -53,15 +54,15 @@ namespace Microsoft.Owin.Security.Authorization
         }
 
         [TestMethod, UnitTest, ExpectedException(typeof(ArgumentNullException))]
-        public void CombineShouldThrowWhenOptionsIsNull()
+        public async Task CombineShouldThrowWhenOptionsIsNull()
         {
-            AuthorizationPolicy.Combine(null, new IAuthorizeData[0]);
+            await AuthorizationPolicy.CombineAsync(null, new IAuthorizeData[0]);
         }
 
         [TestMethod, UnitTest, ExpectedException(typeof(ArgumentNullException))]
-        public void CombineShouldThrowWhenAttributesIsNull()
+        public async Task CombineShouldThrowWhenAttributesIsNull()
         {
-            AuthorizationPolicy.Combine(new AuthorizationOptions(), null);
+            await AuthorizationPolicy.CombineAsync(new DefaultAuthorizationPolicyProvider(new AuthorizationOptions()), null);
         }
 
         [TestMethod, UnitTest]
@@ -81,9 +82,9 @@ namespace Microsoft.Owin.Security.Authorization
         }
 
         [TestMethod, UnitTest]
-        public void CombineShouldReturnNullWhenThereAreNoAttributes()
+        public async Task CombineShouldReturnNullWhenThereAreNoAttributes()
         {
-            var policy = AuthorizationPolicy.Combine(new AuthorizationOptions(), new IAuthorizeData[0]);
+            var policy = await AuthorizationPolicy.CombineAsync(new DefaultAuthorizationPolicyProvider(new AuthorizationOptions()), new IAuthorizeData[0]);
             Assert.IsNull(policy, "policy != null");
         }
 
@@ -96,12 +97,12 @@ namespace Microsoft.Owin.Security.Authorization
             return data;
         }
 
-        private static AuthorizationPolicy CombineWithOptions(params Mock<IAuthorizeData>[] data)
+        private static Task<AuthorizationPolicy> CombineWithOptionsAsync(params Mock<IAuthorizeData>[] data)
         {
-            return CombineWithOptions(new AuthorizationOptions(), data);
+            return CombineWithOptionsAsync(new AuthorizationOptions(), data);
         }
 
-        private static AuthorizationPolicy CombineWithOptions(AuthorizationOptions options, params Mock<IAuthorizeData>[] data)
+        private static Task<AuthorizationPolicy> CombineWithOptionsAsync(AuthorizationOptions options, params Mock<IAuthorizeData>[] data)
         {
             var attributes = new IAuthorizeData[data.Length];
             for (var i = 0; i < attributes.Length; i++)
@@ -109,7 +110,7 @@ namespace Microsoft.Owin.Security.Authorization
                 attributes[i] = data[i].Object;
             }
 
-            return AuthorizationPolicy.Combine(options, attributes);
+            return AuthorizationPolicy.CombineAsync(new DefaultAuthorizationPolicyProvider(options), attributes);
         }
 
         private static AuthorizationOptions CreateOptionsAndAddPolicy(string policyName, AuthorizationPolicy policy)
@@ -128,65 +129,66 @@ namespace Microsoft.Owin.Security.Authorization
         public void CombineShouldThrowWhenNoPolicyIsFound()
         {
             var data = CreateAndSetupData("policy name", null, null);
-            CombineWithOptions(data);
+            CombineWithOptionsAsync(data);
         }
 
         [TestMethod, UnitTest]
-        public void CombineShouldUseDefaultPolicyAsDefault()
+        public async Task CombineShouldUseDefaultPolicyAsDefault()
         {
             var data = CreateAndSetupData(null, null, null);
             var policy = CreateAssertionPolicy();
             var options = new AuthorizationOptions() { DefaultPolicy = policy };
-            var combined = CombineWithOptions(options, data);
+            var combined = await CombineWithOptionsAsync(options, data);
             Assert.IsInstanceOfType(combined.Requirements[0], typeof(AssertionRequirement));
         }
 
         [TestMethod, UnitTest]
-        public void CombineShouldCombinePolicy()
+        public async Task CombineShouldCombinePolicy()
         {
             const string policyName = "policy name";
             const string scheme = "authentication scheme";
             var data = CreateAndSetupData(policyName, null, null);
             var policy = CreateAssertionPolicy(scheme);
             var options = CreateOptionsAndAddPolicy(policyName, policy);
-            var combined = CombineWithOptions(options, data);
+            var combined = await CombineWithOptionsAsync(options, data);
             
             Assert.IsInstanceOfType(combined.Requirements[0], typeof(AssertionRequirement));
             Assert.AreEqual(scheme, combined.AuthenticationSchemes[0]);
         }
 
-        private static void AssertDefaultIsIgnored(AuthorizationOptions options, Mock<IAuthorizeData> data)
+        private static async Task AssertDefaultIsIgnoredAsync(AuthorizationOptions options, Mock<IAuthorizeData> data)
         {
             Assert.IsNotNull(options, "options != null");
             Assert.IsNotNull(data, "data != null");
 
-            var combined = CombineWithOptions(options, data);
+            var combined = await CombineWithOptionsAsync(options, data);
 
             Assert.AreEqual(1, combined.Requirements.Count);
             Assert.IsNotInstanceOfType(combined.Requirements[0], typeof(DenyAnonymousAuthorizationRequirement));
         }
 
         [TestMethod, UnitTest]
-        public void CombinePolicyShouldIgnoreDefaultPolicy()
+        public async Task CombinePolicyShouldIgnoreDefaultPolicy()
         {
             const string policyName = "policy name";
             var data = CreateAndSetupData(policyName, null, null);
             var policy = CreateAssertionPolicy();
             var options = CreateOptionsAndAddPolicy(policyName, policy);
-            AssertDefaultIsIgnored(options, data);
+
+            await AssertDefaultIsIgnoredAsync(options, data);
         }
 
         [TestMethod, UnitTest]
-        public void CombineRolesShouldIgnoreDefaultPolicy()
+        public async Task CombineRolesShouldIgnoreDefaultPolicy()
         {
-            AssertDefaultIsIgnored(new AuthorizationOptions(), CreateAndSetupData(null, "role", null));
+            await AssertDefaultIsIgnoredAsync(new AuthorizationOptions(), CreateAndSetupData(null, "role", null));
         }
 
         [TestMethod, UnitTest]
-        public void CombineSchemesShouldIgnoreDefaultPolicy()
+        public async Task CombineSchemesShouldIgnoreDefaultPolicy()
         {
             var options = new AuthorizationOptions {DefaultPolicy = null};
-            var combined = CombineWithOptions(options, CreateAndSetupData(null, null, "scheme"));
+            var combined = await CombineWithOptionsAsync(options, CreateAndSetupData(null, null, "scheme"));
 
             Assert.AreEqual(1, combined.Requirements.Count);
             Assert.IsInstanceOfType(combined.Requirements[0], typeof(DenyAnonymousAuthorizationRequirement));
@@ -213,43 +215,41 @@ namespace Microsoft.Owin.Security.Authorization
         }
 
         [TestMethod, UnitTest]
-        public void CombineRolesShouldBeSplitByComma()
+        public async Task CombineRolesShouldBeSplitByComma()
         {
             var roles = new[] {"role1", "role2"};
             var data = CreateAndSetupData(null, string.Join(",", roles), null);
-            var combined = CombineWithOptions(data);
+            var combined = await CombineWithOptionsAsync(data);
 
             AssertCorrectRoles(roles, combined);
         }
 
         [TestMethod, UnitTest]
-        public void CombineSchemesShouldBeSplitByComma()
+        public async Task CombineSchemesShouldBeSplitByComma()
         {
             var schemes = new[] { "scheme1", "scheme2" };
             var data = CreateAndSetupData(null, null, string.Join(",", schemes));
-            var combined = CombineWithOptions(data);
+            var combined = await CombineWithOptionsAsync(data);
 
             AssertCorrectSchemes(schemes, combined);
         }
 
-        
-
         [TestMethod, UnitTest]
-        public void CombineSchemesAloneShouldRequireAuthenticatedUser()
+        public async Task CombineSchemesAloneShouldRequireAuthenticatedUser()
         {
             var data = CreateAndSetupData(null, null, "scheme");
-            var combined = CombineWithOptions(data);
+            var combined = await CombineWithOptionsAsync(data);
 
             Assert.IsInstanceOfType(combined.Requirements[0], typeof(DenyAnonymousAuthorizationRequirement));
         }
 
         [TestMethod, UnitTest]
-        public void CombineSchemesNotAloneShouldNotRequireAuthenticatedUser()
+        public async Task CombineSchemesNotAloneShouldNotRequireAuthenticatedUser()
         {
             const string scheme = "scheme";
             var data = CreateAndSetupData(null, null, scheme);
             var otherData = CreateAndSetupData(null, "role", null);
-            var combined = CombineWithOptions(data, otherData);
+            var combined = await CombineWithOptionsAsync(data, otherData);
 
             Assert.AreEqual(1, combined.Requirements.Count);
             Assert.IsNotInstanceOfType(combined.Requirements[0], typeof(DenyAnonymousAuthorizationRequirement));
@@ -257,23 +257,25 @@ namespace Microsoft.Owin.Security.Authorization
         }
 
         [TestMethod, UnitTest]
-        public void CombineSplitShouldIgnoreEmptyEntries()
+        public async Task CombineSplitShouldIgnoreEmptyEntries()
         {
             var data = CreateAndSetupData(null, null, ",test1,,,test2");
-            var combined = CombineWithOptions(data);
+            var combined = await CombineWithOptionsAsync(data);
+
             AssertCorrectSchemes(new[] { "test1", "test2" }, combined);
         }
 
         [TestMethod, UnitTest]
-        public void CombineSplitShouldTrimEntries()
+        public async Task CombineSplitShouldTrimEntries()
         {
             var data = CreateAndSetupData(null, null, "  test1 \r\n ,     \ttest2");
-            var combined = CombineWithOptions(data);
+            var combined = await CombineWithOptionsAsync(data);
+
             AssertCorrectSchemes(new[] { "test1", "test2" }, combined);
         }
 
         [TestMethod, UnitTest]
-        public void CombineAllShouldSucceed()
+        public async Task CombineAllShouldSucceed()
         {
             const string policyName = "policy name";
             const string role = "role";
@@ -285,7 +287,7 @@ namespace Microsoft.Owin.Security.Authorization
 
             var policy = CreateAssertionPolicy();
             var options = CreateOptionsAndAddPolicy(policyName, policy);
-            var combined = CombineWithOptions(options, policyData, rolesData, schemesData);
+            var combined = await CombineWithOptionsAsync(options, policyData, rolesData, schemesData);
 
             Assert.IsInstanceOfType(combined.Requirements[0], typeof(AssertionRequirement));
             AssertCorrectRoles(new []{ role }, combined, 1);
