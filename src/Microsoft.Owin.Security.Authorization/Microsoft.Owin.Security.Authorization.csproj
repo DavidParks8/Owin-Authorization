@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AuthorizationContext.cs" />
+    <Compile Include="AuthorizationDependencyHelper.cs" />
     <Compile Include="AuthorizationHandler.cs" />
     <Compile Include="AuthorizationHelper.cs" />
     <Compile Include="AuthorizationOptions.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="Infrastructure\OperationAuthorizationRequirement.cs" />
     <Compile Include="Infrastructure\PassThroughAuthorizationHandler.cs" />
     <Compile Include="Infrastructure\RolesAuthorizationRequirement.cs" />
+    <Compile Include="IOwinContextAccessor.cs" />
     <Compile Include="IResourceAuthorizationHelper.cs" />
     <Compile Include="LoggingExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

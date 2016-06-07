@@ -4,22 +4,21 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.Owin.Logging;
 using Microsoft.Owin.Security.Authorization.Infrastructure;
-using Microsoft.Owin.Security.Authorization.Properties;
 
 namespace Microsoft.Owin.Security.Authorization
 {
     public class AuthorizationHelper : IResourceAuthorizationHelper
     {
-        private readonly Func<IOwinContext> _contextProvisioning;
+        private readonly IOwinContextAccessor _owinContextAccessor;
 
-        public AuthorizationHelper(Func<IOwinContext> contextProvisioning)
+        public AuthorizationHelper(IOwinContextAccessor owinContextAccessor)
         {
-            if (contextProvisioning == null)
+            if (owinContextAccessor == null)
             {
-                throw new ArgumentNullException(nameof(contextProvisioning));
+                throw new ArgumentNullException(nameof(owinContextAccessor));
             }
 
-            _contextProvisioning = contextProvisioning;
+            _owinContextAccessor = owinContextAccessor;
         }
 
         public async Task<bool> IsAuthorizedAsync(IAuthorizationController controller, ClaimsPrincipal user, IAuthorizeData authorizeAttribute)
@@ -40,28 +39,11 @@ namespace Microsoft.Owin.Security.Authorization
             }
             else
             {
-                var context = _contextProvisioning();
-                if (context == null)
-                {
-                    throw new ArgumentNullException(nameof(context));
-                }
-
-                if (context.Environment == null)
-                {
-                    throw new ArgumentNullException(nameof(context), Resources.ErrorTheOwinEnvironmentDictionaryWasNull);
-                }
-
-                object environmentService;
-                if (context.Environment.TryGetValue(ResourceAuthorizationMiddleware.ServiceKey, out environmentService))
-                {
-                    options = (AuthorizationOptions)environmentService;
-                }
-                else
-                {
-                    throw new InvalidOperationException(Resources.Exception_PleaseSetupOwinResourceAuthorizationInYourStartupFile);
-                }
+                var owinContext = _owinContextAccessor.Context;
+                var helper = new AuthorizationDependencyHelper(owinContext);
+                options = helper.AuthorizationOptions;
             }
-            
+
             if (options == null)
             {
                 throw new InvalidOperationException("AuthorizationOptions must not be null.  Your resource authorization may be set up incorrectly.");
@@ -73,7 +55,7 @@ namespace Microsoft.Owin.Security.Authorization
             }
 
             var authorizationService = GetAuthorizationService(options);
-            var policy = AuthorizationPolicy.Combine(options, new[] {authorizeAttribute});
+            var policy = AuthorizationPolicy.Combine(options, new[] { authorizeAttribute });
             return await authorizationService.AuthorizeAsync(user, policy);
         }
 

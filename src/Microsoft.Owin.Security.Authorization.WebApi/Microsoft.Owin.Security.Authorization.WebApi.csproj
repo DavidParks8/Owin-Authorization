@@ -73,6 +73,7 @@
     <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HttpRequestMessageOwinContextAccessor.cs" />
     <Compile Include="ResourceAuthorizeAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

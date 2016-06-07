@@ -18,10 +18,5 @@ namespace WebApi_SelfHost.Controllers
         {
             return Json("You should never be presented this text because you will never be authorized to see it");
         }
-
-        public IHttpActionResult Test()
-        {
-            return Json("You are authorized!");
-        }
     }
 }
