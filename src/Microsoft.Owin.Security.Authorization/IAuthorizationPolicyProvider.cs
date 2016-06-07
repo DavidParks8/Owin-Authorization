@@ -16,5 +16,12 @@ namespace Microsoft.Owin.Security.Authorization
         /// <param name="policyName"></param>
         /// <returns></returns>
         Task<AuthorizationPolicy> GetPolicyAsync(string policyName);
+
+
+        /// <summary>
+        /// Gets the default <see cref="AuthorizationPolicy"/>
+        /// </summary>
+        /// <returns></returns>
+        Task<AuthorizationPolicy> GetDefaultPolicyAsync();
     }
 }
