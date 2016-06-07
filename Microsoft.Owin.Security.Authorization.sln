@@ -34,6 +34,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Owin.Security.Aut
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi Custom Handler", "samples\WebApi Custom Handler\WebApi Custom Handler.csproj", "{9DE6373E-47EA-4B02-B1EC-4859F14A6ACD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi SelfHost", "samples\WebApi SelfHost\WebApi SelfHost.csproj", "{7CCE795D-D98C-41E7-834E-64A2D7B2D1DF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -80,6 +82,10 @@ Global
 		{9DE6373E-47EA-4B02-B1EC-4859F14A6ACD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9DE6373E-47EA-4B02-B1EC-4859F14A6ACD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9DE6373E-47EA-4B02-B1EC-4859F14A6ACD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7CCE795D-D98C-41E7-834E-64A2D7B2D1DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CCE795D-D98C-41E7-834E-64A2D7B2D1DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CCE795D-D98C-41E7-834E-64A2D7B2D1DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CCE795D-D98C-41E7-834E-64A2D7B2D1DF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -95,5 +101,6 @@ Global
 		{7EDB6C8C-46A8-48BB-B9E6-DA23F2C6EED1} = {9D82C3FC-EC41-4F7A-8846-D69C4CA1FA5B}
 		{43DBB1B1-539B-4740-9CC8-998A742C598A} = {E1616215-7BD6-43BC-BFB8-D2BFD8BCB788}
 		{9DE6373E-47EA-4B02-B1EC-4859F14A6ACD} = {9D82C3FC-EC41-4F7A-8846-D69C4CA1FA5B}
+		{7CCE795D-D98C-41E7-834E-64A2D7B2D1DF} = {9D82C3FC-EC41-4F7A-8846-D69C4CA1FA5B}
 	EndGlobalSection
 EndGlobal

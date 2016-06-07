@@ -119,7 +119,6 @@
     <Compile Include="Infrastructure\RolesAuthorizationRequirementTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResourceHelperTests.cs" />
-    <Compile Include="OwinContextAccessorTests.cs" />
     <Compile Include="AuthorizationContextTests.cs" />
     <Compile Include="AuthorizationOptionsTests.cs" />
     <Compile Include="AuthorizationPolicyTests.cs" />

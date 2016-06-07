@@ -24,7 +24,7 @@ namespace Microsoft.Owin.Security.Authorization
             object environmentService;
             if (context.Environment.TryGetValue(ResourceAuthorizationMiddleware.ServiceKey, out environmentService))
             {
-                AuthorizationOptions = (AuthorizationOptions) environmentService;
+                AuthorizationOptions = (AuthorizationOptions)environmentService;
             }
             else
             {

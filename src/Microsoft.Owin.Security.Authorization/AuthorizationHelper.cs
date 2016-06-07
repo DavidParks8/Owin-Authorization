@@ -43,7 +43,7 @@ namespace Microsoft.Owin.Security.Authorization
                 var helper = new AuthorizationDependencyHelper(owinContext);
                 options = helper.AuthorizationOptions;
             }
-            
+
             if (options == null)
             {
                 throw new InvalidOperationException("AuthorizationOptions must not be null.  Your resource authorization may be set up incorrectly.");
@@ -55,7 +55,7 @@ namespace Microsoft.Owin.Security.Authorization
             }
 
             var authorizationService = GetAuthorizationService(options);
-            var policy = AuthorizationPolicy.Combine(options, new[] {authorizeAttribute});
+            var policy = AuthorizationPolicy.Combine(options, new[] { authorizeAttribute });
             return await authorizationService.AuthorizeAsync(user, policy);
         }
 

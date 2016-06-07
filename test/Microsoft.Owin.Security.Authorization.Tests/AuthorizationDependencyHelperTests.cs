@@ -61,4 +61,3 @@ namespace Microsoft.Owin.Security.Authorization
         }
     }
 }
-
