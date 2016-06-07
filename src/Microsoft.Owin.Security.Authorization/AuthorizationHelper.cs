@@ -54,13 +54,12 @@ namespace Microsoft.Owin.Security.Authorization
                 throw new InvalidOperationException("AuthorizationOptions.Dependencies must not be null");
             }
 
-            var policyProvider = new DefaultAuthorizationPolicyProvider(options);
-            var authorizationService = GetAuthorizationService(options, policyProvider);
-            var policy = await AuthorizationPolicy.CombineAsync(policyProvider, new[] { authorizeAttribute });
+            var authorizationService = GetAuthorizationService(options);
+            var policy = AuthorizationPolicy.Combine(options, new[] { authorizeAttribute });
             return await authorizationService.AuthorizeAsync(user, policy);
         }
 
-        private static IAuthorizationService GetAuthorizationService(AuthorizationOptions options, IAuthorizationPolicyProvider policyProvider)
+        private static IAuthorizationService GetAuthorizationService(AuthorizationOptions options)
         {
             Debug.Assert(options != null, "options != null");
             Debug.Assert(options.Dependencies != null, "options.Dependencies != null");
@@ -69,7 +68,8 @@ namespace Microsoft.Owin.Security.Authorization
             {
                 return options.Dependencies.Service;
             }
-            
+
+            var policyProvider = new DefaultAuthorizationPolicyProvider(options);
             var handlers = new IAuthorizationHandler[] { new PassThroughAuthorizationHandler() };
             var logger = GetLogger(options);
             return new DefaultAuthorizationService(policyProvider, handlers, logger);
