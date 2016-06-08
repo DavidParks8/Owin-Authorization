@@ -14,14 +14,14 @@ namespace Microsoft.Owin.Security.Authorization
         /// Gets a <see cref="AuthorizationPolicy"/> from the given <paramref name="policyName"/>
         /// </summary>
         /// <param name="policyName"></param>
-        /// <returns></returns>
+        /// <returns>The corresponding<see cref="AuthorizationPolicy"/>.</returns>
         Task<AuthorizationPolicy> GetPolicyAsync(string policyName);
 
 
         /// <summary>
         /// Gets the default <see cref="AuthorizationPolicy"/>
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The default<see cref="AuthorizationPolicy"/>.</returns>
         Task<AuthorizationPolicy> GetDefaultPolicyAsync();
     }
 }

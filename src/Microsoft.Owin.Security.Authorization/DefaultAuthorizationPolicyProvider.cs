@@ -27,29 +27,19 @@ namespace Microsoft.Owin.Security.Authorization
         /// Gets a <see cref="AuthorizationPolicy"/> from the given <paramref name="policyName"/>
         /// </summary>
         /// <param name="policyName"></param>
-        /// <returns></returns>
-        public virtual async Task<AuthorizationPolicy> GetPolicyAsync(string policyName)
+        /// <returns>The corresponding<see cref="AuthorizationPolicy"/>.</returns>
+        public virtual Task<AuthorizationPolicy> GetPolicyAsync(string policyName)
         {
-            if (_options.Dependencies?.PolicyProvider != null)
-            {
-                return await _options.Dependencies.PolicyProvider.GetPolicyAsync(policyName);
-            }
-
-            return _options.GetPolicy(policyName);
+            return Task.FromResult(_options.GetPolicy(policyName));
         }
 
         /// <summary>
         /// Gets the default <see cref="AuthorizationPolicy"/>
         /// </summary>
-        /// <returns></returns>
-        public async Task<AuthorizationPolicy> GetDefaultPolicyAsync()
+        /// <returns>The default<see cref="AuthorizationPolicy"/>.</returns>
+        public Task<AuthorizationPolicy> GetDefaultPolicyAsync()
         {
-            if (_options.Dependencies?.PolicyProvider != null)
-            {
-                return await _options.Dependencies.PolicyProvider.GetDefaultPolicyAsync();
-            }
-
-            return _options.DefaultPolicy;
+            return Task.FromResult(_options.DefaultPolicy);
         }
     }
 }
