@@ -23,18 +23,15 @@ namespace WebApi_Custom_Handler
             
             var config = new HttpConfiguration();
             WebApiConfig.Register(config);
-            
+
             app.UseAuthorization(options =>
             {
                 options.AddPolicy(ExampleConstants.EmployeeNumber2Policy, policyBuilder =>
                 {
                     policyBuilder.AddRequirements(new EmployeeNumber2Requirement());
                 });
-
-                var policyProvider = new DefaultAuthorizationPolicyProvider(options);
-                var handlers = new IAuthorizationHandler[] {new EmployeeNumber2Handler()};
-                var logger = app.CreateLogger("my logger");
-                options.Dependencies.Service = new DefaultAuthorizationService(policyProvider, handlers, logger);
+                options.Handlers = new IAuthorizationHandler[] {new EmployeeNumber2Handler()};
+                options.PolicyProvider = new CustomAuthorizationPolicyProvider(options);
             });
 
             app.UseWebApi(config);
@@ -47,8 +44,9 @@ namespace WebApi_Custom_Handler
             {
                 const string currentEmployeeNumber = "2";
                 currentIdentity.AddClaim(new Claim(ExampleConstants.EmployeeClaimType, currentEmployeeNumber));
+                currentIdentity.AddClaim(new Claim("IsUser", "true"));
+                currentIdentity.AddClaim(new Claim("IsAdmin", "false"));
             }
-
             await next();
         }
     }

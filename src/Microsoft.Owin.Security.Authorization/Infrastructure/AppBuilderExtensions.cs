@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using Microsoft.Owin.Logging;
 using Owin;
 
@@ -7,29 +6,7 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
 {
     public static class AppBuilderExtensions
     {
-        private static AuthorizationOptions InitializeDependencies(AuthorizationOptions options)
-        {
-            Debug.Assert(options != null);
-
-            if (options.Dependencies == null)
-            {
-                options.Dependencies = new AuthorizationDependencies();
-            }
-
-            return options;
-        }
-
-        public static IAppBuilder UseAuthorization(this IAppBuilder app)
-        {
-            if (app == null)
-            {
-                throw new ArgumentNullException(nameof(app));
-            }
-
-            return UseAuthorization(app, new AuthorizationOptions());
-        }
-
-        public static IAppBuilder UseAuthorization(this IAppBuilder app, AuthorizationOptions options)
+        public static IAppBuilder UseAuthorization(this IAppBuilder app, AuthorizationOptions options, AuthorizationDependenciesProvider dependenciesProvider = null)
         {
             if (app == null)
             {
@@ -39,24 +16,18 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
             {
                 throw new ArgumentNullException(nameof(options));
             }
-
-            return app.Use(typeof(ResourceAuthorizationMiddleware), InitializeDependencies(options));
+            return app.Use(typeof(ResourceAuthorizationMiddleware), options, dependenciesProvider ?? new AuthorizationDependenciesProvider(options.PolicyProvider, options.Handlers, app.GetLoggerFactory()));
         }
 
-        public static IAppBuilder UseAuthorization(this IAppBuilder app, Action<AuthorizationOptions> configure)
+        public static IAppBuilder UseAuthorization(this IAppBuilder app, Action<AuthorizationOptions> configure = null, AuthorizationDependenciesProvider dependenciesProvider = null)
         {
             if (app == null)
             {
                 throw new ArgumentNullException(nameof(app));
             }
-            if (configure == null)
-            {
-                throw new ArgumentNullException(nameof(configure));
-            }
-
             var options = new AuthorizationOptions();
-            configure(options);
-            return UseAuthorization(app, options);
+            configure?.Invoke(options);
+            return UseAuthorization(app, options, dependenciesProvider);
         }
     }
 }

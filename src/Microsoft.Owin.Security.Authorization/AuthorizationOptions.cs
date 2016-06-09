@@ -19,7 +19,9 @@ namespace Microsoft.Owin.Security.Authorization
         /// </summary>
         public AuthorizationPolicy DefaultPolicy { get; set; } = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
 
-        public AuthorizationDependencies Dependencies { get; set; } = new AuthorizationDependencies() { LoggerFactory = new DiagnosticsLoggerFactory()};
+        public IAuthorizationPolicyProvider PolicyProvider { get; set; }
+
+        public IAuthorizationHandler[] Handlers { get; set; }
 
         /// <summary>
         /// Add an authorization policy with the provided name.
