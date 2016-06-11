@@ -54,10 +54,6 @@ The general naming pattern is `Microsoft.Owin.Security.<area>.<subarea>`.
 
 We use [Visual Studio Team Services](https://www.visualstudio.com/en-us/products/visual-studio-team-services-vs.aspx) for builds and releases.
 
-### Unit tests
-
-We use the [Visual Studio unit testing framework](https://en.wikipedia.org/wiki/Visual_Studio_Unit_Testing_Framework) for all unit testing.
-
 ### Samples
 
 Please ensure that all samples go in a `samples/` sub-folder in the repo.
@@ -159,6 +155,22 @@ public Task GetDataAsync(
     ...
 }
 ```
+### Use Only Complete Words or Common/Standard Abbreviations in Public APIs
+
+Public namespaces, type names, member names, and parameter names must use complete words or common/standard abbreviations.
+
+These are correct:
+
+```cs
+public void AddReference(AssemblyReference reference);
+public EcmaScriptObject SomeObject { get; }
+```
+These are incorrect:
+
+```cs
+public void AddRef(AssemblyReference ref);
+public EcmaScriptObject SomeObj { get; }
+```
 
 ### Extension Method Patterns
 
@@ -215,7 +227,9 @@ Use `Debug.Assert()` to assert a condition in the code. Do not use Code Contract
 
 Please note that assertions are only for our own internal debugging purposes. They do not end up in the released code, so to alert a developer of a condition use an exception.
 
-### Unit Tests and Functional Tests
+### Tests
+
+We use the [Visual Studio unit testing framework](https://en.wikipedia.org/wiki/Visual_Studio_Unit_Testing_Framework) for all unit testing.
 
 #### Assembly Naming
 
@@ -297,20 +311,3 @@ Assert.AreEqual("abc123", someString);
 #### Parallel Tests
 
 By default all unit test assemblies should run in parallel mode, which is the default. Unit tests shouldn't depend on any shared state, and so should generally be runnable in parallel. If the tests fail in parallel, the first thing to do is to figure out _why_; do not just disable parallel tests!
-
-### Use Only Complete Words or Common/Standard Abbreviations in Public APIs
-
-Public namespaces, type names, member names, and parameter names must use complete words or common/standard abbreviations.
-
-These are correct:
-
-```cs
-public void AddReference(AssemblyReference reference);
-public EcmaScriptObject SomeObject { get; }
-```
-These are incorrect:
-
-```cs
-public void AddRef(AssemblyReference ref);
-public EcmaScriptObject SomeObj { get; }
-```
