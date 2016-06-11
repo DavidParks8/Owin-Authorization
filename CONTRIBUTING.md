@@ -1,10 +1,10 @@
-# How to contribute
+# How to Contribute
 
 The easiest ways to contribute is to open an issue and start a discussion. 
 Then we can decided if and how a feature or a change could be implemented and if you should submit a pull requests with code changes. Please start all discussions on the [issue tracker](https://github.com/DavidParks8/Owin-Authorization/issues).
 
 
-## Filing issues
+## Filing Issues
 The best way to get your bug fixed is to be as detailed as you can be about the problem.
 Here are questions you can answer before you file a bug to make sure you're not missing any important information.
 
@@ -14,10 +14,10 @@ Here are questions you can answer before you file a bug to make sure you're not 
 
 GitHub supports [markdown](http://github.github.com/github-flavored-markdown/), so when filing bugs make sure you check the formatting before clicking submit.
 
-## Contributing code and content
+## Contributing Code and Content
 Make sure you can build the code. Familiarize yourself with the project workflow and our coding conventions. If you don't know what a pull request is read this article: https://help.github.com/articles/using-pull-requests.
 
-**We only accept PRs to the dev branch.**
+**We only accept pull requests to the dev branch.**
 
 Before submitting a feature or substantial code contribution please discuss it with the team and ensure it follows the product roadmap. Here's a list of blog posts that are worth reading before doing a pull request:
 
