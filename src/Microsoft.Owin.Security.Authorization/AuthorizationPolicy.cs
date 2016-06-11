@@ -4,6 +4,7 @@
 using Microsoft.Owin.Security.Authorization.Properties;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Microsoft.Owin.Security.Authorization
 {
@@ -58,18 +59,18 @@ namespace Microsoft.Owin.Security.Authorization
             return builder.Build();
         }
 
-        public static AuthorizationPolicy Combine(AuthorizationOptions options, IEnumerable<IAuthorizeData> attributes)
+        public static async Task<AuthorizationPolicy> CombineAsync(IAuthorizationPolicyProvider policyProvider, IEnumerable<IAuthorizeData> attributes)
         {
-            if (options == null)
+            if (policyProvider == null)
             {
-                throw new ArgumentNullException(nameof(options));
+                throw new ArgumentNullException(nameof(policyProvider));
             }
 
             if (attributes == null)
             {
                 throw new ArgumentNullException(nameof(attributes));
             }
-            
+
             var policyBuilder = new AuthorizationPolicyBuilder();
             var any = false;
             foreach (var authorizeAttribute in attributes)
@@ -78,7 +79,7 @@ namespace Microsoft.Owin.Security.Authorization
                 var useDefaultPolicy = true;
                 if (!string.IsNullOrWhiteSpace(authorizeAttribute.Policy))
                 {
-                    var policy = options.GetPolicy(authorizeAttribute.Policy);
+                    var policy = await policyProvider.GetPolicyAsync(authorizeAttribute.Policy);
                     if (policy == null)
                     {
                         throw new InvalidOperationException(ResourceHelper.FormatException_AuthorizationPolicyNotFound(authorizeAttribute.Policy));
@@ -99,10 +100,10 @@ namespace Microsoft.Owin.Security.Authorization
                     policyBuilder.AddAuthenticationSchemes(SplitAndTrim(authorizeAttribute.ActiveAuthenticationSchemes));
                     useDefaultPolicy = false;
                 }
-                
+
                 if (useDefaultPolicy)
                 {
-                    policyBuilder.Combine(options.DefaultPolicy);
+                    policyBuilder.Combine(await policyProvider.GetDefaultPolicyAsync());
                 }
             }
 
@@ -124,7 +125,7 @@ namespace Microsoft.Owin.Security.Authorization
 
         private static string[] SplitAndTrim(string commaSeparated)
         {
-            var split = commaSeparated.Split(new [] {','}, StringSplitOptions.RemoveEmptyEntries);
+            var split = commaSeparated.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
             for (var i = 0; i < split.Length; i++)
             {
                 split[i] = split[i].Trim();
