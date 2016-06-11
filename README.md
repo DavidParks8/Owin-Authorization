@@ -8,7 +8,10 @@ Owin-Authorization provides both declarative and imperative authorization functi
 
 Head over to the [wiki](https://github.com/DavidParks8/Owin-Authorization/wiki) for documentation or check out the [samples](https://github.com/DavidParks8/Owin-Authorization/tree/master/samples) if you'd rather dive right in.
 
-####Nuget Packages (Currently Pre-Release)
+#### Contributions
+Before contributing, please read [how to contribute](CONTRIBUTING.md).
+
+#### Nuget Packages (Currently Pre-Release)
 [Authorization Core Classes](https://www.nuget.org/packages/Microsoft.Owin.Security.Authorization/)  
 [Web Api Integration](https://www.nuget.org/packages/Microsoft.Owin.Security.Authorization.WebApi/)  
-[MVC Integration](https://www.nuget.org/packages/Microsoft.Owin.Security.Authorization.Mvc/)  
+[MVC Integration](https://www.nuget.org/packages/Microsoft.Owin.Security.Authorization.Mvc/)
