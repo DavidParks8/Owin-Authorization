@@ -4,40 +4,34 @@ using Microsoft.Owin.Security.Authorization.Infrastructure;
 
 namespace Microsoft.Owin.Security.Authorization
 {
-    public class AuthorizationDependenciesProvider
+    public class AuthorizationDependenciesProvider : IAuthorizationDependenciesProvider
     {
-        public AuthorizationDependenciesProvider(IAuthorizationPolicyProvider policyProvider = null,
-            IAuthorizationHandler[] handlers = null, ILoggerFactory loggerFactory = null)
+        public AuthorizationDependenciesProvider(
+            Func<AuthorizationOptions, IOwinContext, AuthorizationDependencies> onCreate = null,
+            Action<AuthorizationOptions, IOwinContext, AuthorizationDependencies> onDispose = null)
         {
-            OnCreate = options =>
+            OnCreate = onCreate;
+            OnDispose = onDispose;
+        }
+
+        public Func<AuthorizationOptions, IOwinContext, AuthorizationDependencies> OnCreate { get; }
+
+        public Action<AuthorizationOptions, IOwinContext, AuthorizationDependencies> OnDispose { get; }
+
+        public static AuthorizationDependenciesProvider CreateDefault(IAuthorizationHandler[] handlers = null, ILoggerFactory loggerFactory = null)
+        {
+            return new AuthorizationDependenciesProvider((options, context) =>
             {
-                policyProvider = policyProvider ?? new DefaultAuthorizationPolicyProvider(options);
-                handlers = handlers ?? new IAuthorizationHandler[] {new PassThroughAuthorizationHandler()};
-                loggerFactory = loggerFactory ?? new DiagnosticsLoggerFactory();
+                var policyProvider = new DefaultAuthorizationPolicyProvider(options);
                 return new AuthorizationDependencies
                 {
                     PolicyProvider = policyProvider,
                     Service = new DefaultAuthorizationService(
                         policyProvider,
-                        handlers,
-                        loggerFactory.Create("ResourceAuthorization"))
+                        handlers ?? new IAuthorizationHandler[] {new PassThroughAuthorizationHandler()},
+                        loggerFactory?.Create("ResourceAuthorization"))
                 };
-            };
-            OnDispose = (options, context) => { };
-        }
-
-        public Func<AuthorizationOptions, AuthorizationDependencies> OnCreate { get; set; }
-
-        public Action<AuthorizationOptions, AuthorizationDependencies> OnDispose { get; set; }
-
-        public virtual AuthorizationDependencies Create(AuthorizationOptions options)
-        {
-            return OnCreate(options);
-        }
-
-        public virtual void Dispose(AuthorizationOptions options, AuthorizationDependencies dependencies)
-        {
-            OnDispose(options, dependencies);
+            });
         }
     }
 }

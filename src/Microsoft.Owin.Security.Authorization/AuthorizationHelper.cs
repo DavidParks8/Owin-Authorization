@@ -32,8 +32,8 @@ namespace Microsoft.Owin.Security.Authorization
             AuthorizationDependencies dependencies;
             if (controller != null)
             {
-                var dependenciesProvider = new AuthorizationDependenciesProvider();
-                dependencies = dependenciesProvider.Create(controller.AuthorizationOptions);
+                var dependenciesProvider = AuthorizationDependenciesProvider.CreateDefault();
+                dependencies = dependenciesProvider.OnCreate?.Invoke(controller.AuthorizationOptions, null);
             }
             else
             {

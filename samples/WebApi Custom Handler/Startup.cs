@@ -30,9 +30,18 @@ namespace WebApi_Custom_Handler
                 {
                     policyBuilder.AddRequirements(new EmployeeNumber2Requirement());
                 });
-                options.Handlers = new IAuthorizationHandler[] {new EmployeeNumber2Handler()};
-                options.PolicyProvider = new CustomAuthorizationPolicyProvider(options);
-            });
+            }, new AuthorizationDependenciesProvider((options, context) =>
+            {
+                var policyProvider = new CustomAuthorizationPolicyProvider(options);
+                return new AuthorizationDependencies
+                {
+                    PolicyProvider = policyProvider,
+                    Service = new DefaultAuthorizationService(
+                        policyProvider,
+                        new IAuthorizationHandler[] {new PassThroughAuthorizationHandler()},
+                        app.GetLoggerFactory()?.Create("ResourceAuthorization"))
+                };
+            }));
 
             app.UseWebApi(config);
         }

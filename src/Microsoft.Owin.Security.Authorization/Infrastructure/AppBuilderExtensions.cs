@@ -6,7 +6,7 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
 {
     public static class AppBuilderExtensions
     {
-        public static IAppBuilder UseAuthorization(this IAppBuilder app, AuthorizationOptions options, AuthorizationDependenciesProvider dependenciesProvider = null)
+        public static IAppBuilder UseAuthorization(this IAppBuilder app, AuthorizationOptions options, IAuthorizationDependenciesProvider dependenciesProvider = null, IAuthorizationHandler[] handlers = null)
         {
             if (app == null)
             {
@@ -16,10 +16,10 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
             {
                 throw new ArgumentNullException(nameof(options));
             }
-            return app.Use(typeof(ResourceAuthorizationMiddleware), options, dependenciesProvider ?? new AuthorizationDependenciesProvider(options.PolicyProvider, options.Handlers, app.GetLoggerFactory()));
+            return app.Use(typeof (ResourceAuthorizationMiddleware), options, dependenciesProvider ?? AuthorizationDependenciesProvider.CreateDefault(handlers, app.GetLoggerFactory()));
         }
 
-        public static IAppBuilder UseAuthorization(this IAppBuilder app, Action<AuthorizationOptions> configure = null, AuthorizationDependenciesProvider dependenciesProvider = null)
+        public static IAppBuilder UseAuthorization(this IAppBuilder app, Action<AuthorizationOptions> configure = null, IAuthorizationDependenciesProvider dependenciesProvider = null, IAuthorizationHandler[] handlers = null)
         {
             if (app == null)
             {
@@ -27,7 +27,7 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
             }
             var options = new AuthorizationOptions();
             configure?.Invoke(options);
-            return UseAuthorization(app, options, dependenciesProvider);
+            return UseAuthorization(app, options, dependenciesProvider, handlers);
         }
     }
 }
