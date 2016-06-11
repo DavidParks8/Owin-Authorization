@@ -15,7 +15,7 @@ namespace Microsoft.Owin.Security.Authorization
     [TestClass, ExcludeFromCodeCoverage]
     public class DefaultAuthorizationServiceTests
     {
-        public class DynamicPolicyProvider : IAuthorizationPolicyProvider
+        private class DynamicPolicyProvider : IAuthorizationPolicyProvider
         {
             public Task<AuthorizationPolicy> GetPolicyAsync(string policyName)
             {
