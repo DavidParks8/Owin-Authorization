@@ -131,11 +131,11 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\ExampleController.cs" />
+    <Compile Include="AutofacAuthorizationDependenciesFactory.cs" />
     <Compile Include="ExampleConstants.cs" />
     <Compile Include="Models\EmployeeNumber2Handler.cs" />
     <Compile Include="Models\EmployeeNumber2Requirement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="CustomAuthorizationPolicyProvider.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>

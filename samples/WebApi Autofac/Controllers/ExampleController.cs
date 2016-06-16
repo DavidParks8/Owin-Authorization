@@ -7,7 +7,7 @@ namespace WebApi_Autofac.Controllers
     {
         [HttpGet]
         [ResourceAuthorize(Policy = ExampleConstants.EmployeeNumber2Policy)]
-        public IHttpActionResult Authorized()
+        public IHttpActionResult AuthorizedEveryThirdTime()
         {
             return Json("You are authorized now (only every third time!)");
         }

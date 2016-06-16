@@ -132,7 +132,7 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
             var app = Repository.Create<IAppBuilder>(MockBehavior.Loose);
             app.Setup(a => a.Properties).Returns(new Dictionary<string, object>());
             app.Object.UseAuthorization();
-            app.Verify(x => x.Use(typeof(ResourceAuthorizationMiddleware), It.IsNotNull<AuthorizationOptions>(), It.IsNotNull<IAuthorizationDependenciesProvider>()), Times.Once);
+            app.Verify(x => x.Use(typeof(ResourceAuthorizationMiddleware), It.IsNotNull<AuthorizationOptions>(), It.IsNotNull<IAuthorizationDependenciesFactory>()), Times.Once);
         }
     }
 }

@@ -6,32 +6,25 @@ namespace Microsoft.Owin.Security.Authorization
     {
         private readonly AuthorizationOptions _options;
 
-        private readonly IAuthorizationDependenciesProvider _dependenciesProvider;
+        private readonly IAuthorizationDependenciesFactory _dependenciesFactory;
 
         public ResourceAuthorizationMiddleware(OwinMiddleware next, AuthorizationOptions options,
-            IAuthorizationDependenciesProvider dependenciesProvider) : base(next)
+            IAuthorizationDependenciesFactory dependenciesFactory) : base(next)
         {
             _options = options;
-            _dependenciesProvider = dependenciesProvider;
+            _dependenciesFactory = dependenciesFactory;
         }
 
         public override async Task Invoke(IOwinContext context)
         {
-            var dependencies = _dependenciesProvider.OnCreate?.Invoke(_options, context);
-            try
+            var dependencies = _dependenciesFactory.Create(_options, context);
+            if (dependencies != null)
             {
-                if (dependencies != null)
-                {
-                    context.SetDependencies(dependencies);
-                }
-                if (Next != null)
-                {
-                    await Next.Invoke(context);
-                }
+                context.SetDependencies(dependencies);
             }
-            finally
+            if (Next != null)
             {
-                _dependenciesProvider.OnDispose?.Invoke(_options, context, dependencies);
+                await Next.Invoke(context);
             }
         }
     }

@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using Microsoft.Owin;
 using Microsoft.Owin.Logging;
-using Microsoft.Owin.Security.Authorization;
 using Microsoft.Owin.Security.Authorization.Infrastructure;
 using Owin;
 using WebApi_Custom_Handler;
@@ -30,18 +29,7 @@ namespace WebApi_Custom_Handler
                 {
                     policyBuilder.AddRequirements(new EmployeeNumber2Requirement());
                 });
-            }, new AuthorizationDependenciesProvider((options, context) =>
-            {
-                var policyProvider = new CustomAuthorizationPolicyProvider(options);
-                return new AuthorizationDependencies
-                {
-                    PolicyProvider = policyProvider,
-                    Service = new DefaultAuthorizationService(
-                        policyProvider,
-                        new IAuthorizationHandler[] {new PassThroughAuthorizationHandler()},
-                        app.GetLoggerFactory()?.Create("ResourceAuthorization"))
-                };
-            }));
+            }, new CustomAuthorizationDependenciesFactory(app.GetLoggerFactory(), new EmployeeNumber2Handler()));
 
             app.UseWebApi(config);
         }

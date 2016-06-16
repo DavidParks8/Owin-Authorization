@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Reflection;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Autofac;
-using Autofac.Core;
-using Autofac.Integration.Owin;
 using Autofac.Integration.WebApi;
 using Microsoft.Owin;
 using Microsoft.Owin.Logging;
@@ -22,8 +19,6 @@ namespace WebApi_Autofac
 {
     public class Startup
     {
-        public delegate AuthorizationDependencies AuthorizationDependenciesFactory(AuthorizationOptions options);
-
         public void Configuration(IAppBuilder app)
         {
             app.UseErrorPage();
@@ -35,8 +30,9 @@ namespace WebApi_Autofac
             WebApiConfig.Register(config);
 
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
-            builder.RegisterType<CustomAuthorizationPolicyProvider>().As<IAuthorizationPolicyProvider>().InstancePerRequest();
+            builder.RegisterType<DefaultAuthorizationPolicyProvider>().As<IAuthorizationPolicyProvider>().InstancePerRequest();
             builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly()).Where(t => typeof(IAuthorizationHandler).IsAssignableFrom(t)).InstancePerRequest().AsImplementedInterfaces();
+            builder.RegisterType<PassThroughAuthorizationHandler>().As<IAuthorizationHandler>().InstancePerRequest();
             builder.RegisterType<DefaultAuthorizationService>().As<IAuthorizationService>().InstancePerRequest();
             builder.RegisterType<AuthorizationDependencies>().InstancePerRequest().PropertiesAutowired();
             builder.RegisterInstance(new DiagnosticsLoggerFactory().Create("WebApi_Autofac_Logger"))
@@ -55,20 +51,7 @@ namespace WebApi_Autofac
                 {
                     policyBuilder.AddRequirements(new EmployeeNumber2Requirement());
                 });
-            }, new AuthorizationDependenciesProvider
-            (
-                (options, context) =>
-                {
-                    var optionsParameter = new ResolvedParameter(
-                        (pi, ctx) => pi.ParameterType == typeof (AuthorizationOptions),
-                        (pi, ctx) => options);
-
-                    context.GetAutofacLifetimeScope().Resolve<IAuthorizationPolicyProvider>(optionsParameter);
-                    var dependenciesFactory = context.GetAutofacLifetimeScope().Resolve<Func<AuthorizationOptions, AuthorizationDependencies>>();
-                    var dependencies = dependenciesFactory?.Invoke(options);
-                    return dependencies;
-                }
-            ));
+            }, new AutofacAuthorizationDependenciesFactory());
 
             app.UseWebApi(config);
         }

@@ -61,8 +61,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AuthorizationContext.cs" />
-    <Compile Include="AuthorizationDependenciesProvider.cs" />
-    <Compile Include="IAuthorizationDependenciesProvider.cs" />
+    <Compile Include="DefaultAuthorizationDependenciesFactory.cs" />
+    <Compile Include="IAuthorizationDependenciesFactory.cs" />
     <Compile Include="AuthorizationHandler.cs" />
     <Compile Include="ResourceAuthorizationOwinContextExtensions.cs" />
     <Compile Include="AuthorizationHelper.cs" />
