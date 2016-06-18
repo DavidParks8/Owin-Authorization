@@ -63,6 +63,7 @@
     <Compile Include="AuthorizationContext.cs" />
     <Compile Include="AuthorizationDependencyHelper.cs" />
     <Compile Include="DefaultAuthorizationDependenciesFactory.cs" />
+    <Compile Include="DefaultAuthorizationHandlerProvider.cs" />
     <Compile Include="DefaultAuthorizationServiceFactory.cs" />
     <Compile Include="IAuthorizationDependencies.cs" />
     <Compile Include="IAuthorizationDependenciesFactory.cs" />
@@ -77,6 +78,7 @@
     <Compile Include="DefaultAuthorizationService.cs" />
     <Compile Include="IAuthorizationHandler.cs" />
     <Compile Include="IAuthorizationController.cs" />
+    <Compile Include="IAuthorizationHandlerProvider.cs" />
     <Compile Include="IAuthorizationPolicyProvider.cs" />
     <Compile Include="IAuthorizationRequirement.cs" />
     <Compile Include="IAuthorizationService.cs" />

@@ -17,11 +17,12 @@ namespace Microsoft.Owin.Security.Authorization
         public IAuthorizationDependencies Create(AuthorizationOptions options, IOwinContext owinContext)
         {
             var policyProvider = new DefaultAuthorizationPolicyProvider(options);
+            var handlerProvider = new DefaultAuthorizationHandlerProvider(_handlers);
             return new AuthorizationDependencies
             {
                 LoggerFactory = _loggerFactory,
                 PolicyProvider = policyProvider,
-                Handlers = _handlers
+                HandlerProvider = handlerProvider
             };
         }
     }

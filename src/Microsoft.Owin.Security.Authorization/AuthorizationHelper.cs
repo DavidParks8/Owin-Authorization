@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.Owin.Logging;
@@ -38,7 +37,6 @@ namespace Microsoft.Owin.Security.Authorization
             {
                 throw new InvalidOperationException(Resources.Exception_AuthorizationOptionsMustNotBeNull);
             }
-
             if (options.DependenciesFactory == null)
             {
                 throw new InvalidOperationException(Resources.Exception_AuthorizationDependenciesMustNotBeNull);
@@ -49,14 +47,16 @@ namespace Microsoft.Owin.Security.Authorization
 
             var policyProvider = dependencies.PolicyProvider 
                 ?? new DefaultAuthorizationPolicyProvider(options);
-            var authorizationHandlers = dependencies.Handlers?.ToArray()
-                ?? new IAuthorizationHandler[] { new PassThroughAuthorizationHandler() };
+            var handlerProvider = dependencies.HandlerProvider 
+                ?? new DefaultAuthorizationHandlerProvider(new PassThroughAuthorizationHandler());
             var loggerFactory = dependencies.LoggerFactory
                 ?? new DiagnosticsLoggerFactory();
             var serviceFactory = dependencies.ServiceFactory
                 ?? new DefaultAuthorizationServiceFactory();
-            
-            var authorizationService = serviceFactory.Create(policyProvider, authorizationHandlers, loggerFactory);
+
+            var handlers = await handlerProvider.GetHandlersAsync();
+            var authorizationService = serviceFactory.Create(policyProvider, handlers, loggerFactory);
+            //todo: handle case where authorizationService is null
             var policy = await AuthorizationPolicy.CombineAsync(policyProvider, new[] { authorizeAttribute });
             return await authorizationService.AuthorizeAsync(user, policy);
         }

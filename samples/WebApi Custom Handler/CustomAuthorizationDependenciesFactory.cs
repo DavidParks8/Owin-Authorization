@@ -27,12 +27,13 @@ namespace WebApi_Custom_Handler
             }
             handlers.Add(new PassThroughAuthorizationHandler());
             var policyProvider = new CustomAuthorizationPolicyProvider(options);
+            var handlerProvider = new DefaultAuthorizationHandlerProvider(handlers.ToArray());
             return new AuthorizationDependencies
             {
                 LoggerFactory = _loggerFactory,
                 PolicyProvider = policyProvider,
                 ServiceFactory = new DefaultAuthorizationServiceFactory(),
-                Handlers = handlers.ToArray()
+                HandlerProvider = handlerProvider
             };
         }
     }

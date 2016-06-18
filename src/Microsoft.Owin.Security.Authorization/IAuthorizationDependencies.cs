@@ -7,6 +7,6 @@ namespace Microsoft.Owin.Security.Authorization
         IAuthorizationServiceFactory ServiceFactory { get; set; }
         ILoggerFactory LoggerFactory { get; set; }
         IAuthorizationPolicyProvider PolicyProvider { get; set; }
-        IAuthorizationHandler[] Handlers { get; set; }
+        IAuthorizationHandlerProvider HandlerProvider { get; set; }
     }
 }

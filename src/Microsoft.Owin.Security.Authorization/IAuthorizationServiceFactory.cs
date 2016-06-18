@@ -1,4 +1,5 @@
-﻿using Microsoft.Owin.Logging;
+﻿using System.Collections.Generic;
+using Microsoft.Owin.Logging;
 
 namespace Microsoft.Owin.Security.Authorization
 {
@@ -6,7 +7,7 @@ namespace Microsoft.Owin.Security.Authorization
     {
         IAuthorizationService Create(
             IAuthorizationPolicyProvider policyProvider,
-            IAuthorizationHandler[] authorizationHandlers,
+            IEnumerable<IAuthorizationHandler> authorizationHandlers,
             ILoggerFactory loggerFactory);
     }
 }
