@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.Owin.Logging;
 using Microsoft.Owin.Security.Authorization.Infrastructure;
 
 namespace Microsoft.Owin.Security.Authorization
@@ -32,53 +30,36 @@ namespace Microsoft.Owin.Security.Authorization
                 throw new ArgumentNullException(nameof(authorizeAttribute));
             }
 
-            AuthorizationOptions options;
+            IAuthorizationPolicyProvider policyProvider;
+            IAuthorizationService service;
             if (controller != null)
             {
-                options = controller.AuthorizationOptions;
+                var options = controller.AuthorizationOptions;
+                if (options == null)
+                {
+                    throw new InvalidOperationException("AuthorizationOptions must not be null. Your resource authorization may be set up incorrectly.");
+                }
+                policyProvider = new DefaultAuthorizationPolicyProvider(options);
+                service = new DefaultAuthorizationService(policyProvider, new IAuthorizationHandler[] {new PassThroughAuthorizationHandler()});
             }
             else
             {
                 var owinContext = _owinContextAccessor.Context;
-                var helper = new AuthorizationDependencyHelper(owinContext);
-                options = helper.AuthorizationOptions;
+                var dependencies = owinContext.GetDependencies();
+                if (dependencies == null)
+                {
+                    throw new InvalidOperationException(
+                        "AuthorizationDependencies must not be null. Your resource authorization may be set up incorrectly.");
+                }
+                policyProvider = dependencies.PolicyProvider;
+                service = dependencies.Service;
             }
-
-            if (options == null)
+            if (service == null)
             {
-                throw new InvalidOperationException("AuthorizationOptions must not be null.  Your resource authorization may be set up incorrectly.");
+                throw new InvalidOperationException("AuthorizationService must not be null. Your resource authorization may be set up incorrectly.");
             }
-
-            if (options.Dependencies == null)
-            {
-                throw new InvalidOperationException("AuthorizationOptions.Dependencies must not be null");
-            }
-
-            var policyProvider = options.Dependencies.PolicyProvider ?? new DefaultAuthorizationPolicyProvider(options);
-            var authorizationService = GetAuthorizationService(options, policyProvider);
             var policy = await AuthorizationPolicy.CombineAsync(policyProvider, new[] { authorizeAttribute });
-            return await authorizationService.AuthorizeAsync(user, policy);
-        }
-
-        private static IAuthorizationService GetAuthorizationService(AuthorizationOptions options, IAuthorizationPolicyProvider policyProvider)
-        {
-            Debug.Assert(options != null, "options != null");
-            Debug.Assert(options.Dependencies != null, "options.Dependencies != null");
-
-            if (options.Dependencies.Service != null)
-            {
-                return options.Dependencies.Service;
-            }
-
-            var handlers = new IAuthorizationHandler[] { new PassThroughAuthorizationHandler() };
-            var logger = GetLogger(options);
-            return new DefaultAuthorizationService(policyProvider, handlers, logger);
-        }
-
-        private static ILogger GetLogger(AuthorizationOptions options)
-        {
-            var loggerFactory = options.Dependencies.LoggerFactory ?? new DiagnosticsLoggerFactory();
-            return loggerFactory.Create("ResourceAuthorization");
+            return await service.AuthorizeAsync(user, policy);
         }
     }
 }

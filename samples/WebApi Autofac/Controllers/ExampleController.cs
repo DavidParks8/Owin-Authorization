@@ -1,15 +1,15 @@
 ﻿using System.Web.Http;
 using Microsoft.Owin.Security.Authorization.WebApi;
 
-namespace WebApi_Custom_Handler.Controllers
+namespace WebApi_Autofac.Controllers
 {
     public class ExampleController : ApiController
     {
         [HttpGet]
         [ResourceAuthorize(Policy = ExampleConstants.EmployeeNumber2Policy)]
-        public IHttpActionResult Authorized()
+        public IHttpActionResult AuthorizedEveryThirdTime()
         {
-            return Json("You are authorized!");
+            return Json("You are authorized now (only every third time!)");
         }
 
         [HttpGet]

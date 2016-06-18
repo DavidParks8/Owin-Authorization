@@ -37,7 +37,7 @@ namespace Microsoft.Owin.Security.Authorization
         /// Gets the default <see cref="AuthorizationPolicy"/>
         /// </summary>
         /// <returns>The default<see cref="AuthorizationPolicy"/>.</returns>
-        public Task<AuthorizationPolicy> GetDefaultPolicyAsync()
+        public virtual Task<AuthorizationPolicy> GetDefaultPolicyAsync()
         {
             return Task.FromResult(_options.DefaultPolicy);
         }

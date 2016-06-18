@@ -1,17 +1,21 @@
 ﻿using System;
+using System.Reflection;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Http;
+using Autofac;
+using Autofac.Integration.WebApi;
 using Microsoft.Owin;
 using Microsoft.Owin.Logging;
+using Microsoft.Owin.Security.Authorization;
 using Microsoft.Owin.Security.Authorization.Infrastructure;
 using Owin;
-using WebApi_Custom_Handler;
-using WebApi_Custom_Handler.Models;
+using WebApi_Autofac;
+using WebApi_Autofac.Models;
 
 [assembly: OwinStartup(typeof(Startup))]
 
-namespace WebApi_Custom_Handler
+namespace WebApi_Autofac
 {
     public class Startup
     {
@@ -20,8 +24,26 @@ namespace WebApi_Custom_Handler
             app.UseErrorPage();
             app.Use(AddEmployeeClaimBeforeAuthorizationCheck);
             
+            var builder = new ContainerBuilder();
+
             var config = new HttpConfiguration();
             WebApiConfig.Register(config);
+
+            builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
+            builder.RegisterType<DefaultAuthorizationPolicyProvider>().As<IAuthorizationPolicyProvider>().InstancePerRequest();
+            builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly()).Where(t => typeof(IAuthorizationHandler).IsAssignableFrom(t)).InstancePerRequest().AsImplementedInterfaces();
+            builder.RegisterType<PassThroughAuthorizationHandler>().As<IAuthorizationHandler>().InstancePerRequest();
+            builder.RegisterType<DefaultAuthorizationService>().As<IAuthorizationService>().InstancePerRequest();
+            builder.RegisterType<AuthorizationDependencies>().InstancePerRequest().PropertiesAutowired();
+            builder.RegisterInstance(new DiagnosticsLoggerFactory().Create("WebApi_Autofac_Logger"))
+                .As<ILogger>()
+                .SingleInstance();
+
+            var container = builder.Build();
+            config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
+
+            app.UseAutofacMiddleware(container);
+            app.UseAutofacWebApi(config);
 
             app.UseAuthorization(options =>
             {
@@ -29,7 +51,7 @@ namespace WebApi_Custom_Handler
                 {
                     policyBuilder.AddRequirements(new EmployeeNumber2Requirement());
                 });
-            }, new CustomAuthorizationDependenciesFactory(app.GetLoggerFactory(), new EmployeeNumber2Handler()));
+            }, new AutofacAuthorizationDependenciesFactory());
 
             app.UseWebApi(config);
         }
