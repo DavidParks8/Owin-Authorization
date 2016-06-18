@@ -1,7 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Owin.Logging;
-using Microsoft.Owin.Security.Authorization.Infrastructure;
 
 namespace Microsoft.Owin.Security.Authorization
 {
@@ -17,22 +17,14 @@ namespace Microsoft.Owin.Security.Authorization
             _handlers = handlers;
         }
 
-        public AuthorizationDependencies Create(AuthorizationOptions options, IOwinContext owinContext)
+        public IAuthorizationDependencies Create(AuthorizationOptions options, IOwinContext owinContext)
         {
             var policyProvider = new DefaultAuthorizationPolicyProvider(options);
-            var handlers = new List<IAuthorizationHandler>();
-            if (_handlers != null)
-            {
-                handlers.AddRange(_handlers);
-            }
-            handlers.Add(new PassThroughAuthorizationHandler());
             return new AuthorizationDependencies
             {
+                LoggerFactory = _loggerFactory,
                 PolicyProvider = policyProvider,
-                Service = new DefaultAuthorizationService(
-                    policyProvider,
-                    handlers,
-                    _loggerFactory?.Create("ResourceAuthorization"))
+                Handlers = _handlers
             };
         }
     }

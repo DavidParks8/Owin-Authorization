@@ -70,6 +70,24 @@ namespace Microsoft.Owin.Security.Authorization.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to AuthorizationDependencies must not be null.
+        /// </summary>
+        internal static string Exception_AuthorizationDependenciesMustNotBeNull {
+            get {
+                return ResourceManager.GetString("Exception_AuthorizationDependenciesMustNotBeNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to AuthorizationOptions must not be null.  Your resource authorization may be set up incorrectly..
+        /// </summary>
+        internal static string Exception_AuthorizationOptionsMustNotBeNull {
+            get {
+                return ResourceManager.GetString("Exception_AuthorizationOptionsMustNotBeNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to AuthorizationPolicy must have at least one requirement..
         /// </summary>
         internal static string Exception_AuthorizationPolicyEmpty {

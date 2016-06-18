@@ -138,4 +138,10 @@
   <data name="LogAuthorizationSucceededForUser" xml:space="preserve">
     <value>Authorization was successful for user: {0}</value>
   </data>
+  <data name="Exception_AuthorizationDependenciesMustNotBeNull" xml:space="preserve">
+    <value>AuthorizationDependencies must not be null</value>
+  </data>
+  <data name="Exception_AuthorizationOptionsMustNotBeNull" xml:space="preserve">
+    <value>AuthorizationOptions must not be null.  Your resource authorization may be set up incorrectly.</value>
+  </data>
 </root>

@@ -14,6 +14,8 @@ namespace Microsoft.Owin.Security.Authorization
     {
         private IDictionary<string, AuthorizationPolicy> PolicyMap { get; } = new Dictionary<string, AuthorizationPolicy>(StringComparer.OrdinalIgnoreCase);
 
+        public IAuthorizationDependenciesFactory DependenciesFactory { get; set; } = new DefaultAuthorizationDependenciesFactory(new DiagnosticsLoggerFactory());
+
         /// <summary>
         /// The initial default policy is to require any authenticated user
         /// </summary>

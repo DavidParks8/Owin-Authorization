@@ -9,7 +9,7 @@ namespace WebApi_Autofac
 {
     public class AutofacAuthorizationDependenciesFactory : IAuthorizationDependenciesFactory
     {
-        public AuthorizationDependencies Create(AuthorizationOptions options, IOwinContext owinContext)
+        public IAuthorizationDependencies Create(AuthorizationOptions options, IOwinContext owinContext)
         {
             var optionsParameter = new ResolvedParameter(
                         (pi, ctx) => pi.ParameterType == typeof(AuthorizationOptions),

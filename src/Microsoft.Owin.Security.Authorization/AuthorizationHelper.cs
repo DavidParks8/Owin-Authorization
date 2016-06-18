@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.Owin.Logging;
 using Microsoft.Owin.Security.Authorization.Infrastructure;
+using Microsoft.Owin.Security.Authorization.Properties;
 
 namespace Microsoft.Owin.Security.Authorization
 {
@@ -30,36 +33,76 @@ namespace Microsoft.Owin.Security.Authorization
                 throw new ArgumentNullException(nameof(authorizeAttribute));
             }
 
-            IAuthorizationPolicyProvider policyProvider;
-            IAuthorizationService service;
+            var options = ResolveAuthorizationOptions(controller);
+            if (options == null)
+            {
+                throw new InvalidOperationException(Resources.Exception_AuthorizationOptionsMustNotBeNull);
+            }
+
+            if (options.DependenciesFactory == null)
+            {
+                throw new InvalidOperationException(Resources.Exception_AuthorizationDependenciesMustNotBeNull);
+            }
+
+            var dependencies = options.DependenciesFactory.Create(options, _owinContextAccessor.Context) 
+                ?? new AuthorizationDependencies();
+
+            var policyProvider = dependencies.PolicyProvider 
+                ?? new DefaultAuthorizationPolicyProvider(options);
+            var authorizationHandlers = dependencies.Handlers?.ToArray()
+                ?? new IAuthorizationHandler[] { new PassThroughAuthorizationHandler() };
+            var loggerFactory = dependencies.LoggerFactory
+                ?? new DiagnosticsLoggerFactory();
+            var serviceFactory = dependencies.ServiceFactory
+                ?? new DefaultAuthorizationServiceFactory();
+            
+            var authorizationService = serviceFactory.Create(policyProvider, authorizationHandlers, loggerFactory);
+            var policy = await AuthorizationPolicy.CombineAsync(policyProvider, new[] { authorizeAttribute });
+            return await authorizationService.AuthorizeAsync(user, policy);
+        }
+
+        private AuthorizationOptions ResolveAuthorizationOptions(IAuthorizationController controller)
+        {
             if (controller != null)
             {
-                var options = controller.AuthorizationOptions;
-                if (options == null)
-                {
-                    throw new InvalidOperationException("AuthorizationOptions must not be null. Your resource authorization may be set up incorrectly.");
-                }
-                policyProvider = new DefaultAuthorizationPolicyProvider(options);
-                service = new DefaultAuthorizationService(policyProvider, new IAuthorizationHandler[] {new PassThroughAuthorizationHandler()});
+                return controller.AuthorizationOptions;
             }
-            else
-            {
-                var owinContext = _owinContextAccessor.Context;
-                var dependencies = owinContext.GetDependencies();
-                if (dependencies == null)
-                {
-                    throw new InvalidOperationException(
-                        "AuthorizationDependencies must not be null. Your resource authorization may be set up incorrectly.");
-                }
-                policyProvider = dependencies.PolicyProvider;
-                service = dependencies.Service;
-            }
-            if (service == null)
-            {
-                throw new InvalidOperationException("AuthorizationService must not be null. Your resource authorization may be set up incorrectly.");
-            }
-            var policy = await AuthorizationPolicy.CombineAsync(policyProvider, new[] { authorizeAttribute });
-            return await service.AuthorizeAsync(user, policy);
+
+            var owinContext = _owinContextAccessor.Context;
+            var helper = new AuthorizationDependencyHelper(owinContext);
+            return helper.AuthorizationOptions;
         }
     }
+
+    /// <summary> 
+    /// Extracts authorization objects from the <see cref="IOwinContext"/> environment. 
+    /// </summary> 
+    public class AuthorizationDependencyHelper
+    { 
+         public AuthorizationOptions AuthorizationOptions { get; } 
+ 
+
+         public AuthorizationDependencyHelper(IOwinContext context)
+         { 
+             if (context == null) 
+             { 
+                 throw new ArgumentNullException(nameof(context)); 
+             } 
+             if (context.Environment == null) 
+             { 
+                 throw new ArgumentNullException(nameof(context), Resources.ErrorTheOwinEnvironmentDictionaryWasNull); 
+             } 
+ 
+
+             object environmentService; 
+             if (context.Environment.TryGetValue(ResourceAuthorizationMiddleware.ServiceKey, out environmentService)) 
+             { 
+                 AuthorizationOptions = (AuthorizationOptions)environmentService; 
+             } 
+             else 
+             { 
+                 throw new InvalidOperationException(Resources.Exception_PleaseSetupOwinResourceAuthorizationInYourStartupFile); 
+             } 
+         } 
+     } 
 }

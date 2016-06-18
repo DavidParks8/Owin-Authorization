@@ -4,6 +4,6 @@ namespace Microsoft.Owin.Security.Authorization
 {
     public interface IAuthorizationDependenciesFactory
     {
-        AuthorizationDependencies Create(AuthorizationOptions options, IOwinContext owinContext);
+        IAuthorizationDependencies Create(AuthorizationOptions options, IOwinContext owinContext);
     }
 }

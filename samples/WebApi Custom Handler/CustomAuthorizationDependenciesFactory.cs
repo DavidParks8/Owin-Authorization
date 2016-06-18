@@ -20,7 +20,7 @@ namespace WebApi_Custom_Handler
             _handlers = handlers;
         }
 
-        public AuthorizationDependencies Create(AuthorizationOptions options, IOwinContext owinContext)
+        public IAuthorizationDependencies Create(AuthorizationOptions options, IOwinContext owinContext)
         {
             var handlers = new List<IAuthorizationHandler>();
             if (_handlers != null)
@@ -31,11 +31,10 @@ namespace WebApi_Custom_Handler
             var policyProvider = new CustomAuthorizationPolicyProvider(options);
             return new AuthorizationDependencies
             {
+                LoggerFactory = _loggerFactory,
                 PolicyProvider = policyProvider,
-                Service = new DefaultAuthorizationService(
-                    policyProvider,
-                    handlers,
-                    _loggerFactory?.Create("ResourceAuthorization"))
+                ServiceFactory = new DefaultAuthorizationServiceFactory(),
+                Handlers = handlers.ToArray()
             };
         }
     }
