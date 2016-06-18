@@ -29,7 +29,10 @@ namespace WebApi_Custom_Handler
                 {
                     policyBuilder.AddRequirements(new EmployeeNumber2Requirement());
                 });
-            }, new CustomAuthorizationDependenciesFactory(app.GetLoggerFactory(), new EmployeeNumber2Handler()));
+
+                var loggerFactory = app.GetLoggerFactory();
+                options.DependenciesFactory = new CustomAuthorizationDependenciesFactory(loggerFactory, new EmployeeNumber2Handler());
+            });
 
             app.UseWebApi(config);
         }

@@ -51,7 +51,9 @@ namespace WebApi_Autofac
                 {
                     policyBuilder.AddRequirements(new EmployeeNumber2Requirement());
                 });
-            }, new AutofacAuthorizationDependenciesFactory());
+
+                options.DependenciesFactory = new AutofacAuthorizationDependenciesFactory();
+            });
 
             app.UseWebApi(config);
         }
