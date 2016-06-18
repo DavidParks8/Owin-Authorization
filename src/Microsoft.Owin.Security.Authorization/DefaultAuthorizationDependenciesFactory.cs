@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Owin.Logging;
 
 namespace Microsoft.Owin.Security.Authorization
