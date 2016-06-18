@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
-using Microsoft.Owin.Logging;
 using Microsoft.Owin.Security.Authorization.TestTools;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -109,22 +108,22 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
             }
         }
 
-        //[TestMethod, UnitTest]
-        //public void UseAuthorizationWithOptionsActionArgThrowsWhenActionIsNull()
-        //{
-        //    try
-        //    {
-        //        var app = Repository.Create<IAppBuilder>(MockBehavior.Loose);
-        //        app.Setup(a => a.Properties).Returns(new Dictionary<string, object>());
-        //        app.Object.UseAuthorization((Action<AuthorizationOptions>)null);
-        //        FailWhenNoExceptionIsThrown();
-        //    }
-        //    catch (ArgumentNullException exception)
-        //    {
-        //        var parameter = GetNullParameter(1, typeof(IAppBuilder), typeof(Action<AuthorizationOptions>));
-        //        Assert.AreEqual(parameter.Name, exception.ParamName);
-        //    }
-        //}
+        [TestMethod, UnitTest]
+        public void UseAuthorizationWithOptionsActionArgThrowsWhenActionIsNull()
+        {
+            try
+            {
+                var app = Repository.Create<IAppBuilder>(MockBehavior.Loose);
+                app.Setup(a => a.Properties).Returns(new Dictionary<string, object>());
+                app.Object.UseAuthorization((Action<AuthorizationOptions>)null);
+                FailWhenNoExceptionIsThrown();
+            }
+            catch (ArgumentNullException exception)
+            {
+                var parameter = GetNullParameter(1, typeof(IAppBuilder), typeof(Action<AuthorizationOptions>));
+                Assert.AreEqual(parameter.Name, exception.ParamName);
+            }
+        }
 
         [TestMethod, UnitTest]
         public void UseAuthorizationWithNoArgsConstructsOptions()
@@ -132,7 +131,7 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
             var app = Repository.Create<IAppBuilder>(MockBehavior.Loose);
             app.Setup(a => a.Properties).Returns(new Dictionary<string, object>());
             app.Object.UseAuthorization();
-            app.Verify(x => x.Use(typeof(ResourceAuthorizationMiddleware), It.IsNotNull<AuthorizationOptions>(), It.IsNotNull<IAuthorizationDependenciesFactory>()), Times.Once);
+            app.Verify(x => x.Use(typeof(ResourceAuthorizationMiddleware), It.IsNotNull<AuthorizationOptions>()), Times.Once);
         }
     }
 }
