@@ -53,12 +53,14 @@ namespace Microsoft.Owin.Security.Authorization
             AuthorizationPolicy.Combine((IEnumerable<AuthorizationPolicy>)null);
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest, ExpectedException(typeof(ArgumentNullException))]
         public async Task CombineShouldThrowWhenOptionsIsNull()
         {
             await AuthorizationPolicy.CombineAsync(null, new IAuthorizeData[0]);
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest, ExpectedException(typeof(ArgumentNullException))]
         public async Task CombineShouldThrowWhenAttributesIsNull()
         {
@@ -81,6 +83,7 @@ namespace Microsoft.Owin.Security.Authorization
             Assert.IsTrue(requirements.Contains(denyAnonymousRequirement));
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest]
         public async Task CombineShouldReturnNullWhenThereAreNoAttributes()
         {
@@ -125,6 +128,7 @@ namespace Microsoft.Owin.Security.Authorization
             return new AuthorizationPolicy(new[] { new AssertionRequirement(x => true) }, schemes);
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest, ExpectedException(typeof(InvalidOperationException))]
         public async Task CombineShouldThrowWhenNoPolicyIsFound()
         {
@@ -132,6 +136,7 @@ namespace Microsoft.Owin.Security.Authorization
             await CombineWithOptionsAsync(data);
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest]
         public async Task CombineShouldUseDefaultPolicyAsDefault()
         {
@@ -142,6 +147,7 @@ namespace Microsoft.Owin.Security.Authorization
             Assert.IsInstanceOfType(combined.Requirements[0], typeof(AssertionRequirement));
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest]
         public async Task CombineShouldCombinePolicy()
         {
@@ -167,6 +173,7 @@ namespace Microsoft.Owin.Security.Authorization
             Assert.IsNotInstanceOfType(combined.Requirements[0], typeof(DenyAnonymousAuthorizationRequirement));
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest]
         public async Task CombinePolicyShouldIgnoreDefaultPolicy()
         {
@@ -178,12 +185,14 @@ namespace Microsoft.Owin.Security.Authorization
             await AssertDefaultIsIgnoredAsync(options, data);
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest]
         public async Task CombineRolesShouldIgnoreDefaultPolicy()
         {
             await AssertDefaultIsIgnoredAsync(new AuthorizationOptions(), CreateAndSetupData(null, "role", null));
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest]
         public async Task CombineSchemesShouldIgnoreDefaultPolicy()
         {
@@ -214,6 +223,7 @@ namespace Microsoft.Owin.Security.Authorization
             AssertListsEqual(expected, policy.AuthenticationSchemes);
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest]
         public async Task CombineRolesShouldBeSplitByComma()
         {
@@ -224,6 +234,7 @@ namespace Microsoft.Owin.Security.Authorization
             AssertCorrectRoles(roles, combined);
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest]
         public async Task CombineSchemesShouldBeSplitByComma()
         {
@@ -234,6 +245,7 @@ namespace Microsoft.Owin.Security.Authorization
             AssertCorrectSchemes(schemes, combined);
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest]
         public async Task CombineSchemesAloneShouldRequireAuthenticatedUser()
         {
@@ -243,6 +255,7 @@ namespace Microsoft.Owin.Security.Authorization
             Assert.IsInstanceOfType(combined.Requirements[0], typeof(DenyAnonymousAuthorizationRequirement));
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest]
         public async Task CombineSchemesNotAloneShouldNotRequireAuthenticatedUser()
         {
@@ -256,6 +269,7 @@ namespace Microsoft.Owin.Security.Authorization
             AssertCorrectSchemes(new[] { scheme }, combined);
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest]
         public async Task CombineSplitShouldIgnoreEmptyEntries()
         {
@@ -265,6 +279,7 @@ namespace Microsoft.Owin.Security.Authorization
             AssertCorrectSchemes(new[] { "test1", "test2" }, combined);
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest]
         public async Task CombineSplitShouldTrimEntries()
         {
@@ -274,6 +289,7 @@ namespace Microsoft.Owin.Security.Authorization
             AssertCorrectSchemes(new[] { "test1", "test2" }, combined);
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest]
         public async Task CombineAllShouldSucceed()
         {
@@ -293,7 +309,5 @@ namespace Microsoft.Owin.Security.Authorization
             AssertCorrectRoles(new[] { role }, combined, 1);
             AssertCorrectSchemes(new[] { scheme }, combined);
         }
-
-
     }
 }

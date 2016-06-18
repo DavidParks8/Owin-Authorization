@@ -6,7 +6,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.Owin.Security.Authorization;
 using Microsoft.Owin.Security.Authorization.TestTools;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -28,6 +27,7 @@ namespace Microsoft.Owin.Security.Authorization
             }
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest]
         public async Task CanUseDynamicPolicyProvider()
         {
