@@ -1,16 +1,19 @@
+using System;
 using Microsoft.Owin.Logging;
 
 namespace Microsoft.Owin.Security.Authorization
 {
     public class DefaultAuthorizationDependenciesFactory : IAuthorizationDependenciesFactory
     {
-        private readonly ILoggerFactory _loggerFactory;
-
         private readonly IAuthorizationHandler[] _handlers;
 
-        public DefaultAuthorizationDependenciesFactory(ILoggerFactory loggerFactory, params IAuthorizationHandler[] handlers)
+        public DefaultAuthorizationDependenciesFactory(params IAuthorizationHandler[] handlers)
         {
-            _loggerFactory = loggerFactory;
+            if (handlers == null)
+            {
+                throw new ArgumentNullException(nameof(handlers));
+            }
+
             _handlers = handlers;
         }
 
@@ -20,7 +23,7 @@ namespace Microsoft.Owin.Security.Authorization
             var handlerProvider = new DefaultAuthorizationHandlerProvider(_handlers);
             return new AuthorizationDependencies
             {
-                LoggerFactory = _loggerFactory,
+                LoggerFactory = new DiagnosticsLoggerFactory(),
                 PolicyProvider = policyProvider,
                 HandlerProvider = handlerProvider
             };
