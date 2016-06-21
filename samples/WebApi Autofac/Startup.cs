@@ -11,7 +11,6 @@ using Microsoft.Owin.Security.Authorization;
 using Microsoft.Owin.Security.Authorization.Infrastructure;
 using Owin;
 using WebApi_Autofac;
-using WebApi_Autofac.Models;
 
 [assembly: OwinStartup(typeof(Startup))]
 
@@ -24,21 +23,12 @@ namespace WebApi_Autofac
             app.UseErrorPage();
             app.Use(AddEmployeeClaimBeforeAuthorizationCheck);
             
-            var builder = new ContainerBuilder();
-
             var config = new HttpConfiguration();
             WebApiConfig.Register(config);
 
+            var builder = new ContainerBuilder();
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
-
-            builder.RegisterType<DefaultAuthorizationPolicyProvider>().As<IAuthorizationPolicyProvider>().InstancePerRequest();
-            builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly()).Where(t => typeof(IAuthorizationHandler).IsAssignableFrom(t)).InstancePerRequest().AsImplementedInterfaces();
-            builder.RegisterType<PassThroughAuthorizationHandler>().As<IAuthorizationHandler>().InstancePerRequest();
-            builder.RegisterType<DefaultAuthorizationService>().As<IAuthorizationService>().InstancePerRequest();
-            builder.RegisterType<AuthorizationDependencies>().InstancePerRequest().PropertiesAutowired();
-            builder.RegisterInstance(new DiagnosticsLoggerFactory().Create("WebApi_Autofac_Logger"))
-                .As<ILogger>()
-                .SingleInstance();
+            builder.RegisterType<AuthorizationDependencies>().AsImplementedInterfaces();
 
             var container = builder.Build();
             config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
