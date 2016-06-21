@@ -30,6 +30,7 @@ namespace WebApi_Autofac
             WebApiConfig.Register(config);
 
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
+
             builder.RegisterType<DefaultAuthorizationPolicyProvider>().As<IAuthorizationPolicyProvider>().InstancePerRequest();
             builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly()).Where(t => typeof(IAuthorizationHandler).IsAssignableFrom(t)).InstancePerRequest().AsImplementedInterfaces();
             builder.RegisterType<PassThroughAuthorizationHandler>().As<IAuthorizationHandler>().InstancePerRequest();
@@ -49,7 +50,7 @@ namespace WebApi_Autofac
             {
                 options.AddPolicy(ExampleConstants.EmployeeNumber2Policy, policyBuilder =>
                 {
-                    policyBuilder.AddRequirements(new EmployeeNumber2Requirement());
+                    policyBuilder.RequireClaim(ExampleConstants.EmployeeClaimType, "2");
                 });
 
                 options.DependenciesFactory = new AutofacAuthorizationDependenciesFactory();
@@ -65,8 +66,6 @@ namespace WebApi_Autofac
             {
                 const string currentEmployeeNumber = "2";
                 currentIdentity.AddClaim(new Claim(ExampleConstants.EmployeeClaimType, currentEmployeeNumber));
-                currentIdentity.AddClaim(new Claim("IsUser", "true"));
-                currentIdentity.AddClaim(new Claim("IsAdmin", "false"));
             }
             await next();
         }
