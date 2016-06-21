@@ -28,6 +28,7 @@ namespace Microsoft.Owin.Security.Authorization
             handler.Handle(null);
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest, ExpectedException(typeof(ArgumentNullException))]
         public async Task HandleAsyncShouldThrowWhenContextIsNull()
         {
@@ -49,6 +50,7 @@ namespace Microsoft.Owin.Security.Authorization
             Assert.IsTrue(context.HasSucceeded);
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest]
         public async Task HandleAsyncShouldSucceed()
         {
@@ -68,6 +70,7 @@ namespace Microsoft.Owin.Security.Authorization
             Assert.IsFalse(context.HasFailed);
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest]
         public async Task HandleAsyncShouldNotSucceed()
         {
@@ -100,6 +103,7 @@ namespace Microsoft.Owin.Security.Authorization
             handler.Handle(null);
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest, ExpectedException(typeof(ArgumentNullException))]
         public async Task HandleAsyncShouldThrowWhenContextIsNull()
         {
@@ -116,6 +120,7 @@ namespace Microsoft.Owin.Security.Authorization
             Assert.IsTrue(context.HasSucceeded);
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest]
         public async Task HandleAsyncShouldSucceed()
         {
@@ -131,6 +136,7 @@ namespace Microsoft.Owin.Security.Authorization
             RunTestWhichShouldNotSucceed(CreateContextWithDifferentRequirement());
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest]
         public async Task HandleAsyncShouldNotSucceedWhenRequirementIsMissing()
         {
@@ -143,6 +149,7 @@ namespace Microsoft.Owin.Security.Authorization
             RunTestWhichShouldNotSucceed(CreateContextWithNullResource());
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest]
         public async Task HandleAsyncShouldNotSucceedWhenResourceIsNull()
         {
@@ -155,6 +162,7 @@ namespace Microsoft.Owin.Security.Authorization
             RunTestWhichShouldNotSucceed(CreateContextWithTheWrongResourceType());
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest]
         public async Task HandleAsyncShouldNotSucceedWhenResourceIsTheWrongType()
         {
