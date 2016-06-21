@@ -1,24 +1,10 @@
 ﻿using System;
-using System.Diagnostics;
-using Microsoft.Owin.Logging;
 using Owin;
 
 namespace Microsoft.Owin.Security.Authorization.Infrastructure
 {
     public static class AppBuilderExtensions
     {
-        private static AuthorizationOptions InitializeDependencies(AuthorizationOptions options)
-        {
-            Debug.Assert(options != null);
-
-            if (options.Dependencies == null)
-            {
-                options.Dependencies = new AuthorizationDependencies();
-            }
-
-            return options;
-        }
-
         public static IAppBuilder UseAuthorization(this IAppBuilder app)
         {
             if (app == null)
@@ -40,7 +26,7 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
                 throw new ArgumentNullException(nameof(options));
             }
 
-            return app.Use(typeof(ResourceAuthorizationMiddleware), InitializeDependencies(options));
+            return app.Use(typeof(ResourceAuthorizationMiddleware), options);
         }
 
         public static IAppBuilder UseAuthorization(this IAppBuilder app, Action<AuthorizationOptions> configure)

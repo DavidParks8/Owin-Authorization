@@ -119,13 +119,16 @@
     <Compile Include="Infrastructure\PassThroughAuthorizationHandlerTests.cs" />
     <Compile Include="Infrastructure\RolesAuthorizationRequirementTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ResourceAuthorizationMiddlewareTests.cs" />
     <Compile Include="ResourceHelperTests.cs" />
     <Compile Include="AuthorizationContextTests.cs" />
     <Compile Include="AuthorizationOptionsTests.cs" />
     <Compile Include="AuthorizationPolicyTests.cs" />
     <Compile Include="AuthorizationPolicyBuilderTests.cs" />
-    <Compile Include="ResourceAuthorizationMiddlewareTests.cs" />
     <Compile Include="DefaultAuthorizationPolicyProviderTests.cs" />
+    <Compile Include="DefaultAuthorizationServiceFactoryTests.cs" />
+    <Compile Include="DefaultAuthorizationHandlerProviderTests.cs" />
+    <Compile Include="AuthorizationHandlerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Microsoft.Owin.Security.Authorization\Microsoft.Owin.Security.Authorization.csproj">

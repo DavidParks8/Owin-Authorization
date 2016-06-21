@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.Owin.Logging;
 using Microsoft.Owin.Security.Authorization.Infrastructure;
+using Microsoft.Owin.Security.Authorization.Properties;
 
 namespace Microsoft.Owin.Security.Authorization
 {
@@ -32,53 +32,45 @@ namespace Microsoft.Owin.Security.Authorization
                 throw new ArgumentNullException(nameof(authorizeAttribute));
             }
 
-            AuthorizationOptions options;
-            if (controller != null)
-            {
-                options = controller.AuthorizationOptions;
-            }
-            else
-            {
-                var owinContext = _owinContextAccessor.Context;
-                var helper = new AuthorizationDependencyHelper(owinContext);
-                options = helper.AuthorizationOptions;
-            }
-
+            var options = ResolveAuthorizationOptions(controller);
             if (options == null)
             {
-                throw new InvalidOperationException("AuthorizationOptions must not be null.  Your resource authorization may be set up incorrectly.");
+                throw new InvalidOperationException(Resources.Exception_AuthorizationOptionsMustNotBeNull);
             }
-
-            if (options.Dependencies == null)
+            if (options.DependenciesFactory == null)
             {
-                throw new InvalidOperationException("AuthorizationOptions.Dependencies must not be null");
+                throw new InvalidOperationException(Resources.Exception_AuthorizationDependenciesMustNotBeNull);
             }
 
-            var policyProvider = options.Dependencies.PolicyProvider ?? new DefaultAuthorizationPolicyProvider(options);
-            var authorizationService = GetAuthorizationService(options, policyProvider);
+            var dependencies = options.DependenciesFactory.Create(options, _owinContextAccessor.Context) 
+                ?? new AuthorizationDependencies();
+
+            var policyProvider = dependencies.PolicyProvider 
+                ?? new DefaultAuthorizationPolicyProvider(options);
+            var handlerProvider = dependencies.HandlerProvider 
+                ?? new DefaultAuthorizationHandlerProvider(new PassThroughAuthorizationHandler());
+            var loggerFactory = dependencies.LoggerFactory
+                ?? new DiagnosticsLoggerFactory();
+            var serviceFactory = dependencies.ServiceFactory
+                ?? new DefaultAuthorizationServiceFactory();
+
+            var handlers = await handlerProvider.GetHandlersAsync();
+            var authorizationService = serviceFactory.Create(policyProvider, handlers, loggerFactory);
+            //todo: handle case where authorizationService is null
             var policy = await AuthorizationPolicy.CombineAsync(policyProvider, new[] { authorizeAttribute });
             return await authorizationService.AuthorizeAsync(user, policy);
         }
 
-        private static IAuthorizationService GetAuthorizationService(AuthorizationOptions options, IAuthorizationPolicyProvider policyProvider)
+        private AuthorizationOptions ResolveAuthorizationOptions(IAuthorizationController controller)
         {
-            Debug.Assert(options != null, "options != null");
-            Debug.Assert(options.Dependencies != null, "options.Dependencies != null");
-
-            if (options.Dependencies.Service != null)
+            if (controller != null)
             {
-                return options.Dependencies.Service;
+                return controller.AuthorizationOptions;
             }
 
-            var handlers = new IAuthorizationHandler[] { new PassThroughAuthorizationHandler() };
-            var logger = GetLogger(options);
-            return new DefaultAuthorizationService(policyProvider, handlers, logger);
-        }
-
-        private static ILogger GetLogger(AuthorizationOptions options)
-        {
-            var loggerFactory = options.Dependencies.LoggerFactory ?? new DiagnosticsLoggerFactory();
-            return loggerFactory.Create("ResourceAuthorization");
+            var owinContext = _owinContextAccessor.Context;
+            var helper = new AuthorizationDependencyHelper(owinContext);
+            return helper.AuthorizationOptions;
         }
     }
 }

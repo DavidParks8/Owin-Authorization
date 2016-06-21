@@ -1,26 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace Microsoft.Owin.Security.Authorization
 {
-    public class ResourceAuthorizationMiddleware
+    public class ResourceAuthorizationMiddleware : OwinMiddleware
     {
         public const string ServiceKey = "idm:resourceAuthorizationService";
 
-        private readonly Func<IDictionary<string, object>, Task> _next;
         private readonly AuthorizationOptions _options;
 
-        public ResourceAuthorizationMiddleware(Func<IDictionary<string, object>, Task> next, AuthorizationOptions options)
+        public ResourceAuthorizationMiddleware(OwinMiddleware next, AuthorizationOptions options) 
+            : base(next)
         {
             _options = options;
-            _next = next;
         }
 
-        public async Task Invoke(IDictionary<string, object> environment)
+        public override async Task Invoke(IOwinContext context)
         {
-            environment[ServiceKey] = _options;
-            await _next(environment);
+            context.Set(ServiceKey, _options);
+            if (Next != null)
+            {
+                await Next.Invoke(context);
+            }
         }
     }
 }

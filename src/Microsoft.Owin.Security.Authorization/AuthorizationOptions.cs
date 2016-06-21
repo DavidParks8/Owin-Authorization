@@ -3,7 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-using Microsoft.Owin.Logging;
 
 namespace Microsoft.Owin.Security.Authorization
 {
@@ -14,12 +13,12 @@ namespace Microsoft.Owin.Security.Authorization
     {
         private IDictionary<string, AuthorizationPolicy> PolicyMap { get; } = new Dictionary<string, AuthorizationPolicy>(StringComparer.OrdinalIgnoreCase);
 
+        public IAuthorizationDependenciesFactory DependenciesFactory { get; set; } = new DefaultAuthorizationDependenciesFactory();
+
         /// <summary>
         /// The initial default policy is to require any authenticated user
         /// </summary>
         public AuthorizationPolicy DefaultPolicy { get; set; } = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
-
-        public AuthorizationDependencies Dependencies { get; set; } = new AuthorizationDependencies() { LoggerFactory = new DiagnosticsLoggerFactory()};
 
         /// <summary>
         /// Add an authorization policy with the provided name.

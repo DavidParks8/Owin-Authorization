@@ -97,17 +97,6 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
         }
 
         [TestMethod, UnitTest]
-        public void UseAuthorizationWithOptionsArgShouldInitializeNullDependencies()
-        {
-            var options = new AuthorizationOptions { Dependencies = null };
-            var app = Repository.Create<IAppBuilder>(MockBehavior.Loose);
-            app.Object.UseAuthorization(options);
-
-            Assert.IsNotNull(options.Dependencies, "options.Dependencies != null");
-            app.Verify(x => x.Use(typeof(ResourceAuthorizationMiddleware), options), Times.Once);
-        }
-
-        [TestMethod, UnitTest]
         public void UseAuthorizationWithNoArgsConstructsOptions()
         {
             var app = Repository.Create<IAppBuilder>(MockBehavior.Loose);
@@ -124,7 +113,7 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
             {
                 actionRan = true;
                 Assert.IsNotNull(options, "options != null");
-                Assert.IsNotNull(options.Dependencies, "options.Dependencies != null");
+                Assert.IsNotNull(options.DependenciesFactory, "options.DependenciesFactory != null");
             });
 
             app.Verify(x => x.Use(typeof(ResourceAuthorizationMiddleware), It.IsNotNull<AuthorizationOptions>()), Times.Once);

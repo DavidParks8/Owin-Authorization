@@ -22,20 +22,6 @@ namespace Microsoft.Owin.Security.Authorization
         }
 
         [TestMethod, UnitTest]
-        public void AuthorizeDependenciesShouldNotBeNullByDefault()
-        {
-            var options = NewOptions();
-            Assert.IsNotNull(options.Dependencies);
-        }
-
-        [TestMethod, UnitTest]
-        public void AuthorizeDependenciesShouldHaveALoggerFactoryInstance()
-        {
-            var options = NewOptions();
-            Assert.IsNotNull(options.Dependencies.LoggerFactory);
-        }
-
-        [TestMethod, UnitTest]
         public void DefaultPolicyShouldRequireAuthenticatedUser()
         {
             var options = NewOptions();

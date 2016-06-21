@@ -31,7 +31,9 @@ namespace Microsoft.Owin.Security.Authorization.Mvc
 
             var controller = filterContext.Controller as IAuthorizationController;
             var user = (ClaimsPrincipal) filterContext.HttpContext.User;
-            if (!new AuthorizationHelper(new HttpContextBaseOwinContextAccessor(filterContext.HttpContext)).IsAuthorizedAsync(controller, user, this).Result)
+            var contextAccessor = new HttpContextBaseOwinContextAccessor(filterContext.HttpContext);
+            var authorizationHelper = new AuthorizationHelper(contextAccessor);
+            if (!authorizationHelper.IsAuthorizedAsync(controller, user, this).Result)
             {
                 filterContext.Result = new HttpUnauthorizedResult();
             }
