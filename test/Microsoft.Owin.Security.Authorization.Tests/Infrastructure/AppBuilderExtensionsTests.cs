@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using System.Reflection;
 using Microsoft.Owin.Security.Authorization.TestTools;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -18,32 +16,7 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
             Assert.IsTrue(parameterPosition > -1);
             Assert.IsNotNull(functionArguments);
 
-            var method = typeof(AppBuilderExtensions)
-                .GetMethods()
-                .FirstOrDefault(m =>
-                {
-                    if (m.Name != nameof(AppBuilderExtensions.UseAuthorization))
-                    {
-                        return false;
-                    }
-                    // deal with optional parameters
-                    for (var i = 0; i < functionArguments.Length; i++)
-                    {
-                        if (m.GetParameters().Length <= i)
-                        {
-                            return false;
-                        }
-                        if (m.GetParameters()[i].ParameterType != functionArguments[i])
-                        {
-                            return false;
-                        }
-                    }
-                    return true;
-                });
-            if (method == null)
-            {
-                Assert.Fail("method signature not found");
-            }
+            var method = typeof(AppBuilderExtensions).GetMethod(nameof(AppBuilderExtensions.UseAuthorization), functionArguments);
             var parameter = method.GetParameters()[parameterPosition];
             return parameter;
         }
@@ -113,9 +86,7 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
         {
             try
             {
-                var app = Repository.Create<IAppBuilder>(MockBehavior.Loose);
-                app.Setup(a => a.Properties).Returns(new Dictionary<string, object>());
-                app.Object.UseAuthorization((Action<AuthorizationOptions>)null);
+                Repository.Create<IAppBuilder>().Object.UseAuthorization((Action<AuthorizationOptions>)null);
                 FailWhenNoExceptionIsThrown();
             }
             catch (ArgumentNullException exception)
@@ -129,9 +100,24 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
         public void UseAuthorizationWithNoArgsConstructsOptions()
         {
             var app = Repository.Create<IAppBuilder>(MockBehavior.Loose);
-            app.Setup(a => a.Properties).Returns(new Dictionary<string, object>());
             app.Object.UseAuthorization();
             app.Verify(x => x.Use(typeof(ResourceAuthorizationMiddleware), It.IsNotNull<AuthorizationOptions>()), Times.Once);
+        }
+
+        [TestMethod, UnitTest]
+        public void UseAuthorizationWithOptionsActionArgRunsAction()
+        {
+            var actionRan = false;
+            var app = Repository.Create<IAppBuilder>(MockBehavior.Loose);
+            app.Object.UseAuthorization(options =>
+            {
+                actionRan = true;
+                Assert.IsNotNull(options, "options != null");
+                Assert.IsNotNull(options.DependenciesFactory, "options.DependenciesFactory != null");
+            });
+
+            app.Verify(x => x.Use(typeof(ResourceAuthorizationMiddleware), It.IsNotNull<AuthorizationOptions>()), Times.Once);
+            Assert.IsTrue(actionRan, "The action did not run");
         }
     }
 }
