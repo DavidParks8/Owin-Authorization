@@ -142,7 +142,7 @@ namespace Microsoft.Owin.Security.Authorization
             });
 
             await AssertEverythingIsInitialized(dependenciesFactory.Object);
-       }
+        }
 
         private Mock<IAuthorizationDependenciesFactory> CreateDependenciesFactoryWithSpecificReturn(AuthorizationDependencies dependencies)
         {
