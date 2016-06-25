@@ -9,6 +9,7 @@ using System.Security.Principal;
 using System.Threading.Tasks;
 using Microsoft.Owin.Logging;
 using Microsoft.Owin.Security.Authorization.Infrastructure;
+using Microsoft.Owin.Security.Authorization.Properties;
 
 namespace Microsoft.Owin.Security.Authorization
 {
@@ -117,7 +118,7 @@ namespace Microsoft.Owin.Security.Authorization
             var policy = await _policyProvider.GetPolicyAsync(policyName);
             if (policy == null)
             {
-                throw new InvalidOperationException($"No policy found: {policyName}.");
+                throw new InvalidOperationException(ResourceHelper.FormatException_AuthorizationPolicyNotFound(policyName));
             }
 
             return await this.AuthorizeAsync(user, resource, policy);
