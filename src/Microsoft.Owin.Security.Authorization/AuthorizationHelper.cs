@@ -55,8 +55,9 @@ namespace Microsoft.Owin.Security.Authorization
                 ?? new DefaultAuthorizationServiceFactory();
 
             var handlers = await handlerProvider.GetHandlersAsync();
-            var authorizationService = serviceFactory.Create(policyProvider, handlers, loggerFactory);
-            //todo: handle case where authorizationService is null
+            var authorizationService = serviceFactory.Create(policyProvider, handlers, loggerFactory)
+                ?? new DefaultAuthorizationServiceFactory().Create(policyProvider, handlers, loggerFactory);
+            
             var policy = await AuthorizationPolicy.CombineAsync(policyProvider, new[] { authorizeAttribute });
             return await authorizationService.AuthorizeAsync(user, policy);
         }
