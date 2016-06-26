@@ -22,7 +22,7 @@ namespace Microsoft.Owin.Security.Authorization.WebApi
             attribute.OnAuthorization(null);
         }
 
-        private class TestAuthorize : ResourceAuthorizeAttribute
+        private sealed class TestAuthorize : ResourceAuthorizeAttribute
         {
             public void PassNullIntoIsAuthorized()
             {

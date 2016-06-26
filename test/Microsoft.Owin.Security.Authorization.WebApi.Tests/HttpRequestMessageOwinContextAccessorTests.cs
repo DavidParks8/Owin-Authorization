@@ -29,6 +29,7 @@ namespace Microsoft.Owin.Security.Authorization.WebApi
             }
         }
 
+        [SuppressMessage("Microsoft.Reliability", "CA2001:AvoidCallingProblematicMethods", MessageId = "System.GC.Collect", Justification = Justifications.ForceObjectToFinalize)]
         [TestMethod, UnitTest]
         public void ContextShouldBeNullAfterFinalize()
         {
