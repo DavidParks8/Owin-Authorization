@@ -105,7 +105,18 @@ namespace Microsoft.Owin.Security.Authorization
 
         private static string GetClaimValue(IIdentity identity, string claimsType)
         {
-            return (identity as ClaimsIdentity)?.FindFirst(claimsType)?.Value;
+            var claimsIdentity = identity as ClaimsIdentity;
+            // ReSharper disable once UseNullPropagation because it compiles to more efficient IL
+            if (claimsIdentity != null)
+            {
+                var claim = claimsIdentity.FindFirst(claimsType);
+                if (claim != null)
+                {
+                    return claim.Value;
+                }
+            }
+
+            return null;
         }
 
         public async Task<bool> AuthorizeAsync(ClaimsPrincipal user, object resource, string policyName)

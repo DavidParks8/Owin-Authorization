@@ -1,15 +1,10 @@
-﻿// Copyright (c) .NET Foundation. All rights reserved.
-// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
-using Microsoft.Owin.Logging;
-using Microsoft.Owin.Security.Authorization.Infrastructure;
 using Microsoft.Owin.Security.Authorization.TestTools;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -159,16 +154,12 @@ namespace Microsoft.Owin.Security.Authorization
 
             identity.Verify(x => x.FindFirst("sub"), Times.Once);
             identity.Verify(x => x.FindFirst(ClaimTypes.Name), Times.Once);
-            identity.Verify(x => x.FindFirst(ClaimTypes.NameIdentifier), Times.AtLeast(2));
+            identity.Verify(x => x.FindFirst(ClaimTypes.NameIdentifier), Times.Once);
         }
 
         private static ClaimsPrincipal CreateAnonymousUser()
         {
             return new ClaimsPrincipal();
-        }
-        private static ClaimsPrincipal CreateAuthenticatedUser()
-        {
-            return new ClaimsPrincipal(new ClaimsIdentity(new Claim[0], "authenticated"));
         }
 
         private static DefaultAuthorizationService CreateDynamicAuthorizationService()
