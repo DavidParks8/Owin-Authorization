@@ -43,6 +43,7 @@ namespace Microsoft.Owin.Security.Authorization
             Assert.IsFalse(await authorizationService.AuthorizeAsync(user, "3"));
         }
 
+        [SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "Microsoft.Owin.Security.Authorization.DefaultAuthorizationService", Justification = Justifications.ExpectedException)]
         [TestMethod, UnitTest, ExpectedException(typeof(ArgumentNullException))]
         public void ConstructorShouldThrowWhenPolicyProviderIsNull()
         {
@@ -50,6 +51,7 @@ namespace Microsoft.Owin.Security.Authorization
             new DefaultAuthorizationService(null, new IAuthorizationHandler[0]);
         }
 
+        [SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "Microsoft.Owin.Security.Authorization.DefaultAuthorizationService", Justification = Justifications.ExpectedException)]
         [TestMethod, UnitTest, ExpectedException(typeof(ArgumentNullException))]
         public void ConstructorShouldThrowWhenHandlersIsNull()
         {
@@ -58,7 +60,7 @@ namespace Microsoft.Owin.Security.Authorization
         }
 
         [TestMethod, UnitTest]
-        public async Task AuthorizationServiceShouldAddPassthroughIfNotPresent()
+        public async Task AuthorizationServiceShouldAddPassThroughIfNotPresent()
         {
             var options = new AuthorizationOptions();
             var policyProvider = new DefaultAuthorizationPolicyProvider(options);
@@ -74,6 +76,7 @@ namespace Microsoft.Owin.Security.Authorization
             handler.Verify(x => x.HandleAsync(It.IsAny<AuthorizationContext>()));
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest, ExpectedException(typeof(ArgumentNullException))]
         public async Task AuthorizeAsyncShouldThrowWhenRequirementsIsNull()
         {
@@ -81,6 +84,7 @@ namespace Microsoft.Owin.Security.Authorization
             await service.AuthorizeAsync(CreateAnonymousUser(), new object(), (IEnumerable<IAuthorizationRequirement>) null);
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest, ExpectedException(typeof(ArgumentNullException))]
         public async Task AuthorizeAsyncShouldThrowWhenPolicyIsNull()
         {
@@ -88,6 +92,7 @@ namespace Microsoft.Owin.Security.Authorization
             await service.AuthorizeAsync(CreateAnonymousUser(), new object(), (string)null);
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest]
         public async Task AuthorizeAsyncShouldFailWhenUserIsNull()
         {

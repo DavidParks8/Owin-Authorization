@@ -131,6 +131,7 @@
     <Compile Include="AuthorizationHandlerTests.cs" />
     <Compile Include="AuthorizationHelperTests.cs" />
     <Compile Include="DefaultAuthorizationDependenciesFactoryTests.cs" />
+    <Compile Include="AuthorizationServiceExtensionsTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Microsoft.Owin.Security.Authorization\Microsoft.Owin.Security.Authorization.csproj">
