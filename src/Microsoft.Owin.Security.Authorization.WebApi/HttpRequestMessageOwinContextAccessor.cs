@@ -8,9 +8,20 @@ namespace Microsoft.Owin.Security.Authorization.WebApi
     /// </summary>
     public class HttpRequestMessageOwinContextAccessor : IOwinContextAccessor
     {
-        private readonly HttpRequestMessage _httpRequestMessage;
+        private readonly WeakReference<HttpRequestMessage> _httpRequestMessage;
 
-        public IOwinContext Context => _httpRequestMessage.GetOwinContext();
+        public IOwinContext Context
+        {
+            get
+            {
+                HttpRequestMessage request;
+                if (_httpRequestMessage.TryGetTarget(out request))
+                {
+                    return request.GetOwinContext();
+                }
+                return null;
+            }
+        }
 
         public HttpRequestMessageOwinContextAccessor(HttpRequestMessage httpRequestMessage)
         {
@@ -19,7 +30,7 @@ namespace Microsoft.Owin.Security.Authorization.WebApi
                 throw new ArgumentNullException(nameof(httpRequestMessage));
             }
 
-            _httpRequestMessage = httpRequestMessage;
+            _httpRequestMessage = new WeakReference<HttpRequestMessage>(httpRequestMessage);
         }
     }
 }
