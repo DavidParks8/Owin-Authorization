@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net.Http;
 using System.Web;
 
 namespace Microsoft.Owin.Security.Authorization.Mvc
