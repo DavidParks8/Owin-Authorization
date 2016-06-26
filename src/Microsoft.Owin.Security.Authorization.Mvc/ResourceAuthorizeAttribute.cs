@@ -11,32 +11,40 @@ namespace Microsoft.Owin.Security.Authorization.Mvc
     /// </summary>
     [SuppressMessage("Microsoft.Performance", "CA1813:AvoidUnsealedAttributes", Justification = "It must remain extensible")]
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
-    public class ResourceAuthorizeAttribute : FilterAttribute, IAuthorizeData, IAuthorizationFilter
+    public class ResourceAuthorizeAttribute : AuthorizeAttribute, IAuthorizeData
     {
+        private const string s_controllerKey = "Owin.AuthorizationController";
+
         /// <inheritdoc />
         public string Policy { get; set; }
 
         /// <inheritdoc />
-        public string Roles { get; set; }
-
-        /// <inheritdoc />
         public string ActiveAuthenticationSchemes { get; set; }
 
-        public void OnAuthorization(System.Web.Mvc.AuthorizationContext filterContext)
+        public override void OnAuthorization(System.Web.Mvc.AuthorizationContext filterContext)
         {
             if (filterContext == null)
             {
                 throw new ArgumentNullException(nameof(filterContext));
             }
 
-            var controller = filterContext.Controller as IAuthorizationController;
-            var user = (ClaimsPrincipal) filterContext.HttpContext.User;
-            var contextAccessor = new HttpContextBaseOwinContextAccessor(filterContext.HttpContext);
-            var authorizationHelper = new AuthorizationHelper(contextAccessor);
-            if (!authorizationHelper.IsAuthorizedAsync(controller, user, this).Result)
+            //todo: handle items being null
+            filterContext.HttpContext.Items.Add(s_controllerKey, filterContext.Controller);
+            base.OnAuthorization(filterContext);
+        }
+
+        protected override bool AuthorizeCore(HttpContextBase httpContext)
+        {
+            if (httpContext == null)
             {
-                filterContext.Result = new HttpUnauthorizedResult();
+                throw new ArgumentNullException(nameof(httpContext));
             }
+
+            var controller = httpContext.Items[s_controllerKey] as IAuthorizationController;
+            var user = (ClaimsPrincipal)httpContext.User;
+            var contextAccessor = new HttpContextBaseOwinContextAccessor(httpContext);
+            var authorizationHelper = new AuthorizationHelper(contextAccessor);
+            return authorizationHelper.IsAuthorizedAsync(controller, user, this).Result;
         }
     }
 }
