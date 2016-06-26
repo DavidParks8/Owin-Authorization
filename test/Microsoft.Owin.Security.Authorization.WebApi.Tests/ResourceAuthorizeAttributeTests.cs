@@ -39,41 +39,51 @@ namespace Microsoft.Owin.Security.Authorization.WebApi
         [TestMethod, UnitTest]
         public void UserShouldNotBeAuthorized()
         {
-            var user = new ClaimsPrincipal();
-
-            var options = new AuthorizationOptions();
-            var controller = Repository.Create<IHttpController>();
-            controller.As<IAuthorizationController>().Setup(x => x.AuthorizationOptions).Returns(options);
             using (var request = new HttpRequestMessage())
             {
-                request.Properties.Add("MS_OwinEnvironment", new Dictionary<string, object>());
-                var anonymousAttributes = new Collection<AllowAnonymousAttribute>();
-                var controllerDescriptor = Repository.Create<HttpControllerDescriptor>();
-                controllerDescriptor.Setup(x => x.GetCustomAttributes<AllowAnonymousAttribute>()).Returns(anonymousAttributes);
-                var controllerContext = new HttpControllerContext
-                {
-                    Controller = controller.Object,
-                    Request = request,
-                    RequestContext = new HttpRequestContext { Principal = user },
-                    ControllerDescriptor = controllerDescriptor.Object
-                };
+                var controllerContext = CreateControllerContext(request);
+                var actionContext = CreateActionContext(controllerContext);
 
-                var actionContext = new HttpActionContext { ControllerContext = controllerContext };
-                var action = Repository.Create<HttpActionDescriptor>();
-                action.Setup(x => x.GetCustomAttributes<AllowAnonymousAttribute>()).Returns(anonymousAttributes);
-                actionContext.ActionDescriptor = action.Object;
-                var attribute = new ResourceAuthorizeAttribute();
-                attribute.OnAuthorization(actionContext);
                 try
                 {
+                    var attribute = new ResourceAuthorizeAttribute();
+                    attribute.OnAuthorization(actionContext);
                     Assert.AreEqual(HttpStatusCode.Unauthorized, actionContext.Response.StatusCode);
                 }
                 finally
                 {
                     actionContext.Response?.Dispose();
                 }
-                
             }
+        }
+
+        private HttpControllerContext CreateControllerContext(HttpRequestMessage request)
+        {
+            var options = new AuthorizationOptions();
+            var controller = Repository.Create<IHttpController>();
+            controller.As<IAuthorizationController>().Setup(x => x.AuthorizationOptions).Returns(options);
+            request.Properties.Add("MS_OwinEnvironment", new Dictionary<string, object>());
+            var anonymousAttributes = new Collection<AllowAnonymousAttribute>();
+            var controllerDescriptor = Repository.Create<HttpControllerDescriptor>();
+            controllerDescriptor.Setup(x => x.GetCustomAttributes<AllowAnonymousAttribute>()).Returns(anonymousAttributes);
+            var controllerContext = new HttpControllerContext
+            {
+                Controller = controller.Object,
+                Request = request,
+                RequestContext = new HttpRequestContext { Principal = new ClaimsPrincipal() },
+                ControllerDescriptor = controllerDescriptor.Object
+            };
+            return controllerContext;
+        }
+
+        private HttpActionContext CreateActionContext(HttpControllerContext controllerContext)
+        {
+            var actionContext = new HttpActionContext { ControllerContext = controllerContext };
+            var action = Repository.Create<HttpActionDescriptor>();
+            action.Setup(x => x.GetCustomAttributes<AllowAnonymousAttribute>())
+                .Returns(new Collection<AllowAnonymousAttribute>());
+            actionContext.ActionDescriptor = action.Object;
+            return actionContext;
         }
 
         [TestMethod, UnitTest]
