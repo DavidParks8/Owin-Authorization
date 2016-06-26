@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Net.Http;
 using System.Security.Claims;
 using System.Web.Http.Controllers;
 
@@ -29,7 +28,9 @@ namespace Microsoft.Owin.Security.Authorization.WebApi
 
             var controller = actionContext.ControllerContext.Controller as IAuthorizationController;
             var user = (ClaimsPrincipal)actionContext.RequestContext.Principal;
-            return new AuthorizationHelper(new HttpRequestMessageOwinContextAccessor(actionContext.Request)).IsAuthorizedAsync(controller, user, this).Result;
+            var owinAccessor = new HttpRequestMessageOwinContextAccessor(actionContext.Request);
+            var helper = new AuthorizationHelper(owinAccessor);
+            return helper.IsAuthorizedAsync(controller, user, this).Result;
         }
     }
 }
