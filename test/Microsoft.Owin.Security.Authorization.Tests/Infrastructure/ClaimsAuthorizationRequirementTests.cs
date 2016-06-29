@@ -119,25 +119,27 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
             {
             }
 
-            public void HandleProtected(AuthorizationHandlerContext context, ClaimsAuthorizationRequirement requirement)
+            public async Task HandleProtectedAsync(AuthorizationHandlerContext context, ClaimsAuthorizationRequirement requirement)
             {
-                Handle(context, requirement);
+                await HandleRequirementAsync(context, requirement);
             }
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest, ExpectedException(typeof(ArgumentNullException))]
-        public void HandleProtectedShouldThrowWhenContextIsNull()
+        public async Task HandleProtectedShouldThrowWhenContextIsNull()
         {
             var requirement = new TestClaimsRequirement();
-            requirement.HandleProtected(null, new TestClaimsRequirement());
+            await requirement.HandleProtectedAsync(null, new TestClaimsRequirement());
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest, ExpectedException(typeof(ArgumentNullException))]
-        public void HandleProtectedShouldThrowWhenRequirementIsNull()
+        public async Task HandleProtectedShouldThrowWhenRequirementIsNull()
         {
             var requirement = new TestClaimsRequirement();
             var context = new AuthorizationHandlerContext(new IAuthorizationRequirement[0], null, null);
-            requirement.HandleProtected(context, null);
+            await requirement.HandleProtectedAsync(context, null);
         }
     }
 }

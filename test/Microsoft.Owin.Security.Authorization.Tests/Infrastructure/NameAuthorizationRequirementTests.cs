@@ -17,25 +17,27 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
             {
             }
 
-            public void HandleProtected(AuthorizationHandlerContext context, NameAuthorizationRequirement requirement)
+            public async Task HandleProtectedAsync(AuthorizationHandlerContext context, NameAuthorizationRequirement requirement)
             {
-                Handle(context, requirement);
+                await HandleRequirementAsync(context, requirement);
             }
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest, ExpectedException(typeof(ArgumentNullException))]
-        public void HandleProtectedShouldThrowWhenContextIsNull()
+        public async Task HandleProtectedShouldThrowWhenContextIsNull()
         {
             var requirement = new TestNameRequirement();
-            requirement.HandleProtected(null, new NameAuthorizationRequirement("fdsa"));
+            await requirement.HandleProtectedAsync(null, new NameAuthorizationRequirement("fdsa"));
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest, ExpectedException(typeof(ArgumentNullException))]
-        public void HandleProtectedShouldThrowWhenRequirementIsNull()
+        public async Task HandleProtectedShouldThrowWhenRequirementIsNull()
         {
             var requirement = new TestNameRequirement();
             var context = new AuthorizationHandlerContext(new List<IAuthorizationRequirement>(), null, null);
-            requirement.HandleProtected(context, null);
+            await requirement.HandleProtectedAsync(context, null);
         }
 
         [SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults",

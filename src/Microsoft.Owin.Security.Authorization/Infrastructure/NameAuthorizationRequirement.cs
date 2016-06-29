@@ -4,6 +4,7 @@
 using System;
 using System.Diagnostics;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Microsoft.Owin.Security.Authorization.Infrastructure
 {
@@ -24,7 +25,7 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
             RequiredName = requiredName;
         }
 
-        protected override void Handle(AuthorizationHandlerContext context, NameAuthorizationRequirement requirement)
+        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, NameAuthorizationRequirement requirement)
         {
             if (context == null)
             {
@@ -35,20 +36,20 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
                 throw new ArgumentNullException(nameof(requirement));
             }
 
-            if (context.User == null)
+            if (context.User != null)
             {
-                return;
-            }
-
-            var identities = context.User.Identities;
-            foreach (var identity in identities)
-            {
-                if (ContainsRequiredName(identity, requirement))
+                var identities = context.User.Identities;
+                foreach (var identity in identities)
                 {
-                    context.Succeed(requirement);
-                    break;
+                    if (ContainsRequiredName(identity, requirement))
+                    {
+                        context.Succeed(requirement);
+                        break;
+                    }
                 }
             }
+
+            return Task.FromResult(0);
         }
 
         private static bool ContainsRequiredName(ClaimsIdentity identity, NameAuthorizationRequirement requirement)

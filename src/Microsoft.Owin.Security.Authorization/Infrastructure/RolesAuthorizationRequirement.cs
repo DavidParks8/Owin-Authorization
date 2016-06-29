@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Microsoft.Owin.Security.Authorization.Infrastructure
 {
@@ -33,7 +34,7 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
             AllowedRoles = allowedRoles;
         }
 
-        protected override void Handle(AuthorizationHandlerContext context, RolesAuthorizationRequirement requirement)
+        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, RolesAuthorizationRequirement requirement)
         {
             if (context == null)
             {
@@ -44,19 +45,19 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
                 throw new ArgumentNullException(nameof(requirement));
             }
 
-            if (context.User == null)
+            if (context.User != null)
             {
-                return;
+                Debug.Assert(requirement.AllowedRoles != null, "requirement.AllowedRoles != null");
+                Debug.Assert(requirement.AllowedRoles.Any(), "requirement.AllowedRoles.Any()");
+
+                var found = requirement.AllowedRoles.Any(role => context.User.IsInRole(role));
+                if (found)
+                {
+                    context.Succeed(requirement);
+                }
             }
 
-            Debug.Assert(requirement.AllowedRoles != null, "requirement.AllowedRoles != null");
-            Debug.Assert(requirement.AllowedRoles.Any(), "requirement.AllowedRoles.Any()");
-
-            var found = requirement.AllowedRoles.Any(role => context.User.IsInRole(role));
-            if (found)
-            {
-                context.Succeed(requirement);
-            }
+            return Task.FromResult(0);
         }
     }
 }

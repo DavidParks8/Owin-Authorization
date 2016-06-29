@@ -3,12 +3,13 @@
 
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Microsoft.Owin.Security.Authorization.Infrastructure
 {
     public class DenyAnonymousAuthorizationRequirement : AuthorizationHandler<DenyAnonymousAuthorizationRequirement>, IAuthorizationRequirement
     {
-        protected override void Handle(AuthorizationHandlerContext context, DenyAnonymousAuthorizationRequirement requirement)
+        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, DenyAnonymousAuthorizationRequirement requirement)
         {
             if (context == null)
             {
@@ -21,6 +22,8 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
             {
                 context.Succeed(requirement);
             }
+
+            return Task.FromResult(0);
         }
     }
 }

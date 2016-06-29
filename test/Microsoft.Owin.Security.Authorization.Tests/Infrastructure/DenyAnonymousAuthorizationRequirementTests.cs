@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using Microsoft.Owin.Security.Authorization.TestTools;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -12,40 +13,45 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
     {
         private class TestDenyAnonymousRequirement : DenyAnonymousAuthorizationRequirement
         {
-            public void HandleProtected(AuthorizationHandlerContext context, DenyAnonymousAuthorizationRequirement requirement)
+            public async Task HandleProtectedAsync(AuthorizationHandlerContext context, DenyAnonymousAuthorizationRequirement requirement)
             {
-                Handle(context, requirement);
+                await HandleRequirementAsync(context, requirement);
             }    
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest, ExpectedException(typeof(ArgumentNullException))]
-        public void HandleProtectedShouldThrowWhenContextIsNull()
+        public async Task HandleProtectedShouldThrowWhenContextIsNull()
         {
             var requirement = new TestDenyAnonymousRequirement();
-            requirement.HandleProtected(null, new TestDenyAnonymousRequirement());
+            await requirement.HandleProtectedAsync(null, new TestDenyAnonymousRequirement());
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest]
-        public void HandleShouldFailWhenUserIsNull()
+        public async Task HandleAsyncShouldFailWhenUserIsNull()
         {
-            AssertUserAnonymousAffectsSuccess(null, false);
+            await AssertUserAnonymousAffectsSuccess(null, false);
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest]
-        public void HandleShouldFailWhenIdentityIsNull()
+        public async Task HandleAsyncShouldFailWhenIdentityIsNull()
         {
-            AssertUserAnonymousAffectsSuccess(new ClaimsPrincipal(), false);
+            await AssertUserAnonymousAffectsSuccess(new ClaimsPrincipal(), false);
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest]
-        public void HandleShouldFailWhenIdentityIsAnonymous()
+        public async Task HandleAsyncShouldFailWhenIdentityIsAnonymous()
         {
             var identity = new ClaimsIdentity();
-            AssertUserAnonymousAffectsSuccess(new ClaimsPrincipal(identity), false);
+            await AssertUserAnonymousAffectsSuccess(new ClaimsPrincipal(identity), false);
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest]
-        public void HandleShouldSucceedWhenAnIdentityIsAuthenticated()
+        public async Task HandleAsyncShouldSucceedWhenAnIdentityIsAuthenticated()
         {
             var identities = new List<ClaimsIdentity>()
             {
@@ -53,14 +59,14 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
                 new ClaimsIdentity(new Claim[0], "This string makes it authenticated")
             };
 
-            AssertUserAnonymousAffectsSuccess(new ClaimsPrincipal(identities), true);
+            await AssertUserAnonymousAffectsSuccess(new ClaimsPrincipal(identities), true);
         }
 
-        private static void AssertUserAnonymousAffectsSuccess(ClaimsPrincipal user, bool shouldSucceed)
+        private static async Task AssertUserAnonymousAffectsSuccess(ClaimsPrincipal user, bool shouldSucceed)
         {
             var requirement = new DenyAnonymousAuthorizationRequirement();
             var context = new AuthorizationHandlerContext(new[] { requirement }, user, null);
-            requirement.Handle(context);
+            await requirement.HandleAsync(context);
             Assert.AreEqual(shouldSucceed, context.HasSucceeded);
         }
     }

@@ -15,9 +15,9 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
         {
             public TestRolesRequirement() : base(new []{"asdf"}) { }
 
-            public void HandleProtected(AuthorizationHandlerContext context, RolesAuthorizationRequirement requirement)
+            public async Task HandleProtectedAsync(AuthorizationHandlerContext context, RolesAuthorizationRequirement requirement)
             {
-                Handle(context, requirement);
+                await HandleRequirementAsync(context, requirement);
             }
         }
 
@@ -49,19 +49,21 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
             }
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest, ExpectedException(typeof(ArgumentNullException))]
-        public void HandleProtectedShouldThrowWhenContextIsNull()
+        public async Task HandleProtectedShouldThrowWhenContextIsNull()
         {
             var requirement = new TestRolesRequirement();
-            requirement.HandleProtected(null, new TestRolesRequirement());
+            await requirement.HandleProtectedAsync(null, new TestRolesRequirement());
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest, ExpectedException(typeof(ArgumentNullException))]
-        public void HandleProtectedShouldThrowWhenRequirementIsNull()
+        public async Task HandleProtectedShouldThrowWhenRequirementIsNull()
         {
             var requirement = new TestRolesRequirement();
             var context = new AuthorizationHandlerContext(new [] { requirement }, null, null);
-            requirement.HandleProtected(context, null);
+            await requirement.HandleProtectedAsync(context, null);
         }
 
         [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]

@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Microsoft.Owin.Security.Authorization.Infrastructure
 {
@@ -27,7 +28,7 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
             AllowedValues = allowedValues;
         }
 
-        protected override void Handle(AuthorizationHandlerContext context, ClaimsAuthorizationRequirement requirement)
+        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, ClaimsAuthorizationRequirement requirement)
         {
             if (context == null)
             {
@@ -38,36 +39,38 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
                 throw new ArgumentNullException(nameof(requirement));
             }
 
-            if (context.User == null)
+            if (context.User != null)
             {
-                return;
-            }
-
-            bool found;
-            if (requirement.AllowedValues == null || !requirement.AllowedValues.Any())
-            {
-                found = context.User.Claims.Any(c => string.Equals(c.Type, requirement.ClaimType, StringComparison.OrdinalIgnoreCase));
-            }
-            else
-            {
-                found = false;
-                foreach (var claim in context.User.Claims)
+                bool found;
+                if (requirement.AllowedValues == null || !requirement.AllowedValues.Any())
                 {
-                    if (string.Equals(claim.Type, requirement.ClaimType, StringComparison.OrdinalIgnoreCase))
+                    found =
+                        context.User.Claims.Any(
+                            c => string.Equals(c.Type, requirement.ClaimType, StringComparison.OrdinalIgnoreCase));
+                }
+                else
+                {
+                    found = false;
+                    foreach (var claim in context.User.Claims)
                     {
-                        if (requirement.AllowedValues.Contains(claim.Value, StringComparer.Ordinal))
+                        if (string.Equals(claim.Type, requirement.ClaimType, StringComparison.OrdinalIgnoreCase))
                         {
-                            found = true;
-                            break;
+                            if (requirement.AllowedValues.Contains(claim.Value, StringComparer.Ordinal))
+                            {
+                                found = true;
+                                break;
+                            }
                         }
                     }
                 }
+
+                if (found)
+                {
+                    context.Succeed(requirement);
+                }
             }
 
-            if (found)
-            {
-                context.Succeed(requirement);
-            }
+            return Task.FromResult(0);
         }
     }
 }

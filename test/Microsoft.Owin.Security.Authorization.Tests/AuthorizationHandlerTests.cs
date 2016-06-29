@@ -15,17 +15,12 @@ namespace Microsoft.Owin.Security.Authorization
 
         private class TestHandler : AuthorizationHandler<TestRequirement>
         {
-            protected override void Handle(AuthorizationHandlerContext context, TestRequirement requirement)
+            protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, TestRequirement requirement)
             {
+                Assert.IsNotNull(context, "context != null");
                 context.Succeed(requirement);
+                return Task.FromResult(0);
             }
-        }
-
-        [TestMethod, UnitTest, ExpectedException(typeof(ArgumentNullException))]
-        public void HandleShouldThrowWhenContextIsNull()
-        {
-            var handler = new TestHandler();
-            handler.Handle(null);
         }
 
         [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
@@ -41,15 +36,6 @@ namespace Microsoft.Owin.Security.Authorization
             return new AuthorizationHandlerContext(requirements, new ClaimsPrincipal(), null);
         }
 
-        [TestMethod, UnitTest]
-        public void HandleShouldSucceed()
-        {
-            var handler = new TestHandler();
-            var context = CreateContext(new TestRequirement());
-            handler.Handle(context);
-            Assert.IsTrue(context.HasSucceeded);
-        }
-
         [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest]
         public async Task HandleAsyncShouldSucceed()
@@ -58,16 +44,6 @@ namespace Microsoft.Owin.Security.Authorization
             var context = CreateContext(new TestRequirement());
             await handler.HandleAsync(context);
             Assert.IsTrue(context.HasSucceeded);
-        }
-
-        [TestMethod, UnitTest]
-        public void HandleShouldNotSucceed()
-        {
-            var handler = new TestHandler();
-            var context = CreateContext(new AssertionRequirement(x => true));
-            handler.Handle(context);
-            Assert.IsFalse(context.HasSucceeded);
-            Assert.IsFalse(context.HasFailed);
         }
 
         [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
@@ -90,17 +66,12 @@ namespace Microsoft.Owin.Security.Authorization
 
         private class TestHandler : AuthorizationHandler<TestRequirement, TestResource>
         {
-            protected override void Handle(AuthorizationHandlerContext context, TestRequirement requirement, TestResource resource)
+            protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, TestRequirement requirement, TestResource resource)
             {
+                Assert.IsNotNull(context, "context != null");
                 context.Succeed(requirement);
+                return Task.FromResult(0);
             }
-        }
-
-        [TestMethod, UnitTest, ExpectedException(typeof(ArgumentNullException))]
-        public void HandleShouldThrowWhenContextIsNull()
-        {
-            var handler = new TestHandler();
-            handler.Handle(null);
         }
 
         [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
@@ -109,15 +80,6 @@ namespace Microsoft.Owin.Security.Authorization
         {
             var handler = new TestHandler();
             await handler.HandleAsync(null);
-        }
-
-        [TestMethod, UnitTest]
-        public void HandleShouldSucceed()
-        {
-            var handler = new TestHandler();
-            var context = CreateContextWhichShouldSucceed();
-            handler.Handle(context);
-            Assert.IsTrue(context.HasSucceeded);
         }
 
         [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
@@ -130,12 +92,6 @@ namespace Microsoft.Owin.Security.Authorization
             Assert.IsTrue(context.HasSucceeded);
         }
 
-        [TestMethod, UnitTest]
-        public void HandleShouldNotSucceedWhenRequirementIsMissing()
-        {
-            RunTestWhichShouldNotSucceed(CreateContextWithDifferentRequirement());
-        }
-
         [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest]
         public async Task HandleAsyncShouldNotSucceedWhenRequirementIsMissing()
@@ -143,23 +99,11 @@ namespace Microsoft.Owin.Security.Authorization
             await RunTestWhichShouldNotSucceedAsync(CreateContextWithDifferentRequirement());
         }
 
-        [TestMethod, UnitTest]
-        public void HandleShouldNotSucceedWhenResourceIsNull()
-        {
-            RunTestWhichShouldNotSucceed(CreateContextWithNullResource());
-        }
-
         [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
         [TestMethod, UnitTest]
         public async Task HandleAsyncShouldNotSucceedWhenResourceIsNull()
         {
             await RunTestWhichShouldNotSucceedAsync(CreateContextWithNullResource());
-        }
-
-        [TestMethod, UnitTest]
-        public void HandleShouldNotSucceedWhenResourceIsTheWrongType()
-        {
-            RunTestWhichShouldNotSucceed(CreateContextWithTheWrongResourceType());
         }
 
         [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
@@ -194,13 +138,6 @@ namespace Microsoft.Owin.Security.Authorization
             return CreateContext("wrong type", new TestRequirement());
         }
 
-        private static void RunTestWhichShouldNotSucceed(AuthorizationHandlerContext context)
-        {
-            var handler = new TestHandler();
-            handler.Handle(context);
-            AssertNoSuccessOrFailure(context);
-        }
-
         private static async Task RunTestWhichShouldNotSucceedAsync(AuthorizationHandlerContext context)
         {
             var handler = new TestHandler();
@@ -210,8 +147,8 @@ namespace Microsoft.Owin.Security.Authorization
 
         private static void AssertNoSuccessOrFailure(AuthorizationHandlerContext context)
         {
-            Assert.IsFalse(context.HasSucceeded);
-            Assert.IsFalse(context.HasFailed);
+            Assert.IsFalse(context.HasSucceeded, "context.HasSucceeded");
+            Assert.IsFalse(context.HasFailed, "context.HasFailed");
         }
     }
 }
