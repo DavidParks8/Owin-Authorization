@@ -11,7 +11,7 @@ namespace Microsoft.Owin.Security.Authorization
     /// <summary>
     /// Contains authorization information used by <see cref="IAuthorizationHandler"/>.
     /// </summary>
-    public class AuthorizationContext
+    public class AuthorizationHandlerContext
     {
         private readonly HashSet<IAuthorizationRequirement> _pendingRequirements;
         private bool _succeedCalled;
@@ -26,7 +26,7 @@ namespace Microsoft.Owin.Security.Authorization
 
         public bool HasSucceeded => !HasFailed && _succeedCalled && !PendingRequirements.Any();
 
-        public AuthorizationContext(
+        public AuthorizationHandlerContext(
             IEnumerable<IAuthorizationRequirement> requirements,
             ClaimsPrincipal user,
             object resource)

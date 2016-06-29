@@ -17,7 +17,7 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
             {
             }
 
-            public void HandleProtected(AuthorizationContext context, NameAuthorizationRequirement requirement)
+            public void HandleProtected(AuthorizationHandlerContext context, NameAuthorizationRequirement requirement)
             {
                 Handle(context, requirement);
             }
@@ -34,7 +34,7 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
         public void HandleProtectedShouldThrowWhenRequirementIsNull()
         {
             var requirement = new TestNameRequirement();
-            var context = new AuthorizationContext(new List<IAuthorizationRequirement>(), null, null);
+            var context = new AuthorizationHandlerContext(new List<IAuthorizationRequirement>(), null, null);
             requirement.HandleProtected(context, null);
         }
 
@@ -93,7 +93,7 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
         private static async Task AssertNameAffectsSuccess(ClaimsPrincipal user, string requiredName, bool shouldSucceed)
         {
             var requirement = new NameAuthorizationRequirement(requiredName);
-            var context = new AuthorizationContext(new[] { requirement }, user, null);
+            var context = new AuthorizationHandlerContext(new[] { requirement }, user, null);
             await requirement.HandleAsync(context);
             Assert.AreEqual(shouldSucceed, context.HasSucceeded);
         }

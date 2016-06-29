@@ -8,7 +8,7 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
 {
     public class DenyAnonymousAuthorizationRequirement : AuthorizationHandler<DenyAnonymousAuthorizationRequirement>, IAuthorizationRequirement
     {
-        protected override void Handle(AuthorizationContext context, DenyAnonymousAuthorizationRequirement requirement)
+        protected override void Handle(AuthorizationHandlerContext context, DenyAnonymousAuthorizationRequirement requirement)
         {
             if (context == null)
             {

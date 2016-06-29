@@ -16,7 +16,7 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
         public void ConstructorShouldThrowWhenPassedNullSynchronousFunc()
         {
             // ReSharper disable once ObjectCreationAsStatement
-            new AssertionRequirement((Func<AuthorizationContext, bool>) null);
+            new AssertionRequirement((Func<AuthorizationHandlerContext, bool>) null);
         }
 
         [SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = _messageId, Justification = Justifications.ExpectedException)]
@@ -24,7 +24,7 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
         public void ConstructorShouldThrowWhenPassedNullAsynchronousFunc()
         {
             // ReSharper disable once ObjectCreationAsStatement
-            new AssertionRequirement((Func<AuthorizationContext, Task<bool>>)null);
+            new AssertionRequirement((Func<AuthorizationHandlerContext, Task<bool>>)null);
         }
 
         [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]
@@ -32,7 +32,7 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
         public async Task HandlerShouldBeSetWhenPassedSynchronousFunc()
         {
             var funcWasCalled = false;
-            var func = new Func<AuthorizationContext, bool>(context =>
+            var func = new Func<AuthorizationHandlerContext, bool>(context =>
             {
                 funcWasCalled = true;
                 return true;
@@ -48,7 +48,7 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
         [TestMethod, UnitTest]
         public void HandlerShouldBeSetWhenPassedAsynchronousFunc()
         {
-            var func = new Func<AuthorizationContext, Task<bool>>(context => Task.FromResult(true));
+            var func = new Func<AuthorizationHandlerContext, Task<bool>>(context => Task.FromResult(true));
             var requirement = new AssertionRequirement(func);
 
             Assert.IsNotNull(requirement.Handler);

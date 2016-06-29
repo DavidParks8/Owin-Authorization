@@ -178,20 +178,20 @@ namespace Microsoft.Owin.Security.Authorization
         public void RequireAssertionAsyncShouldThrowWhenAssertIsNull()
         {
             var builder = new AuthorizationPolicyBuilder();
-            builder.RequireAssertion((Func<AuthorizationContext, Task<bool>>) null);
+            builder.RequireAssertion((Func<AuthorizationHandlerContext, Task<bool>>) null);
         }
 
         [TestMethod, UnitTest, ExpectedException(typeof(ArgumentNullException))]
         public void RequireAssertionShouldThrowWhenAssertIsNull()
         {
             var builder = new AuthorizationPolicyBuilder();
-            builder.RequireAssertion((Func<AuthorizationContext, bool>)null);
+            builder.RequireAssertion((Func<AuthorizationHandlerContext, bool>)null);
         }
 
         [TestMethod, UnitTest]
         public void RequireAssertionAsyncShouldAddAssertionRequirement()
         {
-            Func<AuthorizationContext, Task<bool>> assert = context => Task.FromResult(true); 
+            Func<AuthorizationHandlerContext, Task<bool>> assert = context => Task.FromResult(true); 
             var builder = new AuthorizationPolicyBuilder();
             builder.RequireAssertion(assert);
             Assert.IsInstanceOfType(builder.Requirements[0], typeof(AssertionRequirement));
@@ -200,7 +200,7 @@ namespace Microsoft.Owin.Security.Authorization
         [TestMethod, UnitTest]
         public void RequireAssertionShouldAddAssertionRequirement()
         {
-            Func<AuthorizationContext, bool> assert = context => true;
+            Func<AuthorizationHandlerContext, bool> assert = context => true;
             var builder = new AuthorizationPolicyBuilder();
             builder.RequireAssertion(assert);
             Assert.IsInstanceOfType(builder.Requirements[0], typeof(AssertionRequirement));

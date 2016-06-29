@@ -12,7 +12,7 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
     {
         private class TestDenyAnonymousRequirement : DenyAnonymousAuthorizationRequirement
         {
-            public void HandleProtected(AuthorizationContext context, DenyAnonymousAuthorizationRequirement requirement)
+            public void HandleProtected(AuthorizationHandlerContext context, DenyAnonymousAuthorizationRequirement requirement)
             {
                 Handle(context, requirement);
             }    
@@ -59,7 +59,7 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
         private static void AssertUserAnonymousAffectsSuccess(ClaimsPrincipal user, bool shouldSucceed)
         {
             var requirement = new DenyAnonymousAuthorizationRequirement();
-            var context = new AuthorizationContext(new[] { requirement }, user, null);
+            var context = new AuthorizationHandlerContext(new[] { requirement }, user, null);
             requirement.Handle(context);
             Assert.AreEqual(shouldSucceed, context.HasSucceeded);
         }

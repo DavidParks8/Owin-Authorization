@@ -9,7 +9,7 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
 {
     public class PassThroughAuthorizationHandler : IAuthorizationHandler
     {
-        public async Task HandleAsync(AuthorizationContext context)
+        public async Task HandleAsync(AuthorizationHandlerContext context)
         {
             if (context == null)
             {

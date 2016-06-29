@@ -33,7 +33,7 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
             AllowedRoles = allowedRoles;
         }
 
-        protected override void Handle(AuthorizationContext context, RolesAuthorizationRequirement requirement)
+        protected override void Handle(AuthorizationHandlerContext context, RolesAuthorizationRequirement requirement)
         {
             if (context == null)
             {

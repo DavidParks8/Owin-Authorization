@@ -15,7 +15,7 @@ namespace Microsoft.Owin.Security.Authorization
 
         private class TestHandler : AuthorizationHandler<TestRequirement>
         {
-            protected override void Handle(AuthorizationContext context, TestRequirement requirement)
+            protected override void Handle(AuthorizationHandlerContext context, TestRequirement requirement)
             {
                 context.Succeed(requirement);
             }
@@ -36,9 +36,9 @@ namespace Microsoft.Owin.Security.Authorization
             await handler.HandleAsync(null);
         }
 
-        private static AuthorizationContext CreateContext(params IAuthorizationRequirement[] requirements)
+        private static AuthorizationHandlerContext CreateContext(params IAuthorizationRequirement[] requirements)
         {
-            return new AuthorizationContext(requirements, new ClaimsPrincipal(), null);
+            return new AuthorizationHandlerContext(requirements, new ClaimsPrincipal(), null);
         }
 
         [TestMethod, UnitTest]
@@ -90,7 +90,7 @@ namespace Microsoft.Owin.Security.Authorization
 
         private class TestHandler : AuthorizationHandler<TestRequirement, TestResource>
         {
-            protected override void Handle(AuthorizationContext context, TestRequirement requirement, TestResource resource)
+            protected override void Handle(AuthorizationHandlerContext context, TestRequirement requirement, TestResource resource)
             {
                 context.Succeed(requirement);
             }
@@ -169,46 +169,46 @@ namespace Microsoft.Owin.Security.Authorization
             await RunTestWhichShouldNotSucceedAsync(CreateContextWithTheWrongResourceType());
         }
 
-        private static AuthorizationContext CreateContext(object resource, params IAuthorizationRequirement[] requirements)
+        private static AuthorizationHandlerContext CreateContext(object resource, params IAuthorizationRequirement[] requirements)
         {
-            return new AuthorizationContext(requirements, new ClaimsPrincipal(), resource);
+            return new AuthorizationHandlerContext(requirements, new ClaimsPrincipal(), resource);
         }
 
-        private static AuthorizationContext CreateContextWhichShouldSucceed()
+        private static AuthorizationHandlerContext CreateContextWhichShouldSucceed()
         {
             return CreateContext(new TestResource(), new TestRequirement());
         }
 
-        private static AuthorizationContext CreateContextWithDifferentRequirement()
+        private static AuthorizationHandlerContext CreateContextWithDifferentRequirement()
         {
             return CreateContext(new TestResource(), new AssertionRequirement(x => true));
         }
 
-        private static AuthorizationContext CreateContextWithNullResource()
+        private static AuthorizationHandlerContext CreateContextWithNullResource()
         {
             return CreateContext(null, new TestRequirement());
         }
 
-        private static AuthorizationContext CreateContextWithTheWrongResourceType()
+        private static AuthorizationHandlerContext CreateContextWithTheWrongResourceType()
         {
             return CreateContext("wrong type", new TestRequirement());
         }
 
-        private static void RunTestWhichShouldNotSucceed(AuthorizationContext context)
+        private static void RunTestWhichShouldNotSucceed(AuthorizationHandlerContext context)
         {
             var handler = new TestHandler();
             handler.Handle(context);
             AssertNoSuccessOrFailure(context);
         }
 
-        private static async Task RunTestWhichShouldNotSucceedAsync(AuthorizationContext context)
+        private static async Task RunTestWhichShouldNotSucceedAsync(AuthorizationHandlerContext context)
         {
             var handler = new TestHandler();
             await handler.HandleAsync(context);
             AssertNoSuccessOrFailure(context);
         }
 
-        private static void AssertNoSuccessOrFailure(AuthorizationContext context)
+        private static void AssertNoSuccessOrFailure(AuthorizationHandlerContext context)
         {
             Assert.IsFalse(context.HasSucceeded);
             Assert.IsFalse(context.HasFailed);

@@ -65,7 +65,7 @@ namespace Microsoft.Owin.Security.Authorization
             var options = new AuthorizationOptions();
             var policyProvider = new DefaultAuthorizationPolicyProvider(options);
             var handler = Repository.Create<IAuthorizationHandler>();
-            handler.Setup(x => x.HandleAsync(It.IsAny<AuthorizationContext>())).Returns(Task.FromResult(0));
+            handler.Setup(x => x.HandleAsync(It.IsAny<AuthorizationHandlerContext>())).Returns(Task.FromResult(0));
             var requirement = handler.As<IAuthorizationRequirement>();
             var service = new DefaultAuthorizationService(policyProvider, Enumerable.Empty<IAuthorizationHandler>());
             
@@ -73,7 +73,7 @@ namespace Microsoft.Owin.Security.Authorization
             var authorized = await service.AuthorizeAsync(CreateAnonymousUser(), null, new[] {requirement.Object});
 
             Assert.IsFalse(authorized, "authorized");
-            handler.Verify(x => x.HandleAsync(It.IsAny<AuthorizationContext>()));
+            handler.Verify(x => x.HandleAsync(It.IsAny<AuthorizationHandlerContext>()));
         }
 
         [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = Justifications.MustBeInstanceMethod)]

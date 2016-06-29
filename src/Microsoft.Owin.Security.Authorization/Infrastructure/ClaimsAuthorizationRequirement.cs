@@ -27,7 +27,7 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
             AllowedValues = allowedValues;
         }
 
-        protected override void Handle(AuthorizationContext context, ClaimsAuthorizationRequirement requirement)
+        protected override void Handle(AuthorizationHandlerContext context, ClaimsAuthorizationRequirement requirement)
         {
             if (context == null)
             {

@@ -12,19 +12,19 @@ namespace Microsoft.Owin.Security.Authorization
     public class AuthorizationContextTests
     {
         [SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults",
-            MessageId = "Microsoft.Owin.Security.Authorization." + nameof(AuthorizationContext),
+            MessageId = "Microsoft.Owin.Security.Authorization." + nameof(AuthorizationHandlerContext),
             Justification = Justifications.ExpectedException)]
         [TestMethod, UnitTest, ExpectedException(typeof(ArgumentNullException))]
         public void ConstructorShouldThrowWhenRequirementsIsNull()
         {
             // ReSharper disable once ObjectCreationAsStatement
-            new AuthorizationContext(null, new ClaimsPrincipal(), new object());
+            new AuthorizationHandlerContext(null, new ClaimsPrincipal(), new object());
         }
 
         [TestMethod, UnitTest]
         public void FailShouldSetHasFailed()
         {
-            var context = new AuthorizationContext(new IAuthorizationRequirement[0], null, null);
+            var context = new AuthorizationHandlerContext(new IAuthorizationRequirement[0], null, null);
             Assert.IsFalse(context.HasFailed, "context.HasFailed");
             context.Fail();
             Assert.IsTrue(context.HasFailed, "context.HasFailed");
@@ -33,7 +33,7 @@ namespace Microsoft.Owin.Security.Authorization
         [TestMethod, UnitTest]
         public void SucceedShouldNotThrowWhenRequirementIsNull()
         {
-            var context = new AuthorizationContext(new IAuthorizationRequirement[0], null, null);
+            var context = new AuthorizationHandlerContext(new IAuthorizationRequirement[0], null, null);
             Assert.IsFalse(context.HasSucceeded, "context.HasSucceeded");
             context.Succeed(null);
             Assert.IsTrue(context.HasSucceeded, "context.HasSucceeded");
@@ -42,7 +42,7 @@ namespace Microsoft.Owin.Security.Authorization
         [TestMethod, UnitTest]
         public void FailingShouldPreventSuccess()
         {
-            var context = new AuthorizationContext(new IAuthorizationRequirement[0], null, null);
+            var context = new AuthorizationHandlerContext(new IAuthorizationRequirement[0], null, null);
             context.Fail();
             context.Succeed(null);
             Assert.IsFalse(context.HasSucceeded, "context.HasSucceeded");
@@ -56,7 +56,7 @@ namespace Microsoft.Owin.Security.Authorization
                 new DenyAnonymousAuthorizationRequirement()
             };
 
-            var context = new AuthorizationContext(requirements, null, null);
+            var context = new AuthorizationHandlerContext(requirements, null, null);
             Assert.AreEqual(requirements.Length, context.PendingRequirements.Count());
             context.Succeed(requirements[0]);
             Assert.IsFalse(context.PendingRequirements.Any(), "context.PendingRequirements.Any()");
@@ -71,7 +71,7 @@ namespace Microsoft.Owin.Security.Authorization
                 new DenyAnonymousAuthorizationRequirement()
             };
 
-            var context = new AuthorizationContext(requirements, null, null);
+            var context = new AuthorizationHandlerContext(requirements, null, null);
             context.Succeed(requirements[0]);
             Assert.IsFalse(context.HasSucceeded, "context.HasSucceeded");
             context.Succeed(requirements[1]);
@@ -84,7 +84,7 @@ namespace Microsoft.Owin.Security.Authorization
             var requirements = new IAuthorizationRequirement[0];
             var user = new ClaimsPrincipal();
             
-            var context = new AuthorizationContext(requirements, user, requirements);
+            var context = new AuthorizationHandlerContext(requirements, user, requirements);
 
             Assert.AreSame(requirements, context.Requirements);
             Assert.AreSame(user, context.User);

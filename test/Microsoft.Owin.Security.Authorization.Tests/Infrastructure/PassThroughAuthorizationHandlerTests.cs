@@ -31,13 +31,13 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
         {
             var mockRequirementHandler = Repository.Create<IAuthorizationHandler>();
             var innerWasHandled = false;
-            mockRequirementHandler.Setup(x => x.HandleAsync(It.IsAny<AuthorizationContext>())).Returns(() =>
+            mockRequirementHandler.Setup(x => x.HandleAsync(It.IsAny<AuthorizationHandlerContext>())).Returns(() =>
             {
                 innerWasHandled = true;
                 return Task.FromResult(0);
             });
 
-            var context = new AuthorizationContext(new [] { mockRequirementHandler.As<IAuthorizationRequirement>().Object}, null, null);
+            var context = new AuthorizationHandlerContext(new [] { mockRequirementHandler.As<IAuthorizationRequirement>().Object}, null, null);
             var handler = new PassThroughAuthorizationHandler();
             await handler.HandleAsync(context);
 

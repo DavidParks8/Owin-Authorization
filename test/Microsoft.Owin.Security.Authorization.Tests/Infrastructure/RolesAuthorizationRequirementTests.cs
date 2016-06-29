@@ -15,7 +15,7 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
         {
             public TestRolesRequirement() : base(new []{"asdf"}) { }
 
-            public void HandleProtected(AuthorizationContext context, RolesAuthorizationRequirement requirement)
+            public void HandleProtected(AuthorizationHandlerContext context, RolesAuthorizationRequirement requirement)
             {
                 Handle(context, requirement);
             }
@@ -60,7 +60,7 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
         public void HandleProtectedShouldThrowWhenRequirementIsNull()
         {
             var requirement = new TestRolesRequirement();
-            var context = new AuthorizationContext(new [] { requirement }, null, null);
+            var context = new AuthorizationHandlerContext(new [] { requirement }, null, null);
             requirement.HandleProtected(context, null);
         }
 
@@ -91,7 +91,7 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
         private static async Task AssertRolesAffectSuccess(ClaimsPrincipal user, IEnumerable<string> allowedRoles, bool shouldSucceed)
         {
             var requirement = new RolesAuthorizationRequirement(allowedRoles);
-            var context = new AuthorizationContext(new []{ requirement }, user, null);
+            var context = new AuthorizationHandlerContext(new []{ requirement }, user, null);
             await requirement.HandleAsync(context);
             Assert.AreEqual(shouldSucceed, context.HasSucceeded);
         }

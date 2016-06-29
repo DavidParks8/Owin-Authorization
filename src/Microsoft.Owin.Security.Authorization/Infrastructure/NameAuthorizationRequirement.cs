@@ -24,7 +24,7 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
             RequiredName = requiredName;
         }
 
-        protected override void Handle(AuthorizationContext context, NameAuthorizationRequirement requirement)
+        protected override void Handle(AuthorizationHandlerContext context, NameAuthorizationRequirement requirement)
         {
             if (context == null)
             {

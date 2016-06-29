@@ -26,10 +26,10 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
             Assert.IsFalse(context.HasSucceeded, "context.HasSucceeded");
         }
 
-        private static AuthorizationContext CreateDefaultAuthorizationContext(TRequirement requirement)
+        private static AuthorizationHandlerContext CreateDefaultAuthorizationContext(TRequirement requirement)
         {
             Assert.IsNotNull(requirement);
-            return new AuthorizationContext(new IAuthorizationRequirement[] { requirement }, new ClaimsPrincipal(), null);
+            return new AuthorizationHandlerContext(new IAuthorizationRequirement[] { requirement }, new ClaimsPrincipal(), null);
         }
 
         public abstract Task HandleAsyncShouldThrowWhenPassedNullContext();

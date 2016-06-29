@@ -36,7 +36,7 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
         {
             Assert.IsNotNull(requirement);
 
-            var context = new AuthorizationContext(new [] { requirement }, UserWithClaim(requirement.ClaimType), null);
+            var context = new AuthorizationHandlerContext(new [] { requirement }, UserWithClaim(requirement.ClaimType), null);
             await requirement.HandleAsync(context);
             Assert.IsTrue(context.HasSucceeded, "context.HasSucceeded");
         }
@@ -64,7 +64,7 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
         public async Task HandleAsyncShouldFailWhenUserIsNull()
         {
             var requirement = new ClaimsAuthorizationRequirement("asdf", null);
-            var context = new AuthorizationContext(new [] { requirement }, null, null);
+            var context = new AuthorizationHandlerContext(new [] { requirement }, null, null);
             await requirement.HandleAsync(context);
             Assert.IsFalse(context.HasSucceeded);
         }
@@ -98,7 +98,7 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
             var identity = new ClaimsIdentity(new[] { new Claim(requirement.ClaimType, claimValue) });
             var user = new ClaimsPrincipal(identity);
 
-            var context = new AuthorizationContext(new[] { requirement }, user, null);
+            var context = new AuthorizationHandlerContext(new[] { requirement }, user, null);
             await requirement.HandleAsync(context);
             Assert.AreEqual(shouldSucceed, context.HasSucceeded);
         }
@@ -108,7 +108,7 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
         public async Task ShouldFailWithoutExpectedClaim()
         {
             var requirement = new ClaimsAuthorizationRequirement("asdf", new [] { "hi"});
-            var context = new AuthorizationContext(new[] { requirement }, new ClaimsPrincipal(), null);
+            var context = new AuthorizationHandlerContext(new[] { requirement }, new ClaimsPrincipal(), null);
             await requirement.HandleAsync(context);
             Assert.IsFalse(context.HasSucceeded);
         }
@@ -119,7 +119,7 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
             {
             }
 
-            public void HandleProtected(AuthorizationContext context, ClaimsAuthorizationRequirement requirement)
+            public void HandleProtected(AuthorizationHandlerContext context, ClaimsAuthorizationRequirement requirement)
             {
                 Handle(context, requirement);
             }
@@ -136,7 +136,7 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
         public void HandleProtectedShouldThrowWhenRequirementIsNull()
         {
             var requirement = new TestClaimsRequirement();
-            var context = new AuthorizationContext(new IAuthorizationRequirement[0], null, null);
+            var context = new AuthorizationHandlerContext(new IAuthorizationRequirement[0], null, null);
             requirement.HandleProtected(context, null);
         }
     }

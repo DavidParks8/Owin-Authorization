@@ -70,7 +70,7 @@ namespace Microsoft.Owin.Security.Authorization
                 throw new ArgumentNullException(nameof(requirements));
             }
 
-            var authContext = new AuthorizationContext(requirements, user, resource);
+            var authContext = new AuthorizationHandlerContext(requirements, user, resource);
             foreach (var handler in _handlers)
             {
                 await handler.HandleAsync(authContext);

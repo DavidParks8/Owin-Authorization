@@ -60,7 +60,7 @@
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AuthorizationContext.cs" />
+    <Compile Include="AuthorizationHandlerContext.cs" />
     <Compile Include="AuthorizationDependencyHelper.cs" />
     <Compile Include="DefaultAuthorizationDependenciesFactory.cs" />
     <Compile Include="DefaultAuthorizationHandlerProvider.cs" />
