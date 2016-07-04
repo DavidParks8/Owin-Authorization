@@ -16,8 +16,11 @@ namespace Microsoft.Owin.Security.Authorization
         public IAuthorizationDependenciesFactory DependenciesFactory { get; set; } = new DefaultAuthorizationDependenciesFactory();
 
         /// <summary>
-        /// The initial default policy is to require any authenticated user
+        /// Gets or sets the default authorization policy.
         /// </summary>
+        /// <remarks>
+        /// The default policy is to require any authenticated user.
+        /// </remarks>
         public AuthorizationPolicy DefaultPolicy { get; set; } = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
 
         /// <summary>

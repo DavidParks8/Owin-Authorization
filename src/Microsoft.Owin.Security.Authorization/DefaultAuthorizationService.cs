@@ -13,16 +13,31 @@ using Microsoft.Owin.Security.Authorization.Properties;
 
 namespace Microsoft.Owin.Security.Authorization
 {
+    /// <summary>
+    /// The default implementation of an <see cref="IAuthorizationService"/>.
+    /// </summary>
     public class DefaultAuthorizationService : IAuthorizationService
     {
         private readonly IAuthorizationPolicyProvider _policyProvider;
         private readonly IList<IAuthorizationHandler> _handlers;
         private readonly ILogger _logger;
 
+        /// <summary>
+        /// Creates a new instance of <see cref="DefaultAuthorizationService"/>.
+        /// </summary>
+        /// <param name="policyProvider">The <see cref="IAuthorizationPolicyProvider"/> used to provide policies.</param>
+        /// <param name="handlers">The handlers used to fulfill <see cref="IAuthorizationRequirement"/>s.</param>
+        /// <remarks>Uses the <see cref="DiagnosticsLoggerFactory"/> to create a logger.</remarks>
         public DefaultAuthorizationService(IAuthorizationPolicyProvider policyProvider, IEnumerable<IAuthorizationHandler> handlers) 
             : this(policyProvider, handlers, null)
         { }
 
+        /// <summary>
+        /// Creates a new instance of <see cref="DefaultAuthorizationService"/>.
+        /// </summary>
+        /// <param name="policyProvider">The <see cref="IAuthorizationPolicyProvider"/> used to provide policies.</param>
+        /// <param name="handlers">The handlers used to fufills <see cref="IAuthorizationRequirement"/>s.</param>
+        /// <param name="logger">The logger used to log messages, warnings and errors.</param>  
         public DefaultAuthorizationService(IAuthorizationPolicyProvider policyProvider, IEnumerable<IAuthorizationHandler> handlers, ILogger logger)
         {
             if (policyProvider == null)
@@ -63,6 +78,16 @@ namespace Microsoft.Owin.Security.Authorization
             return allHandlers;
         }
 
+        /// <summary>
+        /// Checks if a user meets a specific set of requirements for the specified resource.
+        /// </summary>
+        /// <param name="user">The user to evaluate the requirements against.</param>
+        /// <param name="resource">The resource to evaluate the requirements against.</param>
+        /// <param name="requirements">The requirements to evaluate.</param>
+        /// <returns>
+        /// A flag indicating whether authorization has succeded.
+        /// This value is <value>true</value> when the user fulfills the policy otherwise <value>false</value>.
+        /// </returns>
         public async Task<bool> AuthorizeAsync(ClaimsPrincipal user, object resource, IEnumerable<IAuthorizationRequirement> requirements)
         {
             if (requirements == null)
@@ -119,6 +144,16 @@ namespace Microsoft.Owin.Security.Authorization
             return null;
         }
 
+        /// <summary>
+        /// Checks if a user meets a specific authorization policy.
+        /// </summary>
+        /// <param name="user">The user to check the policy against.</param>
+        /// <param name="resource">The resource the policy should be checked with.</param>
+        /// <param name="policyName">The name of the policy to check against a specific context.</param>
+        /// <returns>
+        /// A flag indicating whether authorization has succeded.
+        /// This value is <value>true</value> when the user fulfills the policy otherwise <value>false</value>.
+        /// </returns>
         public async Task<bool> AuthorizeAsync(ClaimsPrincipal user, object resource, string policyName)
         {
             if (policyName == null)
