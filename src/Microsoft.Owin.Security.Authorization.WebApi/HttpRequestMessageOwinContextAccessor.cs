@@ -4,12 +4,15 @@ using System.Net.Http;
 namespace Microsoft.Owin.Security.Authorization.WebApi
 {
     /// <summary>
-    /// Allows for easy access of the <see cref="IOwinContext"/>
+    /// Allows for easy access of the <see cref="IOwinContext"/> in a <see cref="System.Net.Http"/> environment.
     /// </summary>
     public class HttpRequestMessageOwinContextAccessor : IOwinContextAccessor
     {
         private readonly WeakReference<HttpRequestMessage> _httpRequestMessage;
 
+        /// <summary>
+        /// Gets an <see cref="IOwinContext"/>.
+        /// </summary>
         public IOwinContext Context
         {
             get
