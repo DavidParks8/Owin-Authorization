@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 namespace Microsoft.Owin.Security.Authorization
 {
     /// <summary>
-    /// The default implementation of a policy provider,
-    /// which provides a <see cref="AuthorizationPolicy"/> for a particular name.
+    /// The default implementation of an <see cref="IAuthorizationPolicyProvider"/>,
+    /// which provides an <see cref="AuthorizationPolicy"/> for a particular name.
     /// </summary>
     public class DefaultAuthorizationPolicyProvider : IAuthorizationPolicyProvider
     {
