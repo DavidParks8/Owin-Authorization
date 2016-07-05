@@ -26,6 +26,10 @@ namespace Microsoft.Owin.Security.Authorization.WebApi
             }
         }
 
+        /// <summary>
+        /// Creates a new <see cref="HttpRequestMessageOwinContextAccessor"/> instance.
+        /// </summary>
+        /// <param name="httpRequestMessage">The <see cref="HttpRequestMessage"/> to use in retrieving an <see cref="IOwinContext"/>.</param>
         public HttpRequestMessageOwinContextAccessor(HttpRequestMessage httpRequestMessage)
         {
             if (httpRequestMessage == null)

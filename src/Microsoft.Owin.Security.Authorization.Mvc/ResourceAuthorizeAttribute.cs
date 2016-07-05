@@ -21,6 +21,7 @@ namespace Microsoft.Owin.Security.Authorization.Mvc
         /// <inheritdoc />
         public string ActiveAuthenticationSchemes { get; set; }
 
+        /// <inheritdoc />
         public override void OnAuthorization(System.Web.Mvc.AuthorizationContext filterContext)
         {
             if (filterContext == null)
@@ -33,6 +34,7 @@ namespace Microsoft.Owin.Security.Authorization.Mvc
             base.OnAuthorization(filterContext);
         }
 
+        /// <inheritdoc />
         protected override bool AuthorizeCore(HttpContextBase httpContext)
         {
             if (httpContext == null)

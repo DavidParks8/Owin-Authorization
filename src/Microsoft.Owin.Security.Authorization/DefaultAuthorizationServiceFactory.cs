@@ -5,7 +5,7 @@ using Microsoft.Owin.Logging;
 namespace Microsoft.Owin.Security.Authorization
 {
     /// <summary>
-    /// The default implementation of <see cref="IAuthorizationServiceFactory"/>.
+    /// The default implementation of an <see cref="IAuthorizationServiceFactory"/>.
     /// </summary>
     public class DefaultAuthorizationServiceFactory : IAuthorizationServiceFactory
     {
