@@ -1,10 +1,11 @@
-﻿using Microsoft.Owin.Security.Authorization;
+﻿using System.Threading.Tasks;
+using Microsoft.Owin.Security.Authorization;
 
 namespace WebApi_Custom_Handler.Models
 {
     public class EmployeeNumber2Handler : AuthorizationHandler<EmployeeNumber2Requirement>
     {
-        protected override void Handle(AuthorizationContext context, EmployeeNumber2Requirement requirement)
+        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, EmployeeNumber2Requirement requirement)
         {
             foreach (var claim in context.User.Claims)
             {
@@ -13,10 +14,12 @@ namespace WebApi_Custom_Handler.Models
                     if (claim.Value == "2")
                     {
                         context.Succeed(requirement);
-                        return;
+                        break;
                     }
                 }
             }
+
+            return Task.FromResult(0);
         }
     }
 }

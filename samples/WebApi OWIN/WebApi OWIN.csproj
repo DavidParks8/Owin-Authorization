@@ -56,12 +56,12 @@
       <HintPath>..\..\packages\Microsoft.Owin.Security.3.0.1\lib\net45\Microsoft.Owin.Security.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Owin.Security.Authorization, Version=0.2.0.1, Culture=neutral, PublicKeyToken=ba8e29017989cc66, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.Owin.Security.Authorization.0.2.0.1\lib\net452\Microsoft.Owin.Security.Authorization.dll</HintPath>
+    <Reference Include="Microsoft.Owin.Security.Authorization, Version=0.2.1.1, Culture=neutral, PublicKeyToken=ba8e29017989cc66, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Owin.Security.Authorization.0.2.1.1\lib\net452\Microsoft.Owin.Security.Authorization.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Owin.Security.Authorization.WebApi, Version=0.2.0.1, Culture=neutral, PublicKeyToken=ba8e29017989cc66, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.Owin.Security.Authorization.WebApi.0.2.0.1\lib\net452\Microsoft.Owin.Security.Authorization.WebApi.dll</HintPath>
+    <Reference Include="Microsoft.Owin.Security.Authorization.WebApi, Version=0.2.1.1, Culture=neutral, PublicKeyToken=ba8e29017989cc66, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Owin.Security.Authorization.WebApi.0.2.1.1\lib\net452\Microsoft.Owin.Security.Authorization.WebApi.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
