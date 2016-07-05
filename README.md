@@ -11,7 +11,7 @@ Head over to the [wiki](https://github.com/DavidParks8/Owin-Authorization/wiki) 
 #### Feedback
 Check out the [contributing](CONTRIBUTING.md) page to see the best places to log issues and start discussions.
 
-#### Nuget Packages (Currently Pre-Release)
+#### Nuget Packages
 [Authorization Core Classes](https://www.nuget.org/packages/Microsoft.Owin.Security.Authorization/)  
 [Web Api Integration](https://www.nuget.org/packages/Microsoft.Owin.Security.Authorization.WebApi/)  
 [MVC Integration](https://www.nuget.org/packages/Microsoft.Owin.Security.Authorization.Mvc/)
