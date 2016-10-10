@@ -28,14 +28,6 @@ namespace Microsoft.Owin.Security.Authorization
         /// Creates a new instance of <see cref="DefaultAuthorizationService"/>.
         /// </summary>
         /// <param name="policyProvider">The <see cref="IAuthorizationPolicyProvider"/> used to provide policies.</param>
-        /// <remarks>Uses the <see cref="DiagnosticsLoggerFactory"/> to create a logger.</remarks>
-        public DefaultAuthorizationService(IAuthorizationPolicyProvider policyProvider) : this(policyProvider, new []{ new PassThroughAuthorizationHandler() })
-        { }
-
-        /// <summary>
-        /// Creates a new instance of <see cref="DefaultAuthorizationService"/>.
-        /// </summary>
-        /// <param name="policyProvider">The <see cref="IAuthorizationPolicyProvider"/> used to provide policies.</param>
         /// <param name="handlers">The handlers used to fulfill <see cref="IAuthorizationRequirement"/>s.</param>
         /// <remarks>Uses the <see cref="DiagnosticsLoggerFactory"/> to create a logger.</remarks>
         public DefaultAuthorizationService(IAuthorizationPolicyProvider policyProvider, IEnumerable<IAuthorizationHandler> handlers) 
