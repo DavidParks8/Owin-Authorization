@@ -58,25 +58,26 @@ namespace Microsoft.Owin.Security.Authorization
                 throw new InvalidOperationException(Resources.Exception_AuthorizationOptionsMustNotBeNull);
             }
 
-            var dependenciesFactory = options.DependenciesFactory
-                ?? new DefaultAuthorizationDependenciesFactory();
-
-            var dependencies = dependenciesFactory.Create(options, _owinContextAccessor.Context) 
+            var dependencies = options.Dependencies
                 ?? new AuthorizationDependencies();
-
-            var policyProvider = dependencies.PolicyProvider 
+            var policyProvider = dependencies.PolicyProvider
                 ?? new DefaultAuthorizationPolicyProvider(options);
-            var handlerProvider = dependencies.HandlerProvider 
-                ?? new DefaultAuthorizationHandlerProvider(new PassThroughAuthorizationHandler());
-            var loggerFactory = dependencies.LoggerFactory
-                ?? new DiagnosticsLoggerFactory();
-            var serviceFactory = dependencies.ServiceFactory
-                ?? new DefaultAuthorizationServiceFactory();
+            var authorizationService = dependencies.Service;
+            if (authorizationService == null)
+            {
+                var handlerProvider = new DefaultAuthorizationHandlerProvider(new PassThroughAuthorizationHandler());
+                var handlers = await handlerProvider.GetHandlersAsync();
+                var loggerFactory = dependencies.LoggerFactory
+                    ?? new DiagnosticsLoggerFactory();
 
-            var handlers = await handlerProvider.GetHandlersAsync();
-            var authorizationService = serviceFactory.Create(policyProvider, handlers, loggerFactory)
-                ?? new DefaultAuthorizationServiceFactory().Create(policyProvider, handlers, loggerFactory);
-            
+                authorizationService = new DefaultAuthorizationService(
+                    policyProvider,
+                    handlers,
+                    loggerFactory.CreateDefaultLogger(),
+                    new DefaultAuthorizationHandlerContextFactory(),
+                    new DefaultAuthorizationEvaluator());
+            }
+
             var policy = await AuthorizationPolicy.CombineAsync(policyProvider, new[] { authorizeAttribute });
             return await authorizationService.AuthorizeAsync(user, policy);
         }

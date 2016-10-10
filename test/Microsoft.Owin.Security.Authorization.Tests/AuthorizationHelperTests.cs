@@ -4,7 +4,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.Owin.Logging;
 using Microsoft.Owin.Security.Authorization.TestTools;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -104,58 +103,38 @@ namespace Microsoft.Owin.Security.Authorization
         [TestMethod, UnitTest]
         public async Task IsAuthorizedAsyncShouldInitializeDependencies()
         {
-            var dependenciesFactory = CreateDependenciesFactoryWithSpecificReturn(null);
-            await AssertEverythingIsInitialized(dependenciesFactory.Object);
+            await AssertEverythingIsInitialized(null);
         }
 
         [TestMethod, UnitTest]
         public async Task IsAuthorizedAsyncShouldInitializeDependencyProperties()
         {
-            var dependenciesFactory = CreateDependenciesFactoryWithSpecificReturn(new AuthorizationDependencies
+            var dependencies = new AuthorizationDependencies
             {
-                HandlerProvider = null,
                 LoggerFactory = null,
                 PolicyProvider = null,
-                ServiceFactory = null
-            });
+                Service = null
+            };
 
-            await AssertEverythingIsInitialized(dependenciesFactory.Object);
-            dependenciesFactory.Verify(x => x.Create(It.IsNotNull<AuthorizationOptions>(), It.IsNotNull<IOwinContext>()), Times.Once);
+            await AssertEverythingIsInitialized(dependencies);
         }
 
         [TestMethod, UnitTest]
         public async Task IsAuthorizedAsyncShouldInitializeAuthorizationService()
         {
-            var serviceFactory = Repository.Create<IAuthorizationServiceFactory>();
-            serviceFactory.Setup(x => x.Create(
-                It.IsAny<IAuthorizationPolicyProvider>(),
-                It.IsAny<IEnumerable<IAuthorizationHandler>>(),
-                It.IsAny<ILoggerFactory>()))
-                .Returns((IAuthorizationService)null);
-
-            var dependenciesFactory = CreateDependenciesFactoryWithSpecificReturn(new AuthorizationDependencies
+            var dependencies = new AuthorizationDependencies
             {
-                HandlerProvider = null,
                 LoggerFactory = null,
                 PolicyProvider = null,
-                ServiceFactory = serviceFactory.Object
-            });
+                Service = null
+            };
 
-            await AssertEverythingIsInitialized(dependenciesFactory.Object);
+            await AssertEverythingIsInitialized(dependencies);
         }
 
-        private Mock<IAuthorizationDependenciesFactory> CreateDependenciesFactoryWithSpecificReturn(AuthorizationDependencies dependencies)
+        private async Task AssertEverythingIsInitialized(IAuthorizationDependencies dependencies)
         {
-            var dependenciesFactory = Repository.Create<IAuthorizationDependenciesFactory>();
-            dependenciesFactory
-                .Setup(x => x.Create(It.IsAny<AuthorizationOptions>(), It.IsAny<IOwinContext>()))
-                .Returns(dependencies);
-            return dependenciesFactory;
-        }
-
-        private async Task AssertEverythingIsInitialized(IAuthorizationDependenciesFactory dependenciesFactory)
-        {
-            var options = new AuthorizationOptions { DependenciesFactory = dependenciesFactory };
+            var options = new AuthorizationOptions { Dependencies = dependencies };
             var helper = CreateHelperWithOptionsEmbedded(options);
 
             var user = CreateAuthenticatedUser();

@@ -21,6 +21,8 @@ namespace Microsoft.Owin.Security.Authorization
         private readonly IAuthorizationPolicyProvider _policyProvider;
         private readonly IList<IAuthorizationHandler> _handlers;
         private readonly ILogger _logger;
+        private readonly IAuthorizationEvaluator _evaluator;
+        private readonly IAuthorizationHandlerContextFactory _contextFactory;
 
         /// <summary>
         /// Creates a new instance of <see cref="DefaultAuthorizationService"/>.
@@ -29,16 +31,18 @@ namespace Microsoft.Owin.Security.Authorization
         /// <param name="handlers">The handlers used to fulfill <see cref="IAuthorizationRequirement"/>s.</param>
         /// <remarks>Uses the <see cref="DiagnosticsLoggerFactory"/> to create a logger.</remarks>
         public DefaultAuthorizationService(IAuthorizationPolicyProvider policyProvider, IEnumerable<IAuthorizationHandler> handlers) 
-            : this(policyProvider, handlers, null)
+            : this(policyProvider, handlers, null, new DefaultAuthorizationHandlerContextFactory(), new DefaultAuthorizationEvaluator())
         { }
 
         /// <summary>
         /// Creates a new instance of <see cref="DefaultAuthorizationService"/>.
         /// </summary>
         /// <param name="policyProvider">The <see cref="IAuthorizationPolicyProvider"/> used to provide policies.</param>
-        /// <param name="handlers">The handlers used to fufills <see cref="IAuthorizationRequirement"/>s.</param>
-        /// <param name="logger">The logger used to log messages, warnings and errors.</param>  
-        public DefaultAuthorizationService(IAuthorizationPolicyProvider policyProvider, IEnumerable<IAuthorizationHandler> handlers, ILogger logger)
+        /// <param name="handlers">The handlers used to fulfill <see cref="IAuthorizationRequirement"/>s.</param>
+        /// <param name="logger">The logger used to log messages, warnings and errors.</param>
+        /// <param name="contextFactory">The <see cref="IAuthorizationHandlerContextFactory"/> used to create the context to handle the authorization.</param>  
+        /// <param name="evaluator">The <see cref="IAuthorizationEvaluator"/> used to determine if authorzation was successful.</param>
+        public DefaultAuthorizationService(IAuthorizationPolicyProvider policyProvider, IEnumerable<IAuthorizationHandler> handlers, ILogger logger, IAuthorizationHandlerContextFactory contextFactory, IAuthorizationEvaluator evaluator)
         {
             if (policyProvider == null)
             {
@@ -48,10 +52,20 @@ namespace Microsoft.Owin.Security.Authorization
             {
                 throw new ArgumentNullException(nameof(handlers));
             }
+            if (contextFactory == null)
+            {
+                throw new ArgumentNullException(nameof(contextFactory));
+            }
+            if (evaluator == null)
+            {
+                throw new ArgumentNullException(nameof(evaluator));
+            }
 
             _handlers = InitializeHandlers(handlers);
             _policyProvider = policyProvider;
-            _logger = logger ?? new DiagnosticsLoggerFactory().Create("ResourceAuthorization");
+            _logger = logger ?? new DiagnosticsLoggerFactory().CreateDefaultLogger();
+            _contextFactory = contextFactory;
+            _evaluator = evaluator;
         }
 
         private static IList<IAuthorizationHandler> InitializeHandlers(IEnumerable<IAuthorizationHandler> handlers)
@@ -95,13 +109,13 @@ namespace Microsoft.Owin.Security.Authorization
                 throw new ArgumentNullException(nameof(requirements));
             }
 
-            var authContext = new AuthorizationHandlerContext(requirements, user, resource);
+            var authContext = _contextFactory.CreateContext(requirements, user, resource);
             foreach (var handler in _handlers)
             {
                 await handler.HandleAsync(authContext);
             }
 
-            if (authContext.HasSucceeded)
+            if (_evaluator.HasSucceeded(authContext))
             {
                 _logger.UserAuthorizationSucceeded(GetUserNameForLogging(user));
                 return true;

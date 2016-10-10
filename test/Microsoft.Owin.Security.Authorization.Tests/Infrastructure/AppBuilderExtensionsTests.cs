@@ -113,7 +113,7 @@ namespace Microsoft.Owin.Security.Authorization.Infrastructure
             {
                 actionRan = true;
                 Assert.IsNotNull(options, "options != null");
-                Assert.IsNotNull(options.DependenciesFactory, "options.DependenciesFactory != null");
+                Assert.IsNotNull(options.Dependencies, "options.Dependencies != null");
             });
 
             app.Verify(x => x.Use(typeof(ResourceAuthorizationMiddleware), It.IsNotNull<AuthorizationOptions>()), Times.Once);
