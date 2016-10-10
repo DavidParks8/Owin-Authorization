@@ -31,19 +31,8 @@ namespace Microsoft.Owin.Security.Authorization
         /// <param name="handlers">The handlers used to fulfill <see cref="IAuthorizationRequirement"/>s.</param>
         /// <remarks>Uses the <see cref="DiagnosticsLoggerFactory"/> to create a logger.</remarks>
         public DefaultAuthorizationService(IAuthorizationPolicyProvider policyProvider, IEnumerable<IAuthorizationHandler> handlers) 
-            : this(policyProvider, handlers, null)
+            : this(policyProvider, handlers, null, new DefaultAuthorizationHandlerContextFactory(), new DefaultAuthorizationEvaluator())
         { }
-
-        /// <summary>
-        /// Creates a new instance of <see cref="DefaultAuthorizationService"/>.
-        /// </summary>
-        /// <param name="policyProvider">The <see cref="IAuthorizationPolicyProvider"/> used to provide policies.</param>
-        /// <param name="handlers">The handlers used to fufills <see cref="IAuthorizationRequirement"/>s.</param>
-        /// <param name="logger">The logger used to log messages, warnings and errors.</param>  
-        public DefaultAuthorizationService(IAuthorizationPolicyProvider policyProvider, IEnumerable<IAuthorizationHandler> handlers, ILogger logger)
-            : this(policyProvider, handlers, logger, new DefaultAuthorizationHandlerContextFactory(), new DefaultAuthorizationEvaluator())
-        {
-        }
 
         /// <summary>
         /// Creates a new instance of <see cref="DefaultAuthorizationService"/>.
