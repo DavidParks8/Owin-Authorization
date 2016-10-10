@@ -1,4 +1,6 @@
-﻿namespace Microsoft.Owin.Security.Authorization
+﻿using System;
+
+namespace Microsoft.Owin.Security.Authorization
 {
     /// <summary>
     /// Determines whether an authorization request was successful or not.
@@ -12,6 +14,11 @@
         /// <returns>True if authorization has failed.</returns>
         public virtual bool HasFailed(AuthorizationHandlerContext context)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
             return context.HasFailed;
         }
 
@@ -22,6 +29,11 @@
         /// <returns>True if authorization has succeeded.</returns>
         public virtual bool HasSucceeded(AuthorizationHandlerContext context)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
             return context.HasSucceeded;
         }
     }
