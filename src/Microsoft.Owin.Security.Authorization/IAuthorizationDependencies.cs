@@ -28,6 +28,11 @@ namespace Microsoft.Owin.Security.Authorization
         IAuthorizationHandlerProvider HandlerProvider { get; set; }
 
         /// <summary>
+        /// Gets or sets an <see cref="IAuthorizationHandlerContextFactory"/>.
+        /// </summary>
+        IAuthorizationHandlerContextFactory ContextFactory { get; set; }
+
+        /// <summary>
         /// Gets or sets an <see cref="IAuthorizationEvaluator"/>.
         /// </summary>
         IAuthorizationEvaluator Evaluator { get; set; }

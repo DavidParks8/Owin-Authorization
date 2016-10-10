@@ -131,6 +131,7 @@ namespace Microsoft.Owin.Security.Authorization
                 It.IsAny<IAuthorizationPolicyProvider>(),
                 It.IsAny<IEnumerable<IAuthorizationHandler>>(),
                 It.IsAny<ILoggerFactory>(),
+                It.IsAny<IAuthorizationHandlerContextFactory>(),
                 It.IsAny<IAuthorizationEvaluator>()))
                 .Returns((IAuthorizationService)null);
 

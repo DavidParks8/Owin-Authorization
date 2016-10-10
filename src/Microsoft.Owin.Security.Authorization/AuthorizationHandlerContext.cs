@@ -19,32 +19,32 @@ namespace Microsoft.Owin.Security.Authorization
         /// <summary>
         /// The collection of all the <see cref="IAuthorizationRequirement"/> for the current authorization action.
         /// </summary>
-        public IEnumerable<IAuthorizationRequirement> Requirements { get; }
+        public virtual IEnumerable<IAuthorizationRequirement> Requirements { get; }
 
         /// <summary>
         /// The <see cref="ClaimsPrincipal"/> representing the current user.
         /// </summary>
-        public ClaimsPrincipal User { get; }
+        public virtual ClaimsPrincipal User { get; }
 
         /// <summary>
         /// The optional resource to evaluate the <see cref="AuthorizationHandlerContext.Requirements"/> against.
         /// </summary>
-        public object Resource { get; }
+        public virtual object Resource { get; }
 
         /// <summary>
         /// Gets the requirements that have not yet been marked as succeeded.
         /// </summary>
-        public IEnumerable<IAuthorizationRequirement> PendingRequirements => _pendingRequirements;
+        public virtual IEnumerable<IAuthorizationRequirement> PendingRequirements => _pendingRequirements;
 
         /// <summary>
         /// Flag indicating whether the current authorization processing has failed.
         /// </summary>
-        public bool HasFailed { get; private set; }
+        public virtual bool HasFailed { get; private set; }
 
         /// <summary>
         /// Flag indicating whether the current authorization processing has succeeded.
         /// </summary>
-        public bool HasSucceeded => !HasFailed && _succeedCalled && !PendingRequirements.Any();
+        public virtual bool HasSucceeded => !HasFailed && _succeedCalled && !PendingRequirements.Any();
 
         /// <summary>
         /// Creates a new instance of <see cref="AuthorizationHandlerContext"/>.
@@ -75,7 +75,7 @@ namespace Microsoft.Owin.Security.Authorization
         /// Called to indicate <see cref="HasSucceeded"/> will
         /// never return true, even if all requirements are met.
         /// </summary>
-        public void Fail()
+        public virtual void Fail()
         {
             HasFailed = true;
         }
@@ -85,10 +85,49 @@ namespace Microsoft.Owin.Security.Authorization
         /// successfully evaluated.
         /// </summary>
         /// <param name="requirement">The requirement whose evaluation has succeeded.</param>
-        public void Succeed(IAuthorizationRequirement requirement)
+        public virtual void Succeed(IAuthorizationRequirement requirement)
         {
             _succeedCalled = true;
             _pendingRequirements.Remove(requirement);
+        }
+    }
+
+    /// <summary>
+    /// A type used to provide a <see cref="AuthorizationHandlerContext"/> used for authorization.
+    /// </summary>
+    public interface IAuthorizationHandlerContextFactory
+    {
+        /// <summary>
+        /// Creates a <see cref="AuthorizationHandlerContext"/> used for authorization.
+        /// </summary>
+        /// <param name="requirements">The requirements to evaluate.</param>
+        /// <param name="user">The user to evaluate the requirements against.</param>
+        /// <param name="resource">
+        /// An optional resource the policy should be checked with.
+        /// If a resource is not required for policy evaluation you may pass null as the value.
+        /// </param>
+        /// <returns>The <see cref="AuthorizationHandlerContext"/>.</returns>
+        AuthorizationHandlerContext CreateContext(IEnumerable<IAuthorizationRequirement> requirements, ClaimsPrincipal user, object resource);
+    }
+
+    /// <summary>
+    /// A type used to provide a <see cref="AuthorizationHandlerContext"/> used for authorization.
+    /// </summary>
+    public class DefaultAuthorizationHandlerContextFactory : IAuthorizationHandlerContextFactory
+    {
+        /// <summary>
+        /// Creates a <see cref="AuthorizationHandlerContext"/> used for authorization.
+        /// </summary>
+        /// <param name="requirements">The requirements to evaluate.</param>
+        /// <param name="user">The user to evaluate the requirements against.</param>
+        /// <param name="resource">
+        /// An optional resource the policy should be checked with.
+        /// If a resource is not required for policy evaluation you may pass null as the value.
+        /// </param>
+        /// <returns>The <see cref="AuthorizationHandlerContext"/>.</returns>
+        public virtual AuthorizationHandlerContext CreateContext(IEnumerable<IAuthorizationRequirement> requirements, ClaimsPrincipal user, object resource)
+        {
+            return new AuthorizationHandlerContext(requirements, user, resource);
         }
     }
 }

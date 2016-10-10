@@ -72,12 +72,14 @@ namespace Microsoft.Owin.Security.Authorization
                 ?? new DiagnosticsLoggerFactory();
             var serviceFactory = dependencies.ServiceFactory
                 ?? new DefaultAuthorizationServiceFactory();
+            var contextFactory = dependencies.ContextFactory
+                ?? new DefaultAuthorizationHandlerContextFactory();
             var evaluator = dependencies.Evaluator
                 ?? new DefaultAuthorizationEvaluator();
 
             var handlers = await handlerProvider.GetHandlersAsync();
-            var authorizationService = serviceFactory.Create(policyProvider, handlers, loggerFactory, evaluator)
-                ?? new DefaultAuthorizationServiceFactory().Create(policyProvider, handlers, loggerFactory, evaluator);
+            var authorizationService = serviceFactory.Create(policyProvider, handlers, loggerFactory, contextFactory, evaluator)
+                ?? new DefaultAuthorizationServiceFactory().Create(policyProvider, handlers, loggerFactory, contextFactory, evaluator);
             
             var policy = await AuthorizationPolicy.CombineAsync(policyProvider, new[] { authorizeAttribute });
             return await authorizationService.AuthorizeAsync(user, policy);

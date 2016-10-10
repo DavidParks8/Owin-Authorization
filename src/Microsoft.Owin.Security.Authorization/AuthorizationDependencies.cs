@@ -10,26 +10,31 @@ namespace Microsoft.Owin.Security.Authorization
         /// <summary>
         /// Gets or sets an <see cref="IAuthorizationServiceFactory"/>.
         /// </summary>
-        public IAuthorizationServiceFactory ServiceFactory { get; set; }
+        public virtual IAuthorizationServiceFactory ServiceFactory { get; set; }
 
         /// <summary>
         /// Gets or sets a <see cref="ILoggerFactory"/>.
         /// </summary>
-        public ILoggerFactory LoggerFactory { get; set; }
+        public virtual ILoggerFactory LoggerFactory { get; set; }
 
         /// <summary>
         /// Gets or sets an <see cref="IAuthorizationPolicyProvider"/>.
         /// </summary>
-        public IAuthorizationPolicyProvider PolicyProvider { get; set; }
+        public virtual IAuthorizationPolicyProvider PolicyProvider { get; set; }
 
         /// <summary>
         /// Gets or sets an <see cref="IAuthorizationHandlerProvider"/>.
         /// </summary>
-        public IAuthorizationHandlerProvider HandlerProvider { get; set; }
+        public virtual IAuthorizationHandlerProvider HandlerProvider { get; set; }
 
+        /// <summary>
+        /// Gets or sets an <see cref="IAuthorizationHandlerContextFactory"/>.
+        /// </summary>
+        public virtual IAuthorizationHandlerContextFactory ContextFactory { get; set; }
+        
         /// <summary>
         /// Gets or sets an <see cref="IAuthorizationEvaluator"/>.
         /// </summary>
-        public IAuthorizationEvaluator Evaluator { get; set; }
+        public virtual IAuthorizationEvaluator Evaluator { get; set; }
     }
 }

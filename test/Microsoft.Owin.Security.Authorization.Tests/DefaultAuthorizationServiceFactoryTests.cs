@@ -18,28 +18,35 @@ namespace Microsoft.Owin.Security.Authorization
         public void CreateWithNullPolicyProviderShouldThrow()
         {
             var factory = new DefaultAuthorizationServiceFactory();
-            factory.Create(null, new IAuthorizationHandler[0], new DiagnosticsLoggerFactory(), new DefaultAuthorizationEvaluator());
+            factory.Create(null, new IAuthorizationHandler[0], new DiagnosticsLoggerFactory(), new DefaultAuthorizationHandlerContextFactory(), new DefaultAuthorizationEvaluator());
         }
 
         [TestMethod, UnitTest, ExpectedException(typeof(ArgumentNullException))]
         public void CreateWithNullHandlersShouldThrow()
         {
             var factory = new DefaultAuthorizationServiceFactory();
-            factory.Create(DefaultPolicyProvider(), null, new DiagnosticsLoggerFactory(), new DefaultAuthorizationEvaluator());
+            factory.Create(DefaultPolicyProvider(), null, new DiagnosticsLoggerFactory(), new DefaultAuthorizationHandlerContextFactory(), new DefaultAuthorizationEvaluator());
         }
 
         [TestMethod, UnitTest, ExpectedException(typeof(ArgumentNullException))]
         public void CreateWithNullLoggerFactoryShouldThrow()
         {
             var factory = new DefaultAuthorizationServiceFactory();
-            factory.Create(DefaultPolicyProvider(), new IAuthorizationHandler[0], null, new DefaultAuthorizationEvaluator());
+            factory.Create(DefaultPolicyProvider(), new IAuthorizationHandler[0], null, new DefaultAuthorizationHandlerContextFactory(), new DefaultAuthorizationEvaluator());
+        }
+
+        [TestMethod, UnitTest, ExpectedException(typeof(ArgumentNullException))]
+        public void CreateWithNullContextFactoryShouldThrow()
+        {
+            var factory = new DefaultAuthorizationServiceFactory();
+            factory.Create(DefaultPolicyProvider(), new IAuthorizationHandler[0], new DiagnosticsLoggerFactory(), null, new DefaultAuthorizationEvaluator());
         }
 
         [TestMethod, UnitTest, ExpectedException(typeof(ArgumentNullException))]
         public void CreateWithNullEvaluatorShouldThrow()
         {
             var factory = new DefaultAuthorizationServiceFactory();
-            factory.Create(DefaultPolicyProvider(), new IAuthorizationHandler[0], new DiagnosticsLoggerFactory(), null);
+            factory.Create(DefaultPolicyProvider(), new IAuthorizationHandler[0], new DiagnosticsLoggerFactory(), new DefaultAuthorizationHandlerContextFactory(), null);
         }
 
         [TestMethod, UnitTest]
@@ -50,6 +57,7 @@ namespace Microsoft.Owin.Security.Authorization
                 DefaultPolicyProvider(),
                 new IAuthorizationHandler[0],
                 new DiagnosticsLoggerFactory(),
+                new DefaultAuthorizationHandlerContextFactory(),
                 new DefaultAuthorizationEvaluator());
             Assert.IsInstanceOfType(authorizationService, typeof(DefaultAuthorizationService));
         }

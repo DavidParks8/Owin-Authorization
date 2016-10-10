@@ -18,10 +18,11 @@ namespace Microsoft.Owin.Security.Authorization
     /// </summary>
     public class DefaultAuthorizationService : IAuthorizationService
     {
-        private readonly IAuthorizationEvaluator _evaluator;
         private readonly IAuthorizationPolicyProvider _policyProvider;
         private readonly IList<IAuthorizationHandler> _handlers;
         private readonly ILogger _logger;
+        private readonly IAuthorizationEvaluator _evaluator;
+        private readonly IAuthorizationHandlerContextFactory _contextFactory;
 
         /// <summary>
         /// Creates a new instance of <see cref="DefaultAuthorizationService"/>.
@@ -40,7 +41,7 @@ namespace Microsoft.Owin.Security.Authorization
         /// <param name="handlers">The handlers used to fufills <see cref="IAuthorizationRequirement"/>s.</param>
         /// <param name="logger">The logger used to log messages, warnings and errors.</param>  
         public DefaultAuthorizationService(IAuthorizationPolicyProvider policyProvider, IEnumerable<IAuthorizationHandler> handlers, ILogger logger)
-            : this(policyProvider, handlers, logger, new DefaultAuthorizationEvaluator())
+            : this(policyProvider, handlers, logger, new DefaultAuthorizationHandlerContextFactory(), new DefaultAuthorizationEvaluator())
         {
         }
 
@@ -50,8 +51,9 @@ namespace Microsoft.Owin.Security.Authorization
         /// <param name="policyProvider">The <see cref="IAuthorizationPolicyProvider"/> used to provide policies.</param>
         /// <param name="handlers">The handlers used to fulfill <see cref="IAuthorizationRequirement"/>s.</param>
         /// <param name="logger">The logger used to log messages, warnings and errors.</param>
+        /// <param name="contextFactory">The <see cref="IAuthorizationHandlerContextFactory"/> used to create the context to handle the authorization.</param>  
         /// <param name="evaluator">The <see cref="IAuthorizationEvaluator"/> used to determine if authorzation was successful.</param>
-        public DefaultAuthorizationService(IAuthorizationPolicyProvider policyProvider, IEnumerable<IAuthorizationHandler> handlers, ILogger logger, IAuthorizationEvaluator evaluator)
+        public DefaultAuthorizationService(IAuthorizationPolicyProvider policyProvider, IEnumerable<IAuthorizationHandler> handlers, ILogger logger, IAuthorizationHandlerContextFactory contextFactory, IAuthorizationEvaluator evaluator)
         {
             if (policyProvider == null)
             {
@@ -61,6 +63,10 @@ namespace Microsoft.Owin.Security.Authorization
             {
                 throw new ArgumentNullException(nameof(handlers));
             }
+            if (contextFactory == null)
+            {
+                throw new ArgumentNullException(nameof(contextFactory));
+            }
             if (evaluator == null)
             {
                 throw new ArgumentNullException(nameof(evaluator));
@@ -69,6 +75,7 @@ namespace Microsoft.Owin.Security.Authorization
             _handlers = InitializeHandlers(handlers);
             _policyProvider = policyProvider;
             _logger = logger ?? new DiagnosticsLoggerFactory().Create("ResourceAuthorization");
+            _contextFactory = contextFactory;
             _evaluator = evaluator;
         }
 
@@ -113,7 +120,7 @@ namespace Microsoft.Owin.Security.Authorization
                 throw new ArgumentNullException(nameof(requirements));
             }
 
-            var authContext = new AuthorizationHandlerContext(requirements, user, resource);
+            var authContext = _contextFactory.CreateContext(requirements, user, resource);
             foreach (var handler in _handlers)
             {
                 await handler.HandleAsync(authContext);

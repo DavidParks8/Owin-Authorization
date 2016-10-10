@@ -1,7 +1,6 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -23,6 +22,12 @@ namespace Microsoft.Owin.Security.Authorization
         {
             Debug.Assert(logger != null, "logger != null");
             logger.WriteInformation(string.Format(CultureInfo.CurrentCulture, Resources.LogAuthorizationFailedForUser, userName));
+        }
+
+        public static ILogger CreateDefaultLogger(this ILoggerFactory loggerFactory)
+        {
+            Debug.Assert(loggerFactory != null);
+            return loggerFactory.Create("ResourceAuthorization");
         }
     }
 }
