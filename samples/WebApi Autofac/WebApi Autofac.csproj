@@ -139,7 +139,7 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\ExampleController.cs" />
-    <Compile Include="AutofacAuthorizationDependenciesFactory.cs" />
+    <Compile Include="AutofacAuthorizationDependencies.cs" />
     <Compile Include="ExampleConstants.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
