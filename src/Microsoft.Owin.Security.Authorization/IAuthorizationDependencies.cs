@@ -26,5 +26,10 @@ namespace Microsoft.Owin.Security.Authorization
         /// Gets or sets an <see cref="IAuthorizationHandlerProvider"/>.
         /// </summary>
         IAuthorizationHandlerProvider HandlerProvider { get; set; }
+
+        /// <summary>
+        /// Gets or sets an <see cref="IAuthorizationEvaluator"/>.
+        /// </summary>
+        IAuthorizationEvaluator Evaluator { get; set; }
     }
 }

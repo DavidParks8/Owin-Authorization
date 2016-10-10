@@ -15,10 +15,12 @@ namespace Microsoft.Owin.Security.Authorization
         /// <param name="policyProvider">The <see cref="IAuthorizationPolicyProvider"/> for providing policies.</param>
         /// <param name="authorizationHandlers">A set <see cref="IAuthorizationHandler"/>s for evaluating authorization.</param>
         /// <param name="loggerFactory">An <see cref="ILoggerFactory"/> for logging.</param>
+        /// <param name="evaluator">The <see cref="IAuthorizationEvaluator"/> used to determine if authorzation was successful.</param>
         public IAuthorizationService Create(
             IAuthorizationPolicyProvider policyProvider,
             IEnumerable<IAuthorizationHandler> authorizationHandlers,
-            ILoggerFactory loggerFactory)
+            ILoggerFactory loggerFactory,
+            IAuthorizationEvaluator evaluator)
         {
             if (policyProvider == null)
             {
@@ -32,9 +34,13 @@ namespace Microsoft.Owin.Security.Authorization
             {
                 throw new ArgumentNullException(nameof(loggerFactory));
             }
+            if (evaluator == null)
+            {
+                throw new ArgumentNullException(nameof(evaluator));
+            }
 
             var logger = loggerFactory.Create("ResourceAuthorization");
-            return new DefaultAuthorizationService(policyProvider, authorizationHandlers, logger);
+            return new DefaultAuthorizationService(policyProvider, authorizationHandlers, logger, evaluator);
         }
     }
 }

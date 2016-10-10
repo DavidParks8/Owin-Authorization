@@ -18,21 +18,28 @@ namespace Microsoft.Owin.Security.Authorization
         public void CreateWithNullPolicyProviderShouldThrow()
         {
             var factory = new DefaultAuthorizationServiceFactory();
-            factory.Create(null, new IAuthorizationHandler[0], new DiagnosticsLoggerFactory());
+            factory.Create(null, new IAuthorizationHandler[0], new DiagnosticsLoggerFactory(), new DefaultAuthorizationEvaluator());
         }
 
         [TestMethod, UnitTest, ExpectedException(typeof(ArgumentNullException))]
         public void CreateWithNullHandlersShouldThrow()
         {
             var factory = new DefaultAuthorizationServiceFactory();
-            factory.Create(DefaultPolicyProvider(), null, new DiagnosticsLoggerFactory());
+            factory.Create(DefaultPolicyProvider(), null, new DiagnosticsLoggerFactory(), new DefaultAuthorizationEvaluator());
         }
 
         [TestMethod, UnitTest, ExpectedException(typeof(ArgumentNullException))]
         public void CreateWithNullLoggerFactoryShouldThrow()
         {
             var factory = new DefaultAuthorizationServiceFactory();
-            factory.Create(DefaultPolicyProvider(), new IAuthorizationHandler[0], null);
+            factory.Create(DefaultPolicyProvider(), new IAuthorizationHandler[0], null, new DefaultAuthorizationEvaluator());
+        }
+
+        [TestMethod, UnitTest, ExpectedException(typeof(ArgumentNullException))]
+        public void CreateWithNullEvaluatorShouldThrow()
+        {
+            var factory = new DefaultAuthorizationServiceFactory();
+            factory.Create(DefaultPolicyProvider(), new IAuthorizationHandler[0], new DiagnosticsLoggerFactory(), null);
         }
 
         [TestMethod, UnitTest]
@@ -42,7 +49,8 @@ namespace Microsoft.Owin.Security.Authorization
             var authorizationService = factory.Create(
                 DefaultPolicyProvider(),
                 new IAuthorizationHandler[0],
-                new DiagnosticsLoggerFactory());
+                new DiagnosticsLoggerFactory(),
+                new DefaultAuthorizationEvaluator());
             Assert.IsInstanceOfType(authorizationService, typeof(DefaultAuthorizationService));
         }
     }

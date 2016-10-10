@@ -14,9 +14,11 @@ namespace Microsoft.Owin.Security.Authorization
         /// <param name="policyProvider">The <see cref="IAuthorizationPolicyProvider"/> for providing policies.</param>
         /// <param name="authorizationHandlers">A set <see cref="IAuthorizationHandler"/>s for evaluating authorization.</param>
         /// <param name="loggerFactory">An <see cref="ILoggerFactory"/> for logging.</param>
+        /// <param name="evaluator"></param>
         IAuthorizationService Create(
             IAuthorizationPolicyProvider policyProvider,
             IEnumerable<IAuthorizationHandler> authorizationHandlers,
-            ILoggerFactory loggerFactory);
+            ILoggerFactory loggerFactory,
+            IAuthorizationEvaluator evaluator);
     }
 }

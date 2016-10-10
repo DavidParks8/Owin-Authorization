@@ -130,7 +130,8 @@ namespace Microsoft.Owin.Security.Authorization
             serviceFactory.Setup(x => x.Create(
                 It.IsAny<IAuthorizationPolicyProvider>(),
                 It.IsAny<IEnumerable<IAuthorizationHandler>>(),
-                It.IsAny<ILoggerFactory>()))
+                It.IsAny<ILoggerFactory>(),
+                It.IsAny<IAuthorizationEvaluator>()))
                 .Returns((IAuthorizationService)null);
 
             var dependenciesFactory = CreateDependenciesFactoryWithSpecificReturn(new AuthorizationDependencies

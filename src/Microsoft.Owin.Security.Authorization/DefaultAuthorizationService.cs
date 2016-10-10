@@ -18,6 +18,7 @@ namespace Microsoft.Owin.Security.Authorization
     /// </summary>
     public class DefaultAuthorizationService : IAuthorizationService
     {
+        private readonly IAuthorizationEvaluator _evaluator;
         private readonly IAuthorizationPolicyProvider _policyProvider;
         private readonly IList<IAuthorizationHandler> _handlers;
         private readonly ILogger _logger;
@@ -39,6 +40,18 @@ namespace Microsoft.Owin.Security.Authorization
         /// <param name="handlers">The handlers used to fufills <see cref="IAuthorizationRequirement"/>s.</param>
         /// <param name="logger">The logger used to log messages, warnings and errors.</param>  
         public DefaultAuthorizationService(IAuthorizationPolicyProvider policyProvider, IEnumerable<IAuthorizationHandler> handlers, ILogger logger)
+            : this(policyProvider, handlers, logger, new DefaultAuthorizationEvaluator())
+        {
+        }
+
+        /// <summary>
+        /// Creates a new instance of <see cref="DefaultAuthorizationService"/>.
+        /// </summary>
+        /// <param name="policyProvider">The <see cref="IAuthorizationPolicyProvider"/> used to provide policies.</param>
+        /// <param name="handlers">The handlers used to fulfill <see cref="IAuthorizationRequirement"/>s.</param>
+        /// <param name="logger">The logger used to log messages, warnings and errors.</param>
+        /// <param name="evaluator">The <see cref="IAuthorizationEvaluator"/> used to determine if authorzation was successful.</param>
+        public DefaultAuthorizationService(IAuthorizationPolicyProvider policyProvider, IEnumerable<IAuthorizationHandler> handlers, ILogger logger, IAuthorizationEvaluator evaluator)
         {
             if (policyProvider == null)
             {
@@ -48,10 +61,15 @@ namespace Microsoft.Owin.Security.Authorization
             {
                 throw new ArgumentNullException(nameof(handlers));
             }
+            if (evaluator == null)
+            {
+                throw new ArgumentNullException(nameof(evaluator));
+            }
 
             _handlers = InitializeHandlers(handlers);
             _policyProvider = policyProvider;
             _logger = logger ?? new DiagnosticsLoggerFactory().Create("ResourceAuthorization");
+            _evaluator = evaluator;
         }
 
         private static IList<IAuthorizationHandler> InitializeHandlers(IEnumerable<IAuthorizationHandler> handlers)
@@ -101,7 +119,7 @@ namespace Microsoft.Owin.Security.Authorization
                 await handler.HandleAsync(authContext);
             }
 
-            if (authContext.HasSucceeded)
+            if (_evaluator.HasSucceeded(authContext))
             {
                 _logger.UserAuthorizationSucceeded(GetUserNameForLogging(user));
                 return true;
