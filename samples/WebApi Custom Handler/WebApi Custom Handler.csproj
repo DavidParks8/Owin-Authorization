@@ -121,7 +121,6 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\ExampleController.cs" />
-    <Compile Include="CustomAuthorizationDependenciesFactory.cs" />
     <Compile Include="CustomAuthorizationPolicyProvider.cs" />
     <Compile Include="ExampleConstants.cs" />
     <Compile Include="Models\EmployeeNumber2Handler.cs" />
