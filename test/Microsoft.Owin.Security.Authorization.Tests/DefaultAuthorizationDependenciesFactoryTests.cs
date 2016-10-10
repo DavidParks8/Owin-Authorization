@@ -32,7 +32,7 @@ namespace Microsoft.Owin.Security.Authorization
             var dependencies = dependenciesFactory.Create(new AuthorizationOptions(), null);
             Assert.IsInstanceOfType(dependencies.LoggerFactory, typeof(DiagnosticsLoggerFactory));
             Assert.IsInstanceOfType(dependencies.PolicyProvider, typeof(DefaultAuthorizationPolicyProvider));
-            Assert.IsInstanceOfType(dependencies.HandlerProvider, typeof(DefaultAuthorizationHandlerProvider));
+            Assert.IsInstanceOfType(dependencies.Service, typeof(DefaultAuthorizationService));
         }
     }
 }

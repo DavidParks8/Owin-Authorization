@@ -33,12 +33,18 @@ namespace Microsoft.Owin.Security.Authorization
         public IAuthorizationDependencies Create(AuthorizationOptions options, IOwinContext owinContext)
         {
             var policyProvider = new DefaultAuthorizationPolicyProvider(options);
-            var handlerProvider = new DefaultAuthorizationHandlerProvider(_handlers);
+            var loggerFactory = new DiagnosticsLoggerFactory();
+            var service = new DefaultAuthorizationService(
+                policyProvider, 
+                _handlers, 
+                loggerFactory.CreateDefaultLogger(),
+                new DefaultAuthorizationHandlerContextFactory(),
+                new DefaultAuthorizationEvaluator());
             return new AuthorizationDependencies
             {
-                LoggerFactory = new DiagnosticsLoggerFactory(),
+                LoggerFactory = loggerFactory,
                 PolicyProvider = policyProvider,
-                HandlerProvider = handlerProvider
+                Service = service
             };
         }
     }

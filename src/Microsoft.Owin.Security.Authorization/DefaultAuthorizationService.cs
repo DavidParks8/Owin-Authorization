@@ -63,7 +63,7 @@ namespace Microsoft.Owin.Security.Authorization
 
             _handlers = InitializeHandlers(handlers);
             _policyProvider = policyProvider;
-            _logger = logger ?? new DiagnosticsLoggerFactory().Create("ResourceAuthorization");
+            _logger = logger ?? new DiagnosticsLoggerFactory().CreateDefaultLogger();
             _contextFactory = contextFactory;
             _evaluator = evaluator;
         }

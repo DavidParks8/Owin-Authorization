@@ -59,6 +59,22 @@ namespace Microsoft.Owin.Security.Authorization
             new DefaultAuthorizationService(new DynamicPolicyProvider(), null);
         }
 
+        [SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "Microsoft.Owin.Security.Authorization.DefaultAuthorizationService", Justification = Justifications.ExpectedException)]
+        [TestMethod, UnitTest, ExpectedException(typeof(ArgumentNullException))]
+        public void ConstructorShouldThrowWhenContextFactoryIsNull()
+        {
+            // ReSharper disable once ObjectCreationAsStatement
+            new DefaultAuthorizationService(new DynamicPolicyProvider(), new IAuthorizationHandler[0], null, null, new DefaultAuthorizationEvaluator());
+        }
+
+        [SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "Microsoft.Owin.Security.Authorization.DefaultAuthorizationService", Justification = Justifications.ExpectedException)]
+        [TestMethod, UnitTest, ExpectedException(typeof(ArgumentNullException))]
+        public void ConstructorShouldThrowWhenEvaluatorIsNull()
+        {
+            // ReSharper disable once ObjectCreationAsStatement
+            new DefaultAuthorizationService(new DynamicPolicyProvider(), new IAuthorizationHandler[0], null, new DefaultAuthorizationHandlerContextFactory(), null);
+        }
+
         [TestMethod, UnitTest]
         public async Task AuthorizationServiceShouldAddPassThroughIfNotPresent()
         {

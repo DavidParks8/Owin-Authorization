@@ -60,27 +60,26 @@ namespace Microsoft.Owin.Security.Authorization
 
             var dependenciesFactory = options.DependenciesFactory
                 ?? new DefaultAuthorizationDependenciesFactory();
-
             var dependencies = dependenciesFactory.Create(options, _owinContextAccessor.Context) 
                 ?? new AuthorizationDependencies();
-
-            var policyProvider = dependencies.PolicyProvider 
+            var policyProvider = dependencies.PolicyProvider
                 ?? new DefaultAuthorizationPolicyProvider(options);
-            var handlerProvider = dependencies.HandlerProvider 
-                ?? new DefaultAuthorizationHandlerProvider(new PassThroughAuthorizationHandler());
-            var loggerFactory = dependencies.LoggerFactory
-                ?? new DiagnosticsLoggerFactory();
-            var serviceFactory = dependencies.ServiceFactory
-                ?? new DefaultAuthorizationServiceFactory();
-            var contextFactory = dependencies.ContextFactory
-                ?? new DefaultAuthorizationHandlerContextFactory();
-            var evaluator = dependencies.Evaluator
-                ?? new DefaultAuthorizationEvaluator();
+            var authorizationService = dependencies.Service;
+            if (authorizationService == null)
+            {
+                var handlerProvider = new DefaultAuthorizationHandlerProvider(new PassThroughAuthorizationHandler());
+                var handlers = await handlerProvider.GetHandlersAsync();
+                var loggerFactory = dependencies.LoggerFactory
+                    ?? new DiagnosticsLoggerFactory();
 
-            var handlers = await handlerProvider.GetHandlersAsync();
-            var authorizationService = serviceFactory.Create(policyProvider, handlers, loggerFactory, contextFactory, evaluator)
-                ?? new DefaultAuthorizationServiceFactory().Create(policyProvider, handlers, loggerFactory, contextFactory, evaluator);
-            
+                authorizationService = new DefaultAuthorizationService(
+                    policyProvider,
+                    handlers,
+                    loggerFactory.CreateDefaultLogger(),
+                    new DefaultAuthorizationHandlerContextFactory(),
+                    new DefaultAuthorizationEvaluator());
+            }
+
             var policy = await AuthorizationPolicy.CombineAsync(policyProvider, new[] { authorizeAttribute });
             return await authorizationService.AuthorizeAsync(user, policy);
         }

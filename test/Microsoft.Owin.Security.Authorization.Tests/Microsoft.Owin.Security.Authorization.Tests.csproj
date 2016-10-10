@@ -126,12 +126,12 @@
     <Compile Include="AuthorizationPolicyTests.cs" />
     <Compile Include="AuthorizationPolicyBuilderTests.cs" />
     <Compile Include="DefaultAuthorizationPolicyProviderTests.cs" />
-    <Compile Include="DefaultAuthorizationServiceFactoryTests.cs" />
     <Compile Include="DefaultAuthorizationHandlerProviderTests.cs" />
     <Compile Include="AuthorizationHandlerTests.cs" />
     <Compile Include="AuthorizationHelperTests.cs" />
     <Compile Include="DefaultAuthorizationDependenciesFactoryTests.cs" />
     <Compile Include="AuthorizationServiceExtensionsTests.cs" />
+    <Compile Include="DefaultAuthorizationEvaluatorTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Microsoft.Owin.Security.Authorization\Microsoft.Owin.Security.Authorization.csproj">
