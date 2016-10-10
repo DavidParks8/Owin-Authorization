@@ -64,12 +64,10 @@
   <ItemGroup>
     <Compile Include="AuthorizationHandlerContext.cs" />
     <Compile Include="AuthorizationDependencyHelper.cs" />
-    <Compile Include="DefaultAuthorizationDependenciesFactory.cs" />
     <Compile Include="DefaultAuthorizationEvaluator.cs" />
     <Compile Include="DefaultAuthorizationHandlerContextFactory.cs" />
     <Compile Include="DefaultAuthorizationHandlerProvider.cs" />
     <Compile Include="IAuthorizationDependencies.cs" />
-    <Compile Include="IAuthorizationDependenciesFactory.cs" />
     <Compile Include="AuthorizationHandler.cs" />
     <Compile Include="AuthorizationHelper.cs" />
     <Compile Include="AuthorizationOptions.cs" />

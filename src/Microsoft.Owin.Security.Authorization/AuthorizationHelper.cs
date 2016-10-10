@@ -58,9 +58,7 @@ namespace Microsoft.Owin.Security.Authorization
                 throw new InvalidOperationException(Resources.Exception_AuthorizationOptionsMustNotBeNull);
             }
 
-            var dependenciesFactory = options.DependenciesFactory
-                ?? new DefaultAuthorizationDependenciesFactory();
-            var dependencies = dependenciesFactory.Create(options, _owinContextAccessor.Context) 
+            var dependencies = options.Dependencies
                 ?? new AuthorizationDependencies();
             var policyProvider = dependencies.PolicyProvider
                 ?? new DefaultAuthorizationPolicyProvider(options);

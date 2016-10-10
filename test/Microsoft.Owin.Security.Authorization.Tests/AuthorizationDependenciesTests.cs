@@ -7,29 +7,31 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Microsoft.Owin.Security.Authorization
 {
     [TestClass, ExcludeFromCodeCoverage]
-    public class DefaultAuthorizationDependenciesFactoryTests
+    public class AuthorizationDependenciesTests
     {
-        [SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "Microsoft.Owin.Security.Authorization.DefaultAuthorizationDependenciesFactory", Justification = Justifications.ExpectedException)]
         [TestMethod, UnitTest, ExpectedException(typeof(ArgumentNullException))]
-        public void ConstructorShouldThrowWhenHandlersIsNull()
+        public void CreateShouldThrowWhenHandlersIsNull()
         {
-            // ReSharper disable once ObjectCreationAsStatement
-            new DefaultAuthorizationDependenciesFactory(null);
+            AuthorizationDependencies.Create(new AuthorizationOptions(), null);
+        }
+
+        [TestMethod, UnitTest, ExpectedException(typeof(ArgumentNullException))]
+        public void CreateShouldThrowWhenOptionsIsNull()
+        {
+            AuthorizationDependencies.Create(null);
         }
 
         [TestMethod, UnitTest]
         public void CreateShouldNotReturnNull()
         {
-            var dependenciesFactory = new DefaultAuthorizationDependenciesFactory();
-            var dependencies = dependenciesFactory.Create(new AuthorizationOptions(), null);
+            var dependencies = AuthorizationDependencies.Create(new AuthorizationOptions());
             Assert.IsNotNull(dependencies, "dependencies != null");
         }
 
         [TestMethod, UnitTest]
         public void CreateShouldReturnWithDependenciesInitialized()
         {
-            var dependenciesFactory = new DefaultAuthorizationDependenciesFactory();
-            var dependencies = dependenciesFactory.Create(new AuthorizationOptions(), null);
+            var dependencies = AuthorizationDependencies.Create(new AuthorizationOptions());
             Assert.IsInstanceOfType(dependencies.LoggerFactory, typeof(DiagnosticsLoggerFactory));
             Assert.IsInstanceOfType(dependencies.PolicyProvider, typeof(DefaultAuthorizationPolicyProvider));
             Assert.IsInstanceOfType(dependencies.Service, typeof(DefaultAuthorizationService));

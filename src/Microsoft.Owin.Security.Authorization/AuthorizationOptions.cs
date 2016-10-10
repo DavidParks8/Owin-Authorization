@@ -14,12 +14,12 @@ namespace Microsoft.Owin.Security.Authorization
         private IDictionary<string, AuthorizationPolicy> PolicyMap { get; } = new Dictionary<string, AuthorizationPolicy>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
-        /// Gets or sets the <see cref="IAuthorizationDependenciesFactory"/> used to resolve various dependencies for authorization.
+        /// Gets or sets the <see cref="IAuthorizationDependencies"/> used to resolve various dependencies for authorization.
         /// </summary>
         /// <remarks>
-        /// The default dependencies factory is an instance of <see cref="DefaultAuthorizationDependenciesFactory"/>.
+        /// The default dependencies is an instance of <see cref="AuthorizationDependencies"/>.
         /// </remarks>
-        public IAuthorizationDependenciesFactory DependenciesFactory { get; set; } = new DefaultAuthorizationDependenciesFactory();
+        public IAuthorizationDependencies Dependencies { get; set; } = new AuthorizationDependencies();
 
         /// <summary>
         /// Gets or sets the default authorization policy.

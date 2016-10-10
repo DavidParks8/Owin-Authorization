@@ -129,7 +129,7 @@
     <Compile Include="DefaultAuthorizationHandlerProviderTests.cs" />
     <Compile Include="AuthorizationHandlerTests.cs" />
     <Compile Include="AuthorizationHelperTests.cs" />
-    <Compile Include="DefaultAuthorizationDependenciesFactoryTests.cs" />
+    <Compile Include="AuthorizationDependenciesTests.cs" />
     <Compile Include="AuthorizationServiceExtensionsTests.cs" />
     <Compile Include="DefaultAuthorizationEvaluatorTests.cs" />
   </ItemGroup>
