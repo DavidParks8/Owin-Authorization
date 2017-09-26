@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
@@ -29,6 +30,7 @@ namespace Microsoft.Owin.Security.Authorization
         /// </summary>
         /// <param name="policyProvider">The <see cref="IAuthorizationPolicyProvider"/> used to provide policies.</param>
         /// <remarks>Uses the <see cref="DiagnosticsLoggerFactory"/> to create a logger.</remarks>
+        [ExcludeFromCodeCoverage] // no method body to test
         public DefaultAuthorizationService(IAuthorizationPolicyProvider policyProvider) : this(policyProvider, new []{ new PassThroughAuthorizationHandler() })
         { }
 
