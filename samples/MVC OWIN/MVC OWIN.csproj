@@ -24,6 +24,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -60,13 +61,11 @@
       <HintPath>..\..\packages\Microsoft.Owin.Security.3.0.1\lib\net45\Microsoft.Owin.Security.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Owin.Security.Authorization, Version=1.0.1.1, Culture=neutral, PublicKeyToken=ba8e29017989cc66, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.Owin.Security.Authorization.1.0.1.1-beta\lib\net452\Microsoft.Owin.Security.Authorization.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Microsoft.Owin.Security.Authorization, Version=1.1.0.1, Culture=neutral, PublicKeyToken=ba8e29017989cc66, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Owin.Security.Authorization.1.1.0.1\lib\net452\Microsoft.Owin.Security.Authorization.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Owin.Security.Authorization.Mvc, Version=1.0.1.1, Culture=neutral, PublicKeyToken=ba8e29017989cc66, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.Owin.Security.Authorization.Mvc.1.0.1.1-beta\lib\net452\Microsoft.Owin.Security.Authorization.Mvc.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Microsoft.Owin.Security.Authorization.Mvc, Version=1.1.0.1, Culture=neutral, PublicKeyToken=ba8e29017989cc66, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Owin.Security.Authorization.Mvc.1.1.0.1\lib\net452\Microsoft.Owin.Security.Authorization.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Owin.Security.Cookies, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Owin.Security.Cookies.3.0.1\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
