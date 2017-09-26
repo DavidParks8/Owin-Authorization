@@ -108,7 +108,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="AuthorizationDependencyHelperTests.cs" />
+    <Compile Include="OwinContextExtensionsTests.cs" />
     <Compile Include="DefaultAuthorizationServiceTests.cs" />
     <Compile Include="Infrastructure\AppBuilderExtensionsTests.cs" />
     <Compile Include="Infrastructure\AssertionRequirementTests.cs" />

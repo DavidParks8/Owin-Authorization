@@ -63,7 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AuthorizationHandlerContext.cs" />
-    <Compile Include="AuthorizationDependencyHelper.cs" />
+    <Compile Include="OwinContextExtensions.cs" />
     <Compile Include="DefaultAuthorizationEvaluator.cs" />
     <Compile Include="DefaultAuthorizationHandlerContextFactory.cs" />
     <Compile Include="DefaultAuthorizationHandlerProvider.cs" />
