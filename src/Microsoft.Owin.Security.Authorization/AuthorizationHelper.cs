@@ -3,7 +3,6 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.Owin.Logging;
 using Microsoft.Owin.Security.Authorization.Infrastructure;
-using Microsoft.Owin.Security.Authorization.Properties;
 
 namespace Microsoft.Owin.Security.Authorization
 {
@@ -53,10 +52,6 @@ namespace Microsoft.Owin.Security.Authorization
             }
 
             var options = ResolveAuthorizationOptions(controller);
-            if (options == null)
-            {
-                throw new InvalidOperationException(Resources.Exception_AuthorizationOptionsMustNotBeNull);
-            }
 
             var dependencies = options.Dependencies
                 ?? new AuthorizationDependencies();
@@ -89,9 +84,7 @@ namespace Microsoft.Owin.Security.Authorization
                 return controller.AuthorizationOptions;
             }
 
-            var owinContext = _owinContextAccessor.Context;
-            var helper = new AuthorizationDependencyHelper(owinContext);
-            return helper.AuthorizationOptions;
+            return _owinContextAccessor.Context.GetAuthorizationOptions();
         }
     }
 }
