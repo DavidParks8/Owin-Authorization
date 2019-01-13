@@ -55,6 +55,26 @@ namespace Microsoft.Owin.Security.Authorization.Mvc
             Assert.IsInstanceOfType(authorizationContext.Result, typeof(HttpUnauthorizedResult));
         }
 
+        [TestMethod, UnitTest]
+        public void OnBeAuthorizationShouldNotThrowOnMultipleCalls()
+        {
+            var options = new AuthorizationOptions();
+            var controller = Repository.Create<ControllerBase>();
+            controller.As<IAuthorizationController>().Setup(x => x.AuthorizationOptions).Returns(options);
+
+            var authorizationContext = new System.Web.Mvc.AuthorizationContext
+            {
+                HttpContext = SetupHttpContextBase().Object,
+                ActionDescriptor = SetupAllowAnonymous(false).Object,
+                Controller = controller.Object
+            };
+
+            var attribute = new ResourceAuthorizeAttribute();
+            attribute.OnAuthorization(authorizationContext);
+            // the next line should not throw
+            attribute.OnAuthorization(authorizationContext);
+        }
+
         private Mock<ActionDescriptor> SetupAllowAnonymous(bool attributePresent)
         {
             var action = Repository.Create<ActionDescriptor>();

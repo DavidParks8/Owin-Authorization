@@ -29,8 +29,7 @@ namespace Microsoft.Owin.Security.Authorization.Mvc
                 throw new ArgumentNullException(nameof(filterContext));
             }
 
-            //todo: handle items being null
-            filterContext.HttpContext.Items.Add(s_controllerKey, filterContext.Controller);
+            filterContext.HttpContext.Items[s_controllerKey] = filterContext.Controller;
             base.OnAuthorization(filterContext);
         }
 
