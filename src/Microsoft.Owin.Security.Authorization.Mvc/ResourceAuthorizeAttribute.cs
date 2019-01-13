@@ -29,7 +29,11 @@ namespace Microsoft.Owin.Security.Authorization.Mvc
                 throw new ArgumentNullException(nameof(filterContext));
             }
 
-            filterContext.HttpContext.Items[s_controllerKey] = filterContext.Controller;
+            if (!filterContext.HttpContext.Items.Contains(s_controllerKey))
+            {
+                filterContext.HttpContext.Items.Add(s_controllerKey, filterContext.Controller);
+            }
+
             base.OnAuthorization(filterContext);
         }
 
