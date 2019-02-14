@@ -24,6 +24,7 @@ namespace WebApi_Custom_Resource_Handler.Controllers
             //Replace this code with actual code to retreive employee from datastore
             var employee = new Employee { Id = 5, Name = "Willy Waldo" };
         
+            //This will fail when you don't have the employee claim with the corresponding Id...
             if (!(await authorizatonService.AuthorizeAsync((ClaimsPrincipal)User, employee, ExampleConstants.EmployeeDataAccessPolicy)))
             {
                 return Json("You are not authorized to access the requested employee!");

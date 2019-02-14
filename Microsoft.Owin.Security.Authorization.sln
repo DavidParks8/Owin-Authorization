@@ -42,7 +42,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Owin.Security.Aut
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Owin.Security.Authorization.WebApi.Tests", "test\Microsoft.Owin.Security.Authorization.WebApi.Tests\Microsoft.Owin.Security.Authorization.WebApi.Tests.csproj", "{8D88D2CB-21FC-467C-86E6-53CD7B8B3810}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi Custom Resource Handler", "WebApi Custom Resource Handler\WebApi Custom Resource Handler.csproj", "{4EB08BCC-CF42-45A8-B3D9-6727C9254077}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi Custom Resource Handler", "samples\WebApi Custom Resource Handler\WebApi Custom Resource Handler.csproj", "{4EB08BCC-CF42-45A8-B3D9-6727C9254077}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
