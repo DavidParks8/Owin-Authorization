@@ -33,6 +33,7 @@ namespace Microsoft.Owin.Security.Authorization
         /// <param name="controller">The controller from which <see cref="AuthorizationOptions"/> may be obtained.</param>
         /// <param name="user">The user to evaluate the authorize data against.</param>
         /// <param name="authorizeAttribute">The <see cref="IAuthorizeData"/> to evaluate.</param>
+        /// <param name="resource">The resource to evaluate the authorize data against.</param>
         /// <returns>
         /// A flag indicating whether authorization has succeeded.
         /// This value is <value>true</value> when the <paramref name="user"/> fulfills the <paramref name="authorizeAttribute"/>; otherwise <value>false</value>.
@@ -40,7 +41,7 @@ namespace Microsoft.Owin.Security.Authorization
         /// <remarks>
         /// If <paramref name="controller"/> is not null, it will be used to find <see cref="AuthorizationOptions"/> instead of the current <see cref="IOwinContext"/>.
         /// </remarks>
-        public async Task<bool> IsAuthorizedAsync(IAuthorizationController controller, ClaimsPrincipal user, IAuthorizeData authorizeAttribute)
+        public async Task<bool> IsAuthorizedAsync(IAuthorizationController controller, ClaimsPrincipal user, IAuthorizeData authorizeAttribute, object resource = null)
         {
             if (user == null)
             {
@@ -74,7 +75,7 @@ namespace Microsoft.Owin.Security.Authorization
             }
 
             var policy = await AuthorizationPolicy.CombineAsync(policyProvider, new[] { authorizeAttribute });
-            return await authorizationService.AuthorizeAsync(user, policy);
+            return await authorizationService.AuthorizeAsync(user, resource, policy);
         }
 
         private AuthorizationOptions ResolveAuthorizationOptions(IAuthorizationController controller)
