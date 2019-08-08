@@ -13,7 +13,7 @@ namespace Microsoft.Owin.Security.Authorization.Mvc
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
     public class ResourceAuthorizeAttribute : AuthorizeAttribute, IAuthorizeData
     {
-        private const string s_controllerKey = "Owin.AuthorizationController";
+        private const string s_authorizationContextKey = "Owin.AuthorizationContext";
 
         /// <inheritdoc />
         public string Policy { get; set; }
@@ -29,9 +29,9 @@ namespace Microsoft.Owin.Security.Authorization.Mvc
                 throw new ArgumentNullException(nameof(filterContext));
             }
 
-            if (!filterContext.HttpContext.Items.Contains(s_controllerKey))
+            if (!filterContext.HttpContext.Items.Contains(s_authorizationContextKey))
             {
-                filterContext.HttpContext.Items.Add(s_controllerKey, filterContext.Controller);
+                filterContext.HttpContext.Items.Add(s_authorizationContextKey, filterContext.Controller);
             }
 
             base.OnAuthorization(filterContext);
@@ -45,11 +45,12 @@ namespace Microsoft.Owin.Security.Authorization.Mvc
                 throw new ArgumentNullException(nameof(httpContext));
             }
 
-            var controller = httpContext.Items[s_controllerKey] as IAuthorizationController;
+            var filterContext = (System.Web.Mvc.AuthorizationContext)httpContext.Items[s_authorizationContextKey];
+            var controller = filterContext.Controller as IAuthorizationController;
             var user = (ClaimsPrincipal)httpContext.User;
             var contextAccessor = new HttpContextBaseOwinContextAccessor(httpContext);
             var authorizationHelper = new AuthorizationHelper(contextAccessor);
-            return authorizationHelper.IsAuthorizedAsync(controller, user, this).Result;
+            return authorizationHelper.IsAuthorizedAsync(controller, user, this, filterContext).Result;
         }
     }
 }
