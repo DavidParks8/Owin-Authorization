@@ -6,6 +6,20 @@ pool:
   - visualstudio
   - vstest
 
+trigger: none
+
+variables:
+- name: BuildConfiguration
+  value: release
+- name: BuildPlatform
+  value: any cpu
+- name: MajorVersion
+  value: 1
+- name: MinorVersion
+  value: 1
+- name: PatchVersion
+  value: 0
+
 steps:
 - task: PowerShell@1
   displayName: 'Apply Version To Assemblies'
@@ -70,8 +84,5 @@ steps:
      **\packaged\**\*.*
     TargetFolder: '$(build.artifactstagingdirectory)'
 
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish Artifact: drop'
-  inputs:
-    PathtoPublish: '$(build.artifactstagingdirectory)'
-
+- publish: '$(build.artifactstagingdirectory)'
+  artifact: 'drop'
