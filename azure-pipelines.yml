@@ -1,0 +1,84 @@
+pool:
+  name: Hosted
+  demands:
+  - DotNetFramework
+  - msbuild
+  - visualstudio
+  - vstest
+
+#Your build pipeline references the ‘BuildPlatform’ variable, which you’ve selected to be settable at queue time. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab, and then select the option to make it settable at queue time. See https://go.microsoft.com/fwlink/?linkid=865971
+#Your build pipeline references the ‘BuildConfiguration’ variable, which you’ve selected to be settable at queue time. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab, and then select the option to make it settable at queue time. See https://go.microsoft.com/fwlink/?linkid=865971
+#Your build pipeline references the ‘BuildConfiguration’ variable, which you’ve selected to be settable at queue time. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab, and then select the option to make it settable at queue time. See https://go.microsoft.com/fwlink/?linkid=865971
+#Your build pipeline references the ‘BuildPlatform’ variable, which you’ve selected to be settable at queue time. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab, and then select the option to make it settable at queue time. See https://go.microsoft.com/fwlink/?linkid=865971
+#Your build pipeline references the ‘BuildConfiguration’ variable, which you’ve selected to be settable at queue time. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab, and then select the option to make it settable at queue time. See https://go.microsoft.com/fwlink/?linkid=865971
+#Your build pipeline references the ‘BuildConfiguration’ variable, which you’ve selected to be settable at queue time. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab, and then select the option to make it settable at queue time. See https://go.microsoft.com/fwlink/?linkid=865971
+
+steps:
+- task: PowerShell@1
+  displayName: 'Apply Version To Assemblies'
+  inputs:
+    scriptName: 'Build Management/ApplyVersionToAssemblies.ps1'
+
+- task: NuGetCommand@2
+  displayName: 'NuGet restore **\*.sln'
+  inputs:
+    restoreSolution: '**\*.sln'
+
+- task: VSBuild@1
+  displayName: 'Build solution **\*.sln'
+  inputs:
+    platform: '$(BuildPlatform)'
+    configuration: '$(BuildConfiguration)'
+
+- task: VSTest@1
+  displayName: 'Test Assemblies **\$(BuildConfiguration)\*test*.dll;-:**\obj\**'
+  inputs:
+    testAssembly: '**\$(BuildConfiguration)\*test*.dll;-:**\obj\**'
+    codeCoverageEnabled: true
+    vsTestVersion: latest
+    platform: '$(BuildPlatform)'
+    configuration: '$(BuildConfiguration)'
+
+- task: NuGetCommand@2
+  displayName: 'Make Beta Packages'
+  inputs:
+    command: pack
+    packagesToPack: '**\src\Microsoft.Owin.Security.Authorization*\*.csproj'
+    packDestination: packaged/beta
+    includeReferencedProjects: true
+
+- task: PowerShell@1
+  displayName: 'Remove Pre-Release from Nuspecs'
+  inputs:
+    scriptName: 'Build Management/RemovePreReleaseVersionsFromNuspecs.ps1'
+    workingFolder: src
+
+- task: NuGetCommand@2
+  displayName: 'Make Release Packages'
+  inputs:
+    command: pack
+    packagesToPack: '**\src\Microsoft.Owin.Security.Authorization*\*.csproj'
+    packDestination: packaged/release
+    includeReferencedProjects: true
+
+- task: PublishSymbols@1
+  displayName: 'Publish symbols path: '
+  inputs:
+    SearchPattern: '**\bin\**\*.pdb'
+    SkipIndexing: true
+  continueOnError: true
+
+- task: CopyFiles@1
+  displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
+  inputs:
+    SourceFolder: '$(build.sourcesdirectory)'
+    Contents: |
+     **\bin\$(BuildConfiguration)\**
+     **\packaged\**\*.*
+    TargetFolder: '$(build.artifactstagingdirectory)'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact: drop'
+  inputs:
+    PathtoPublish: '$(build.artifactstagingdirectory)'
+
