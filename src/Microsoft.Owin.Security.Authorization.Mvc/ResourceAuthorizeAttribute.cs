@@ -31,7 +31,7 @@ namespace Microsoft.Owin.Security.Authorization.Mvc
 
             if (!filterContext.HttpContext.Items.Contains(s_authorizationContextKey))
             {
-                filterContext.HttpContext.Items.Add(s_authorizationContextKey, filterContext.Controller);
+                filterContext.HttpContext.Items.Add(s_authorizationContextKey, filterContext);
             }
 
             base.OnAuthorization(filterContext);
