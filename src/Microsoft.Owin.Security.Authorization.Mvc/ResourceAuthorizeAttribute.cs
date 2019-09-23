@@ -46,7 +46,7 @@ namespace Microsoft.Owin.Security.Authorization.Mvc
             }
 
             var filterContext = httpContext.Items[s_authorizationContextKey] as System.Web.Mvc.AuthorizationContext;
-            var controller = filterContext.Controller as IAuthorizationController;
+            var controller = filterContext?.Controller as IAuthorizationController;
             var user = (ClaimsPrincipal)httpContext.User;
             var contextAccessor = new HttpContextBaseOwinContextAccessor(httpContext);
             var authorizationHelper = new AuthorizationHelper(contextAccessor);
