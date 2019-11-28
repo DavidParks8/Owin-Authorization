@@ -30,7 +30,7 @@ namespace Microsoft.Owin.Security.Authorization.WebApi
             var user = (ClaimsPrincipal)actionContext.RequestContext.Principal;
             var owinAccessor = new HttpRequestMessageOwinContextAccessor(actionContext.Request);
             var helper = new AuthorizationHelper(owinAccessor);
-            return helper.IsAuthorizedAsync(controller, user, this).Result;
+            return helper.IsAuthorizedAsync(controller, user, this, actionContext).Result;
         }
     }
 }
