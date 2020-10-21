@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Security.Claims;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Web.Http.Controllers;
 
 namespace Microsoft.Owin.Security.Authorization.WebApi
@@ -19,18 +21,24 @@ namespace Microsoft.Owin.Security.Authorization.WebApi
         public string ActiveAuthenticationSchemes { get; set; }
 
         /// <inheritdoc />
-        protected override bool IsAuthorized(HttpActionContext actionContext)
+        public override async Task OnAuthorizationAsync(HttpActionContext actionContext, CancellationToken cancellationToken)
         {
             if (actionContext == null)
             {
                 throw new ArgumentNullException(nameof(actionContext));
             }
 
+            await base.OnAuthorizationAsync(actionContext, cancellationToken);
+            if (actionContext.Response != null) return;
+
             var controller = actionContext.ControllerContext.Controller as IAuthorizationController;
             var user = (ClaimsPrincipal)actionContext.RequestContext.Principal;
             var owinAccessor = new HttpRequestMessageOwinContextAccessor(actionContext.Request);
             var helper = new AuthorizationHelper(owinAccessor);
-            return helper.IsAuthorizedAsync(controller, user, this, actionContext).Result;
+            if (!await helper.IsAuthorizedAsync(controller, user, this, actionContext))
+            {
+                HandleUnauthorizedRequest(actionContext);
+            }
         }
     }
 }
