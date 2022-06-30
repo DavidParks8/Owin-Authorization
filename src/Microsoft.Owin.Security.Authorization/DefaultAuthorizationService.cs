@@ -181,7 +181,7 @@ namespace Microsoft.Owin.Security.Authorization
                 throw new InvalidOperationException(ResourceHelper.FormatException_AuthorizationPolicyNotFound(policyName));
             }
 
-            return await this.AuthorizeAsync(user, resource, policy);
+            return this.AuthorizeAsync(user, resource, policy);
         }
     }
 }
