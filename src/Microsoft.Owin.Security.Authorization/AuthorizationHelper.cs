@@ -75,7 +75,7 @@ namespace Microsoft.Owin.Security.Authorization
             }
 
             var policy = await AuthorizationPolicy.CombineAsync(policyProvider, new[] { authorizeAttribute });
-            return authorizationService.AuthorizeAsync(user, resource, policy);
+            return await authorizationService.AuthorizeAsync(user, resource, policy);
         }
 
         private AuthorizationOptions ResolveAuthorizationOptions(IAuthorizationController controller)
