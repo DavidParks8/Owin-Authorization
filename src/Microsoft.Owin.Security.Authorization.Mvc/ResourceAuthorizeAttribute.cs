@@ -51,8 +51,8 @@ namespace Microsoft.Owin.Security.Authorization.Mvc
             var contextAccessor = new HttpContextBaseOwinContextAccessor(httpContext);
             var authorizationHelper = new AuthorizationHelper(contextAccessor);
             return authorizationHelper.IsAuthorizedAsync(controller, user, this, filterContext)
-                .GetAwaiter()
                 .ConfigureAwait(false)
+                .GetAwaiter()
                 .GetResult();
         }
     }

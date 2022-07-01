@@ -9,7 +9,9 @@ namespace Microsoft.Owin.Security.Authorization.TestTools
     /// <remarks>David, 9/7/2014.</remarks>
     /// <seealso cref="T:Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryBaseAttribute"/>
     [ExcludeFromCodeCoverage]
+#pragma warning disable CS3009 // Base type is not CLS-compliant
     public abstract class TestCategoryAttribute : TestCategoryBaseAttribute
+#pragma warning restore CS3009 // Base type is not CLS-compliant
     {
         public override IList<string> TestCategories { get; }
 
